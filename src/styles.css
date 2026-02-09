@@ -1,3 +1,195 @@
-/* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 168 40% 99%;
+    --foreground: 168 80% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 168 80% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 168 80% 5%;
+    --primary: 168 76% 36%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 168 40% 96%;
+    --secondary-foreground: 168 80% 15%;
+    --muted: 168 20% 94%;
+    --muted-foreground: 168 20% 45%;
+    --accent: 168 80% 50%;
+    --accent-foreground: 168 80% 5%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 168 30% 92%;
+    --input: 168 30% 92%;
+    --ring: 168 76% 36%;
+
+    /* Charts */
+    --chart-1: 168 76% 36%;
+    --chart-2: 175 60% 45%;
+    --chart-3: 185 50% 50%;
+    --chart-4: 195 40% 55%;
+    --chart-5: 205 30% 60%;
+
+    /* Sidebar */
+    --sidebar-background: 168 40% 98%;
+    --sidebar-foreground: 168 80% 10%;
+    --sidebar-primary: 168 76% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 168 40% 94%;
+    --sidebar-accent-foreground: 168 80% 15%;
+    --sidebar-border: 168 20% 90%;
+    --sidebar-ring: 168 76% 36%;
+
+    /* Fonts */
+    --font-sans: 'Geist Sans', 'Inter', sans-serif;
+    --font-serif: 'Lora', serif;
+    --font-mono: 'Geist Mono', monospace;
+
+    /* Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(168 76% 36% / 0.15);
+    --shadow-glow: 0 0 40px hsl(168 76% 36% / 0.1);
+
+    /* Misc */
+    --radius: 0.75rem;
+  }
+
+
+  .dark {
+    --background: 168 80% 4%;
+    --foreground: 168 20% 98%;
+    --card: 168 80% 6%;
+    --card-foreground: 168 20% 98%;
+    --popover: 168 80% 6%;
+    --popover-foreground: 168 20% 98%;
+    --primary: 168 76% 45%;
+    --primary-foreground: 168 80% 4%;
+    --secondary: 168 40% 12%;
+    --secondary-foreground: 168 20% 98%;
+    --muted: 168 40% 12%;
+    --muted-foreground: 168 20% 65%;
+    --accent: 168 80% 50%;
+    --accent-foreground: 168 80% 5%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 168 40% 15%;
+    --input: 168 40% 15%;
+    --ring: 168 76% 45%;
+
+    --sidebar-background: 168 80% 5%;
+    --sidebar-foreground: 168 20% 95%;
+    --sidebar-primary: 168 76% 45%;
+    --sidebar-primary-foreground: 168 80% 4%;
+    --sidebar-accent: 168 40% 12%;
+    --sidebar-accent-foreground: 168 20% 95%;
+    --sidebar-border: 168 40% 15%;
+    --sidebar-ring: 168 76% 45%;
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    letter-spacing: var(--tracking-normal);
+  }
+
+}
+
+/*:root {*/
+/*  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;*/
+/*  line-height: 1.5;*/
+/*  font-weight: 400;*/
+
+/*  color-scheme: light dark;*/
+/*  color: rgba(255, 255, 255, 0.87);*/
+/*  background-color: #242424;*/
+
+/*  font-synthesis: none;*/
+/*  text-rendering: optimizeLegibility;*/
+/*  -webkit-font-smoothing: antialiased;*/
+/*  -moz-osx-font-smoothing: grayscale;*/
+/*}*/
+
+/*a {*/
+/*  font-weight: 500;*/
+/*  color: #646cff;*/
+/*  text-decoration: inherit;*/
+/*}*/
+/*a:hover {*/
+/*  color: #535bf2;*/
+/*}*/
+
+/*body {*/
+/*  margin: 0;*/
+/*  display: flex;*/
+/*  place-items: center;*/
+/*  min-width: 320px;*/
+/*  min-height: 100vh;*/
+/*}*/
+
+/*h1 {*/
+/*  font-size: 3.2em;*/
+/*  line-height: 1.1;*/
+/*}*/
+
+/*#app {*/
+/*  max-width: 1280px;*/
+/*  margin: 0 auto;*/
+/*  padding: 2rem;*/
+/*  text-align: center;*/
+/*}*/
+
+/*.logo {*/
+/*  height: 6em;*/
+/*  padding: 1.5em;*/
+/*  will-change: filter;*/
+/*  transition: filter 300ms;*/
+/*}*/
+/*.logo:hover {*/
+/*  filter: drop-shadow(0 0 2em #646cffaa);*/
+/*}*/
+/*.logo.vanilla:hover {*/
+/*  filter: drop-shadow(0 0 2em #3178c6aa);*/
+/*}*/
+
+/*.card {*/
+/*  padding: 2em;*/
+/*}*/
+
+/*.read-the-docs {*/
+/*  color: #888;*/
+/*}*/
+
+/*button {*/
+/*  border-radius: 8px;*/
+/*  border: 1px solid transparent;*/
+/*  padding: 0.6em 1.2em;*/
+/*  font-size: 1em;*/
+/*  font-weight: 500;*/
+/*  font-family: inherit;*/
+/*  background-color: #1a1a1a;*/
+/*  cursor: pointer;*/
+/*  transition: border-color 0.25s;*/
+/*}*/
+/*button:hover {*/
+/*  border-color: #646cff;*/
+/*}*/
+/*button:focus,*/
+/*button:focus-visible {*/
+/*  outline: 4px auto -webkit-focus-ring-color;*/
+/*}*/
+
+/*@media (prefers-color-scheme: light) {*/
+/*  :root {*/
+/*    color: #213547;*/
+/*    background-color: #ffffff;*/
+/*  }*/
+/*  a:hover {*/
+/*    color: #747bff;*/
+/*  }*/
+/*  button {*/
+/*    background-color: #f9f9f9;*/
+/*  }*/
+/*}*/

@@ -1,0 +1,119 @@
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10 p-4">
+
+  <div class="space-y-6">
+    <h3 class="text-2xl font-bold flex items-center gap-2">
+      <lucide-icon [img]="Award" class="text-primary w-6 h-6"></lucide-icon>
+      Mes Avis
+    </h3>
+
+    <app-card className="border-none shadow-elegant p-6 bg-gradient-to-br from-primary to-primary/80 text-white block">
+      <div class="space-y-6">
+        <div class="text-center">
+          <p class="text-primary-foreground/70 text-sm font-medium uppercase tracking-widest mb-1">Note moyenne donnée</p>
+          <div class="flex items-center justify-center gap-2">
+            <span class="text-6xl font-black">4.8</span>
+            <lucide-icon [img]="Star" class="w-8 h-8 fill-white text-white"></lucide-icon>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          @for (star of [5, 4, 3, 2, 1]; track star) {
+            <div class="flex items-center gap-3 text-sm">
+              <span class="w-3 font-bold">{{ star }}</span>
+              <app-progress
+                [value]="getStarPercentage(star)"
+                className="h-1.5 bg-white/20"
+                indicatorClassName="bg-white">
+              </app-progress>
+            </div>
+          }
+        </div>
+
+        <button app-button variant="secondary" className="w-full rounded-xl h-12 font-bold bg-white text-primary hover:bg-white/90">
+          Voir tous mes badges
+        </button>
+      </div>
+    </app-card>
+
+    <app-card className="border-none shadow-elegant p-6 space-y-4 block">
+      <h4 class="font-bold">Actions recommandées</h4>
+      <div class="flex items-center gap-4 p-4 rounded-xl bg-muted/50 border border-dashed border-primary/20">
+        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+          <lucide-icon [img]="Camera" class="w-5 h-5"></lucide-icon>
+        </div>
+        <div class="flex-1">
+          <p class="text-sm font-bold">Ajoutez des photos</p>
+          <p class="text-xs text-muted-foreground">Gagnez +50 points par photo.</p>
+        </div>
+        <button app-button size="sm" variant="ghost">Poster</button>
+      </div>
+    </app-card>
+  </div>
+
+  <div class="lg:col-span-2 space-y-6">
+    <div class="flex items-center justify-between">
+      <h3 class="text-2xl font-bold">Historique des avis</h3>
+      <button app-button variant="ghost" size="sm" className="font-bold text-primary">Les plus récents</button>
+    </div>
+
+    <div class="space-y-6">
+      @for (review of reviews; track review.id) {
+        <app-card className="border-none shadow-elegant overflow-hidden block">
+          <app-card-content className="p-0">
+            <div class="p-6 space-y-4">
+              <div class="flex justify-between items-start">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-full bg-muted overflow-hidden">
+                    <img [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + review.user" [alt]="review.user" />
+                  </div>
+                  <div>
+                    <h5 class="font-bold text-sm">{{ review.user }}</h5>
+                    <p class="text-xs text-muted-foreground">{{ review.date }}</p>
+                  </div>
+                </div>
+                <button app-button variant="ghost" size="icon" className="h-8 w-8">
+                  <lucide-icon [img]="MoreVertical" class="w-4 h-4"></lucide-icon>
+                </button>
+              </div>
+
+              <div class="flex items-center gap-1">
+                @for (star of [1, 2, 3, 4, 5]; track star) {
+                  <lucide-icon
+                    [img]="Star"
+                    [class]="'w-4 h-4 ' + (star <= review.rating ? 'fill-primary text-primary' : 'text-muted')">
+                  </lucide-icon>
+                }
+              </div>
+
+              <div class="bg-muted/30 p-4 rounded-xl space-y-1">
+                <p class="text-[10px] font-bold text-primary uppercase">{{ review.boutique }}</p>
+                <p class="text-xs font-semibold">{{ review.product }}</p>
+              </div>
+
+              <p class="text-muted-foreground text-sm leading-relaxed italic">
+                "{{ review.comment }}"
+              </p>
+
+              <div class="flex items-center justify-between pt-2">
+                <div class="flex items-center gap-4">
+                  <button app-button variant="ghost" size="sm" className="h-8 gap-2 rounded-full text-xs font-bold hover:bg-primary/5 hover:text-primary">
+                    <lucide-icon [img]="ThumbsUp" class="w-3.5 h-3.5"></lucide-icon>
+                    {{ review.likes }} Utile
+                  </button>
+                  <button app-button variant="ghost" size="sm" className="h-8 gap-2 rounded-full text-xs font-bold hover:bg-primary/5 hover:text-primary">
+                    <lucide-icon [img]="MessageSquare" class="w-3.5 h-3.5"></lucide-icon>
+                    Répondre
+                  </button>
+                </div>
+                <app-badge variant="outline" className="text-[10px] border-primary/20 text-primary">Vérifié</app-badge>
+              </div>
+            </div>
+          </app-card-content>
+        </app-card>
+      }
+      <button app-button variant="outline" className="w-full h-12 rounded-xl border-dashed">
+        Charger plus d'avis
+      </button>
+    </div>
+  </div>
+</div>
