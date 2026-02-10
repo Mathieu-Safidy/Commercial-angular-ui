@@ -4,9 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+/* @layer base { */
   :root {
     --background: 168 40% 99%;
+    --base: 168 76% 36%;
     --foreground: 168 80% 5%;
     --card: 0 0% 100%;
     --card-foreground: 168 80% 5%;
@@ -95,7 +96,7 @@
     letter-spacing: var(--tracking-normal);
   }
 
-}
+/* } */
 
 /*:root {*/
 /*  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;*/

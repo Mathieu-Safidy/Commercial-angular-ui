@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         background: 'hsl(var(--background))',
+        base: 'hsl(var(--base))',
         foreground: 'hsl(var(--foreground))',
         card: 'hsl(var(--card))',
         'card-foreground': 'hsl(var(--card-foreground))',
@@ -20,6 +21,10 @@ module.exports = {
         'accent-foreground': 'hsl(var(--accent-foreground))',
         destructive: 'hsl(var(--destructive))',
         'destructive-foreground': 'hsl(var(--destructive-foreground))',
+      },
+      boxShadow: {
+        elegant: 'var(--shadow-elegant)',
+        glow: 'var(--shadow-glow)',
       },
     },
   },

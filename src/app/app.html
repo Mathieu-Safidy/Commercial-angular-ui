@@ -3,24 +3,46 @@
     <div class="container mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center gap-6">
         <div class="flex items-center gap-2 cursor-pointer" (click)="setActiveProfile('client')">
-          <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-elegant">
+          <div
+            class="w-10 h-10 bg-[hsl(var(--base))]  text-white rounded-xl flex items-center justify-center shadow-elegant"
+          >
             <span class="text-primary-foreground font-bold text-xl italic">T</span>
           </div>
-          <span class="font-bold text-xl tracking-tight hidden sm:block">TROIS <span class="text-primary">UI</span></span>
+          <span class="font-bold text-xl tracking-tight hidden sm:block"
+            >TROIS <span class="text-primary">UI</span></span
+          >
         </div>
 
         <app-separator orientation="vertical" class="h-6 hidden md:block"></app-separator>
 
         <div class="flex items-center gap-1 bg-muted p-1 rounded-lg">
-          <button app-button [variant]="activeProfile === 'client' ? 'default' : 'ghost'" size="sm" class="gap-2 h-8" (click)="setActiveProfile('client')">
+          <button
+            app-button
+            [variant]="activeProfile === 'client' ? 'default' : 'ghost'"
+            size="sm"
+            class="gap-2 h-8"
+            (click)="setActiveProfile('client')"
+          >
             <lucide-icon [img]="User" class="w-4 h-4"></lucide-icon>
             <span class="hidden lg:block text-xs font-medium">Client</span>
           </button>
-          <button app-button [variant]="activeProfile === 'boutique' ? 'default' : 'ghost'" size="sm" class="gap-2 h-8" (click)="setActiveProfile('boutique')">
+          <button
+            app-button
+            [variant]="activeProfile === 'boutique' ? 'default' : 'ghost'"
+            size="sm"
+            class="gap-2 h-8"
+            (click)="setActiveProfile('boutique')"
+          >
             <lucide-icon [img]="Store" class="w-4 h-4"></lucide-icon>
             <span class="hidden lg:block text-xs font-medium">Boutique</span>
           </button>
-          <button app-button [variant]="activeProfile === 'admin' ? 'default' : 'ghost'" size="sm" class="gap-2 h-8" (click)="setActiveProfile('admin')">
+          <button
+            app-button
+            [variant]="activeProfile === 'admin' ? 'default' : 'ghost'"
+            size="sm"
+            class="gap-2 h-8"
+            (click)="setActiveProfile('admin')"
+          >
             <lucide-icon [img]="ShieldCheck" class="w-4 h-4"></lucide-icon>
             <span class="hidden lg:block text-xs font-medium">Admin</span>
           </button>
@@ -28,12 +50,27 @@
       </div>
 
       <div class="flex items-center gap-4">
-        <div class="hidden md:flex relative max-w-sm">
+        <!-- <div class="hidden md:flex relative max-w-sm">
           <lucide-icon [img]="Search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"></lucide-icon>
           <input app-input placeholder="Rechercher..." class="pl-9 h-9 w-[200px] lg:w-[300px] bg-muted/50 border-none focus-visible:ring-primary/20" />
-        </div>
+        </div> -->
+        <div class="relative hidden md:flex items-center w-full max-w-sm">
+          <lucide-icon [name]="Search" class="absolute left-[0.4rem] w-4 h-4 text-gray-400"> </lucide-icon>
 
-        <button app-button variant="ghost" size="icon" class="h-9 w-9 rounded-full" (click)="toggleDarkMode()">
+          <input
+            app-input
+            type="text"
+            placeholder="Rechercher..."
+            class="w-full h-9 pl-9 pr-3 rounded-md bg-gray-100 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:bg-white transition"
+          />
+        </div>
+        <button
+          app-button
+          variant="ghost"
+          size="icon"
+          class="h-9 w-9 rounded-full"
+          (click)="toggleDarkMode()"
+        >
           <lucide-icon [img]="isDarkMode ? Sun : Moon" class="w-4 h-4"></lucide-icon>
         </button>
 
@@ -47,9 +84,13 @@
         <div class="hidden md:flex items-center gap-3 pl-2">
           <div class="flex flex-col items-end">
             <span class="text-sm font-semibold leading-none">Alex Dupont</span>
-            <span class="text-[10px] font-bold text-primary uppercase tracking-wider mt-1">{{ activeProfile }}</span>
+            <span class="text-[10px] font-bold text-primary uppercase tracking-wider mt-1">{{
+              activeProfile
+            }}</span>
           </div>
-          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-accent border-2 border-background shadow-elegant"></div>
+          <div
+            class="w-9 h-9 rounded-full bg-gradient-to-tr from-primary to-accent border-2 border-background shadow-elegant"
+          ></div>
         </div>
       </div>
     </div>
@@ -59,26 +100,30 @@
     @if (activeProfile === 'client') {
       <app-client-dashboard></app-client-dashboard>
     } @else if (activeProfile === 'boutique') {
-<!--      <app-boutique-dashboard></app-boutique-dashboard>-->
+      <!--      <app-boutique-dashboard></app-boutique-dashboard>-->
     } @else if (activeProfile === 'admin') {
-<!--      //<app-admin-dashboard></app-admin-dashboard>-->
+      <!--      //<app-admin-dashboard></app-admin-dashboard>-->
     }
   </main>
 
   <footer class="py-20 border-t bg-muted/20 relative overflow-hidden">
-    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-primary/5 blur-[120px] rounded-full -z-10"></div>
+    <div
+      class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-primary/5 blur-[120px] rounded-full -z-10"
+    ></div>
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
         <div class="col-span-1 md:col-span-2">
           <div class="flex items-center gap-2 mb-6">
-            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <div class="w-8 h-8 bg-[hsl(var(--base))]  rounded-lg flex items-center justify-center">
               <span class="text-primary-foreground font-bold text-sm italic">T</span>
             </div>
-            <span class="font-bold text-xl tracking-tight">TROIS <span class="text-primary">UI</span></span>
+            <span class="font-bold text-xl tracking-tight"
+              >TROIS <span class="text-primary">UI</span></span
+            >
           </div>
           <p class="text-muted-foreground max-w-sm leading-relaxed">
-            Le kit UI de référence pour les places de marché dynamiques.
-            Une interface fluide, moderne et modulaire pour vos projets Angular & React.
+            Le kit UI de référence pour les places de marché dynamiques. Une interface fluide,
+            moderne et modulaire pour vos projets Angular & React.
           </p>
         </div>
         <div>
@@ -108,9 +153,15 @@
           © 2026 TROIS UI Kit. Tous droits réservés.
         </p>
         <div class="flex items-center gap-6">
-          <span class="text-xs font-medium text-muted-foreground hover:text-primary cursor-pointer">Twitter</span>
-          <span class="text-xs font-medium text-muted-foreground hover:text-primary cursor-pointer">Instagram</span>
-          <span class="text-xs font-medium text-muted-foreground hover:text-primary cursor-pointer">LinkedIn</span>
+          <span class="text-xs font-medium text-muted-foreground hover:text-primary cursor-pointer"
+            >Twitter</span
+          >
+          <span class="text-xs font-medium text-muted-foreground hover:text-primary cursor-pointer"
+            >Instagram</span
+          >
+          <span class="text-xs font-medium text-muted-foreground hover:text-primary cursor-pointer"
+            >LinkedIn</span
+          >
         </div>
       </div>
     </div>
