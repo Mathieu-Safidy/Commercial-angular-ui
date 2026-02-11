@@ -11,7 +11,7 @@
   <!-- Stat cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
     <app-card *ngFor="let stat of stats" class="border-none shadow-elegant group overflow-hidden">
-      <app-card-content class="p-6">
+      <app-card-content class="p-6 pt-6">
         <div class="flex justify-between items-start mb-4">
           <div class="p-3 rounded-xl bg-muted/50 transition-colors group-hover:bg-primary/10">
             <lucide-icon [name]="stat.icon" class="w-6 h-6" [ngClass]="stat.color"></lucide-icon>
@@ -62,7 +62,7 @@
         <app-separator></app-separator>
         <button app-button variant="outline" class="w-full rounded-xl gap-2 font-bold py-6">
           Détails de l'audience
-          <lucide-icon name="ArrowUpRight" class="w-4 h-4"></lucide-icon>
+          <lucide-icon [img]="ArrowUpRight" class="w-4 h-4"></lucide-icon>
         </button>
       </app-card-content>
     </app-card>

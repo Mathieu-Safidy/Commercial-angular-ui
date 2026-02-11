@@ -1,13 +1,14 @@
 <div class="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)] bg-muted/20">
-
   <!-- Sidebar -->
-  <aside class="w-full lg:w-72 border-r bg-background/50 backdrop-blur-sm p-6 space-y-8">
-
+  <aside
+    class="w-full lg:w-72 border-r border-border/50 bg-background/50 backdrop-blur-sm p-6 space-y-8"
+  >
     <!-- Boutique info -->
     <div class="space-y-4">
       <div class="flex items-center gap-3 p-2 rounded-2xl bg-primary/5 border border-primary/10">
         <div
-          class="w-12 h-12 rounded-xl bg-gradient-to-tr from-primary to-accent shadow-lg flex items-center justify-center text-white font-black italic">
+          class="w-12 h-12 rounded-xl bg-gradient-to-tr from-primary to-accent shadow-lg flex items-center justify-center text-white font-black italic"
+        >
           EL
         </div>
         <div>
@@ -19,7 +20,8 @@
       </div>
 
       <button app-button class="w-full rounded-xl gap-2 h-11">
-        ➕ Nouveau produit
+        <lucide-icon [img]="Plus" class="w-4 h-4"></lucide-icon>
+        Nouveau produit
       </button>
     </div>
 
@@ -30,15 +32,27 @@
         (click)="setSection(item.id)"
         class="w-full flex items-center justify-between p-3 rounded-xl transition-all"
         [ngClass]="{
-          'bg-primary text-primary-foreground shadow-elegant scale-[1.02]': activeSection === item.id,
-          'text-muted-foreground hover:bg-muted hover:text-foreground': activeSection !== item.id
+          'bg-primary text-primary-foreground shadow-elegant scale-[1.02]':
+            activeSection === item.id,
+          'text-muted-foreground hover:bg-muted hover:text-foreground': activeSection !== item.id,
         }"
       >
         <div class="flex items-center gap-3">
+          <lucide-icon
+            [img]="item.icon"
+            class="w-4 h-4"
+            [ngClass]="{
+              ' text-muted-foreground': activeSection !== item.id,
+              ' text-white': activeSection === item.id,
+            }"
+          ></lucide-icon>
           <span class="text-sm font-semibold">{{ item.label }}</span>
         </div>
 
-        <app-badge *ngIf="item.badge">
+        <app-badge *ngIf="item.badge" variant="primary" [ngClass]="{
+          'bg-white text-primary/100': activeSection === item.id,
+          'bg-primary text-primary': activeSection !== item.id,
+        }">
           {{ item.badge }}
         </app-badge>
       </button>
@@ -47,7 +61,7 @@
     <app-separator></app-separator>
 
     <!-- Audience score -->
-    <div class="p-4 rounded-2xl bg-muted/50 border border-dashed space-y-4">
+    <div class="p-4 rounded-2xl bg-muted/50 border border-dashed border-border space-y-4">
       <p class="text-xs font-bold text-center">Score Audience</p>
 
       <app-progress [value]="75"></app-progress>
@@ -56,25 +70,21 @@
         Excellent ! Votre audience a augmenté de 12% cette semaine.
       </p>
     </div>
-
   </aside>
 
-   Content
   <div class="flex-1 overflow-y-auto p-4 lg:p-10">
     <div class="max-w-7xl mx-auto space-y-10">
-
       <app-boutique-overview *ngIf="activeSection === 'overview'"></app-boutique-overview>
       <app-boutique-products *ngIf="activeSection === 'products'"></app-boutique-products>
       <app-boutique-orders *ngIf="activeSection === 'orders'"></app-boutique-orders>
       <app-boutique-stats *ngIf="activeSection === 'stats'"></app-boutique-stats>
 
       <app-empty
-        *ngIf="!['overview','products','orders','stats'].includes(activeSection)"
+        *ngIf="!['overview', 'products', 'orders', 'stats'].includes(activeSection)"
         title="Section en développement"
-        description="Cette partie du UI Kit sera disponible prochainement">
+        description="Cette partie du UI Kit sera disponible prochainement"
+      >
       </app-empty>
-
     </div>
   </div>
-
 </div>

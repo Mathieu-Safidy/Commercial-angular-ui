@@ -15,6 +15,9 @@
 
   --color-muted-foreground: hsl(var(--muted-foreground));
   --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-card: hsl(var(--card));
+  
 }
 /* @layer base { */
   :root {

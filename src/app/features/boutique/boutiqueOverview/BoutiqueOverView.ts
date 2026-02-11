@@ -6,6 +6,7 @@ import { SeparatorComponent } from '../../../components/ui/separator';
 import { ProgressComponent } from '../../../components/ui/progress';
 import { ArrowUpRight, TrendingUp, Eye, ShoppingCart, MessageSquare, LucideAngularModule } from 'lucide-angular';
 import {NgClass, NgForOf} from '@angular/common';
+import { IconsModule } from '../../../module/IconsModule';
 
 @Component({
   selector: 'app-boutique-overview',
@@ -21,11 +22,14 @@ import {NgClass, NgForOf} from '@angular/common';
     ProgressComponent,
     LucideAngularModule,
     NgForOf,
-    NgClass
+    NgClass,
+    IconsModule
   ],
   templateUrl: './BoutiqueOverview.html'
 })
 export class BoutiqueOverviewComponent {
+
+  readonly ArrowUpRight = ArrowUpRight;
 
   stats = [
     { label: 'Chiffre d\'affaires', value: '12,450€', trend: '+15.2%', icon: 'TrendingUp', color: 'text-emerald-500', trendColor: 'text-emerald-500 bg-emerald-500/10' },

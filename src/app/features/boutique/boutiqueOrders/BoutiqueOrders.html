@@ -11,10 +11,12 @@
 
     <div class="flex gap-3">
       <button app-button variant="outline" className="rounded-xl gap-2 h-11">
-        📅 Planning
+        <lucide-angular [img]="Calendar" class="w-4 h-4"></lucide-angular>
+        Planning
       </button>
       <button app-button className="rounded-xl shadow-glow gap-2 h-11">
-        📦 Expéditions groupées
+        <lucide-angular [img]="Package" class="w-4 h-4"></lucide-angular>
+        Expéditions groupées
       </button>
     </div>
   </div>
@@ -55,7 +57,7 @@
       *ngFor="let order of orders"
       class="border-none shadow-elegant hover:scale-[1.01] transition-all cursor-pointer group overflow-hidden"
     >
-      <app-card-content class="p-0">
+      <app-card-content class="p-0!">
         <div class="relative flex flex-col lg:flex-row lg:items-center p-6 gap-6">
 
           <!-- Status bar -->
@@ -67,7 +69,7 @@
           <!-- Order info -->
           <div class="flex-1 flex items-center gap-6">
             <div class="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center">
-              🛒
+              <lucide-angular [img]="ShoppingBag" class="w-6 h-6 text-primary"></lucide-angular>
             </div>
 
             <div class="space-y-1">
@@ -80,9 +82,9 @@
                 </app-badge>
               </div>
 
-              <div class="flex items-center gap-4 text-sm font-medium">
-                <p>✔ {{ order.customer }}</p>
-                <p class="text-muted-foreground">⏱ {{ order.time }}</p>
+              <div class="flex text-sm font-medium gap-4">
+                <p class="flex items-center gap-4"> <span><lucide-angular [img]="CircleCheck" class="w-4 h-4 text-primary"></lucide-angular></span> <span>{{ order.customer }}</span></p>
+                <p class="flex items-center gap-4 text-muted-foreground"> <span><lucide-angular [img]="Clock" class="w-4 h-4 text-muted-foreground"></lucide-angular></span> <span>{{ order.time }}</span></p>
               </div>
             </div>
           </div>

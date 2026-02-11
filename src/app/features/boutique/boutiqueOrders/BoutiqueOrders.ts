@@ -4,6 +4,7 @@ import {NgClass, NgForOf} from '@angular/common';
 import {BadgeComponent} from '../../../components/ui/badge';
 import {InputComponent} from '../../../components/ui/input';
 import {ButtonComponent} from '../../../components/ui/button';
+import { Calendar, CircleCheck, Clock, LucideAngularModule, Package, ShoppingBag, ShoppingCart } from 'lucide-angular';
 
 type OrderStatus = 'Nouveau' | 'En préparation' | 'Prêt à envoyer' | 'Expédié';
 
@@ -27,10 +28,17 @@ interface Order {
     BadgeComponent,
     NgForOf,
     InputComponent,
-    ButtonComponent
+    ButtonComponent,
+    LucideAngularModule,
   ]
 })
 export class BoutiqueOrdersComponent {
+
+  readonly Calendar = Calendar;
+  readonly Package = Package;
+  readonly ShoppingBag = ShoppingBag;
+  readonly CircleCheck = CircleCheck;
+  readonly Clock = Clock;
 
   orders: Order[] = [
     { id: '#ORD-9821', customer: 'Sophie Martin', items: 3, total: '159€', status: 'Nouveau', time: '12 min ago' },
