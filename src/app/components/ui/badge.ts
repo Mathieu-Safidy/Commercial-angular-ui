@@ -1,6 +1,6 @@
 import { Component, input, HostBinding } from '@angular/core';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../lib/utils'; // Chemin relatif vers tes utils
+import { cn } from '../../lib/utils';
 
 // On définit les variantes exactement comme dans ton code React
 export const badgeVariants = cva(

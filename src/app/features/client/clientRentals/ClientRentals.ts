@@ -28,7 +28,7 @@ import { SeparatorComponent } from '../../../components/ui/separator';
     CardComponent,
     CardContentComponent,
     CardHeaderComponent,
-    CardTitleComponent,
+    //CardTitleComponent,
     CardFooterComponent,
     SeparatorComponent
   ],

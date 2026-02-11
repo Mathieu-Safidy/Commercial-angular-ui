@@ -31,9 +31,9 @@ export const buttonVariants = cva(
 type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 @Component({
-  selector: 'button[app-button], a[app-button]', // S'applique aux balises <button> ou <a>
+  selector: 'button[app-button], a[app-button]',
   standalone: true,
-  template: `<ng-content />`, // Projette le texte/icônes à l'intérieur
+  template: `<ng-content />`,
 })
 export class ButtonComponent {
   // Inputs utilisant les Signals
