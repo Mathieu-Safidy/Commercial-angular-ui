@@ -1,10 +1,22 @@
 
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-@layer base {
+
+@theme {
+ --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+
+  --color-primary: hsl(var(--primary));
+  --color-secondary: hsl(var(--secondary));
+  --color-muted: hsl(var(--muted));
+  --color-accent: hsl(var(--accent));
+  --color-destructive: hsl(var(--destructive));
+
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+}
+/* @layer base { */
   :root {
     --background: 168 40% 99%;
     --foreground: 168 80% 5%;
@@ -95,7 +107,7 @@
     letter-spacing: var(--tracking-normal);
   }
 
-}
+
 
 /*:root {*/
 /*  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;*/
