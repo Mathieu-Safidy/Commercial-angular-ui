@@ -14,13 +14,15 @@ import {
   Wrench
 } from 'lucide-angular';
 import {BadgeComponent} from '../../../components/ui/badge';
+import { ButtonComponent } from '../../../components/ui/button';
 
 @Component({
   selector: 'app-boutique-management',
   imports: [
     CommonModule,
     LucideAngularModule,
-    BadgeComponent
+    BadgeComponent,
+    ButtonComponent,
   ],
   templateUrl: './BoutiqueManagement.html'
 })
@@ -64,6 +66,8 @@ export class BoutiqueManagementComponent {
       maintenance: 'Effectuée'
     }
   ];
+
+  avatars = [1, 2];
 
   factures = [
     { label: 'Eco Luxe', sub: 'Location Janvier', price: '450€', status: 'Payé' },

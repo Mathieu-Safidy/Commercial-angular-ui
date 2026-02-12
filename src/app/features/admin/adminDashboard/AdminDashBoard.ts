@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import {
-  Building2, Users, Calendar, BarChart3, Plus, Settings,
-  Bell, Search, LayoutDashboard, ShieldCheck, Zap, LucideAngularModule
+  Building2, Users, Calendar, Plus, Settings,
+  Bell, Search, LayoutDashboard, ShieldCheck, Zap, LucideAngularModule,
+  ChartColumn
 } from 'lucide-angular';
 import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {AdminOverviewComponent} from '../adminOverview/AdminOverview';
@@ -31,12 +32,12 @@ type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 's
 export class AdminDashboardComponent {
   activeSection: Section = 'dashboard';
 
-  icons = { Building2, Users, Calendar, BarChart3, Plus, Settings, Bell, Search, LayoutDashboard, ShieldCheck, Zap };
-
+  readonly icons = { Building2, Users, Calendar, ChartColumn, Plus, Settings, Bell, Search, LayoutDashboard, ShieldCheck, Zap };
+  // readonly BarChart3 = BarChart3;
   sidebarItems: { id: Section; label: string; icon: any }[] = [
     { id: 'dashboard', label: 'Dashboard Global', icon: LayoutDashboard },
     { id: 'boutiques', label: 'Gestion Boutiques', icon: Building2 },
-    { id: 'performance', label: 'Performance & Trafic', icon: BarChart3 },
+    { id: 'performance', label: 'Performance & Trafic', icon: ChartColumn },
     { id: 'events', label: 'Événements & Jeux', icon: Calendar },
     { id: 'ads', label: 'Publicités & Partenaires', icon: Zap },
     { id: 'settings', label: 'Administration', icon: ShieldCheck },

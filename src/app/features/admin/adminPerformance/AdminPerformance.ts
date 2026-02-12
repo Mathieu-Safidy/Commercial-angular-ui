@@ -7,7 +7,7 @@ import {
   CardContentComponent
 } from '../../../components/ui/card';
 import { BadgeComponent } from '../../../components/ui/badge';
-import { LucideAngularModule } from 'lucide-angular';
+import { ChevronRight, LucideAngularModule, MapPin, MousePointer2, Target, TrendingUp, Users } from 'lucide-angular';
 
 interface PeakDay {
   day: string;
@@ -39,6 +39,9 @@ interface PopularProduct {
   ]
 })
 export class AdminPerformanceComponent {
+
+  items = {Users, MousePointer2, Target, MapPin, TrendingUp, ChevronRight}
+
   peakDays: { day: string; value: string; color: string }[] = [
     { day: 'Samedi', value: '95', color: 'bg-primary' },
     { day: 'Vendredi', value: '82', color: 'bg-primary/80' },

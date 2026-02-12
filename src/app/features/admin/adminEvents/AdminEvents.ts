@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {LucideAngularModule} from 'lucide-angular';
+import {ArrowRight, Calendar, LucideAngularModule, MoreVertical, Plus, QrCode, Share2, Star, Ticket, Trophy, Users, Zap} from 'lucide-angular';
 import {CardComponent, CardContentComponent} from '../../../components/ui/card';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {BadgeComponent} from '../../../components/ui/badge';
@@ -35,6 +35,7 @@ interface Partnership {
 })
 export class AdminEventsComponent {
 
+  icons = { Plus, Trophy, Zap, Ticket, Calendar, Users, QrCode, MoreVertical, ArrowRight, Share2, Star, }
   events: AdminEvent[] = [
     {
       id: 1,

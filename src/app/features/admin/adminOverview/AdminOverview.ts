@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
-import {LucideAngularModule} from 'lucide-angular';
-import {ButtonComponent} from '../../../components/ui/button';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { BarChart3, LucideAngularModule, Zap } from 'lucide-angular';
+import { ButtonComponent } from '../../../components/ui/button';
+import { CardComponent, CardContentComponent, CardHeaderComponent, CardTitleComponent } from '../../../components/ui/card';
 
 @Component({
   selector: 'app-admin-overview',
@@ -9,10 +10,18 @@ import {ButtonComponent} from '../../../components/ui/button';
   imports: [
     NgForOf,
     LucideAngularModule,
-    ButtonComponent
-  ]
+    ButtonComponent,
+    CardComponent,
+    CardContentComponent,
+    CardHeaderComponent,
+    CardTitleComponent,
+  ],
 })
 export class AdminOverviewComponent {
+  // readonly BarChart3 = BarChart3;
+
+  readonly icons = { BarChart3, Zap };
+
   // KPI
   kpis = [
     { label: 'Trafic Global', value: '1.2M', trend: '+24%', sub: 'visiteurs/mois' },
@@ -20,7 +29,6 @@ export class AdminOverviewComponent {
     { label: 'CA Global', value: '854k €', trend: '+12%', sub: 'CA Annuel cumulé' },
     { label: 'Événements', value: '12', trend: '+4', sub: 'prévus cette semaine' },
   ];
-
 
   months = ['Jan', 'Fev', 'Mar', 'Avr', 'Mai', 'Jun', 'Jul', 'Aou', 'Sep', 'Oct', 'Nov', 'Dec'];
 

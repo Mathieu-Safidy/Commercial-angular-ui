@@ -4,10 +4,10 @@
   <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
     <!-- Visites -->
-    <app-card class="border-none shadow-elegant p-8 space-y-4">
+    <app-card class="border-none bg-card shadow-elegant p-8 space-y-4">
       <div class="flex items-center justify-between">
         <div class="p-3 rounded-2xl bg-primary/10 text-primary">
-          <lucide-icon name="users" class="w-6 h-6"></lucide-icon>
+          <lucide-icon [img]="items.Users" class="w-6 h-6"></lucide-icon>
         </div>
         <app-badge class="bg-emerald-500/10 text-emerald-500 font-black">+18%</app-badge>
       </div>
@@ -29,10 +29,10 @@
     </app-card>
 
     <!-- CTR -->
-    <app-card class="border-none shadow-elegant p-8 space-y-4">
+    <app-card class="border-none bg-card shadow-elegant p-8 space-y-4">
       <div class="flex items-center justify-between">
         <div class="p-3 rounded-2xl bg-blue-500/10 text-blue-500">
-          <lucide-icon name="mouse-pointer-2" class="w-6 h-6"></lucide-icon>
+          <lucide-icon [img]="items.MousePointer2" class="w-6 h-6"></lucide-icon>
         </div>
         <app-badge class="bg-blue-500/10 text-blue-500 font-black">+5.2%</app-badge>
       </div>
@@ -54,10 +54,10 @@
     </app-card>
 
     <!-- Conversion -->
-    <app-card class="border-none shadow-elegant p-8 space-y-4">
+    <app-card class="border-none bg-card shadow-elegant p-8 space-y-4">
       <div class="flex items-center justify-between">
         <div class="p-3 rounded-2xl bg-amber-500/10 text-amber-500">
-          <lucide-icon name="target" class="w-6 h-6"></lucide-icon>
+          <lucide-icon [img]="items.Target" class="w-6 h-6"></lucide-icon>
         </div>
         <app-badge class="bg-emerald-500/10 text-emerald-500 font-black">+12%</app-badge>
       </div>
@@ -84,10 +84,10 @@
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
     <!-- Peak days -->
-    <app-card class="border-none shadow-elegant">
+    <app-card class="border-none bg-card shadow-elegant">
       <app-card-header class="p-8 pb-4">
         <app-card-title class="text-xl font-black flex items-center gap-3 uppercase italic">
-          <lucide-icon name="map-pin" class="text-primary"></lucide-icon>
+          <lucide-icon [img]="items.MapPin" class="text-primary"></lucide-icon>
           JOURS DE POINTE VENTES
         </app-card-title>
       </app-card-header>
@@ -113,7 +113,7 @@
   <app-card class="border-none shadow-elegant overflow-hidden">
     <app-card-header class="p-8 pb-4">
       <app-card-title class="text-xl font-black flex items-center gap-3 uppercase italic">
-        <lucide-icon name="trending-up" class="text-primary"></lucide-icon>
+        <lucide-icon [img]="items.TrendingUp" class="text-primary"></lucide-icon>
         PRODUITS POPULAIRES / CATÉGORIE
       </app-card-title>
     </app-card-header>
@@ -155,7 +155,7 @@
           </app-badge>
 
           <lucide-icon
-            name="chevron-right"
+            [img]="items.ChevronRight"
             class="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors"
           ></lucide-icon>
         </div>

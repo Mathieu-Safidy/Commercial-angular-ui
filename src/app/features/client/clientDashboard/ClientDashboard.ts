@@ -17,6 +17,7 @@ import { ClientReviewsComponent } from '../clientReviews/ClientReviews';
 
 
 import { TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComponent } from '../../../components/ui/tabs';
+import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePosts';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -31,7 +32,8 @@ import { TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComp
     TabsComponent,
     TabsListComponent,
     TabsTriggerComponent,
-    TabsContentComponent
+    TabsContentComponent,
+    BoutiquePostsComponent
   ],
   templateUrl: './ClientDashboard.html'
 })

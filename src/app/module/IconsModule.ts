@@ -1,5 +1,18 @@
 import { NgModule } from '@angular/core';
-import { LucideAngularModule, ArrowUpRight, TrendingUp, Eye, ShoppingCart, MessageSquare } from 'lucide-angular';
+import {
+  LucideAngularModule,
+  ArrowUpRight,
+  TrendingUp,
+  Eye,
+  ShoppingCart,
+  MessageSquare,
+  LayoutDashboard,
+  Package,
+  Tag,
+  Image,
+  ChartColumn,
+  Settings,
+} from 'lucide-angular';
 
 @NgModule({
   imports: [
@@ -8,9 +21,15 @@ import { LucideAngularModule, ArrowUpRight, TrendingUp, Eye, ShoppingCart, Messa
       TrendingUp,
       Eye,
       ShoppingCart,
-      MessageSquare
-    })
+      MessageSquare,
+      LayoutDashboard,
+      Package,
+      Tag,
+      Image,
+      ChartColumn,
+      Settings
+    }),
   ],
-  exports: [LucideAngularModule]
+  exports: [LucideAngularModule],
 })
 export class IconsModule {}

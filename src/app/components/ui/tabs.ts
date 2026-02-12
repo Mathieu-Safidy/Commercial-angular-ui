@@ -1,4 +1,4 @@
-import { Component, input, HostBinding, signal, contentChildren, effect } from '@angular/core';
+import { Component, input, HostBinding, signal, contentChildren, effect, inject, HostListener } from '@angular/core';
 import { cn } from '../../lib/utils';
 
 // --- 1. TABS ROOT ---
@@ -42,12 +42,15 @@ export class TabsListComponent {
   selector: 'button[appTabsTrigger]',
   standalone: true,
   template: `<ng-content />`,
+  host: {
+    '(click)': 'onClick()'
+  }
 })
 export class TabsTriggerComponent {
   value = input.required<string>(); // La valeur liée à ce bouton
   className = input<string>('');
-
-  constructor(private parent: TabsComponent) {}
+  private parent = inject(TabsComponent);
+  // constructor(private parent: TabsComponent) {}
 
   @HostBinding('attr.role') role = 'tab';
 
@@ -55,7 +58,7 @@ export class TabsTriggerComponent {
     return cn(
       "inline-flex items-center justify-center whitespace-nowrap rounded-xl px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
       this.parent.value() === this.value()
-        ? "ng-[hsl(var(--background))] text-foreground shadow-md"
+        ? "bg-[hsl(var(--background))] text-foreground shadow-md"
         : "",
       this.className()
     );
@@ -65,7 +68,7 @@ export class TabsTriggerComponent {
     return this.parent.value() === this.value() ? 'active' : 'inactive';
   }
 
-  @HostBinding('click') onClick() {
+  @HostListener('click') onClick() {
     this.parent.value.set(this.value());
   }
 }
@@ -84,7 +87,7 @@ export class TabsContentComponent {
   value = input.required<string>();
   className = input<string>('');
 
-  constructor(public parent: TabsComponent) {}
+  public parent = inject(TabsComponent);
 
   @HostBinding('class') get hostClasses() {
     return cn(
