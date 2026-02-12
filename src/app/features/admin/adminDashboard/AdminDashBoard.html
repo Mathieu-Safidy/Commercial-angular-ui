@@ -1,0 +1,97 @@
+<div class="flex flex-col lg:flex-row min-h-[calc(100vh-4rem)]">
+
+  <!-- Sidebar -->
+  <aside class="w-full lg:w-72 border-r bg-muted/30 p-6 space-y-8 flex-shrink-0">
+
+    <!-- Header -->
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-glow ring-4 ring-primary/10">
+        <lucide-icon [name]="icons.ShieldCheck" class="w-6 h-6"></lucide-icon>
+      </div>
+      <div>
+        <h3 class="font-black text-sm uppercase tracking-wider">Admin Panel</h3>
+        <p class="text-[10px] text-muted-foreground font-bold">V 2.0.4 - Secure Mode</p>
+      </div>
+    </div>
+
+    <div class="h-px bg-border my-6"></div>
+
+    <!-- Navigation -->
+    <nav class="space-y-1">
+      <button
+        app-button
+        *ngFor="let item of sidebarItems"
+        (click)="activeSection = item.id"
+        class="w-full flex items-center gap-3 p-3.5 rounded-xl transition-all relative"
+        [ngClass]="activeSection === item.id
+          ? 'bg-background text-primary shadow-elegant font-bold translate-x-1'
+          : 'text-muted-foreground hover:bg-muted hover:text-foreground'">
+
+        <span *ngIf="activeSection === item.id" class="absolute left-0 inset-y-2 w-1 bg-primary rounded-full"></span>
+        <lucide-icon [name]="item.icon" class="w-5 h-5"></lucide-icon>
+        <span class="text-sm">{{ item.label }}</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Content -->
+  <div class="flex-1 overflow-y-auto p-4 lg:p-10 bg-muted/10">
+    <div class="max-w-7xl mx-auto space-y-10">
+
+      <!-- Header -->
+      <header class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h2 class="text-3xl font-black tracking-tight uppercase">
+            {{ activeSectionLabel }}
+          </h2>
+          <div class="flex items-center gap-2 text-xs font-bold text-muted-foreground">
+            <span>Admin</span> / <span class="text-primary capitalize">{{ activeSection }}</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- Search -->
+          <div class="hidden sm:flex items-center bg-background rounded-full border px-4 h-11">
+            <lucide-icon [name]="icons.Search" class="w-4 h-4 text-muted-foreground mr-3"></lucide-icon>
+            <input placeholder="Global Search..." class="bg-transparent border-none text-sm outline-none w-48 font-medium" />
+          </div>
+
+          <!-- Notification -->
+          <button app-button class="h-11 w-11 rounded-full relative border">
+            <lucide-icon [name]="icons.Bell" class="w-4 h-4"></lucide-icon>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-destructive rounded-full"></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Sections dynamiques -->
+      <div class="flex-1 overflow-y-auto p-4 lg:p-10">
+        <div class="max-w-7xl mx-auto space-y-10">
+
+          <!-- Pages existantes -->
+          <app-admin-overview *ngIf="activeSection === 'dashboard'"></app-admin-overview>
+          <app-boutique-management *ngIf="activeSection === 'boutiques'"></app-boutique-management>
+          <app-admin-performance *ngIf="activeSection === 'performance'"></app-admin-performance>
+          <app-admin-events *ngIf="activeSection === 'events'"></app-admin-events>
+
+          <!-- Section en construction -->
+          <div *ngIf="!['dashboard','boutiques','performance','events'].includes(activeSection)"
+               class="flex flex-col items-center justify-center py-20 text-center space-y-6 opacity-30">
+            <div class="w-24 h-24 rounded-3xl bg-muted flex items-center justify-center rotate-3 border-4 border-dashed">
+              <lucide-icon [name]="icons.Settings" class="w-10 h-10 animate-spin-slow"></lucide-icon>
+            </div>
+            <div>
+              <h3 class="text-2xl font-black italic">CONSTRUCTION EN COURS</h3>
+              <p class="font-bold text-muted-foreground">
+                L'espace {{ activeSection }} est actuellement en maintenance.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
