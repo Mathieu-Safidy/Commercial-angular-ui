@@ -1,0 +1,132 @@
+<div class="grid grid-cols-1 gap-4">
+  @for (order of orders; track order.id) {
+    <app-card class="border-none shadow-elegan transition-all cursor-pointer group overflow-hidden">
+      <app-card-content class="p-0!">
+        <div class="relative flex flex-col lg:flex-row lg:items-center p-6 gap-6">
+          <!-- Status bar -->
+          <!-- <div
+            class="absolute left-0 inset-y-0 w-1.5"
+            [ngClass]="getStatusBarClass(order.status)"
+          ></div> -->
+
+          <!-- Order info -->
+          <div class="flex-1 flex items-center gap-6">
+            <div
+              class="w-14 h-14 rounded-2xl bg-muted overflow-hidden flex items-center justify-center"
+            >
+              <img
+                [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + (order.id + 10)"
+                class="w-full h-full object-cover"
+                alt="Shopping Bag Icon"
+              />
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex items-center gap-3">
+                <h4 class="font-black text-lg">{{ order.id }}</h4>
+                <!-- <app-badge
+                  class="font-bold border-none h-6"
+                  [ngClass]="getStatusBadgeClass(order.status)"
+                >
+                  {{ order.status }}
+                </app-badge> -->
+              </div>
+
+              <div class="flex text-sm font-medium gap-4">
+                <p class="flex items-center gap-4">
+                  <!-- <span
+                  ><lucide-angular [img]="CircleCheck" class="w-4 h-4 text-primary"></lucide-angular
+                ></span> -->
+                  <span>{{ order.customer }}</span>
+                </p>
+                <p class="flex items-center gap-4 text-muted-foreground">
+                  <!-- <span
+                  ><lucide-angular
+                    [img]="Clock"
+                    class="w-4 h-4 text-muted-foreground"
+                  ></lucide-angular
+                ></span> -->
+                  <span>{{ order.time }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div
+            class="flex items-center justify-between lg:justify-end gap-12 border-t lg:border-t-0 pt-4 lg:pt-0"
+          >
+            <button app-button variant="ghost" size="icon" className="rounded-xl h-10 w-10">
+              ⋮
+            </button>
+            <!-- <div class="flex items-center gap-8">
+              <div class="text-center">
+                <p class="text-[10px] font-bold text-muted-foreground uppercase">Articles</p>
+                <p class="font-black">{{ order.items }}</p>
+              </div>
+
+              <div class="text-center">
+                <p class="text-[10px] font-bold text-muted-foreground uppercase">Total</p>
+                <p class="font-black text-primary text-xl">{{ order.total }}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button app-button variant="secondary" className="rounded-xl h-10 px-6 font-bold">
+                Gérer
+              </button>
+              <button app-button variant="ghost" size="icon" className="rounded-xl h-10 w-10">
+                ⋮
+              </button>
+              ➜
+            </div> -->
+          </div>
+        </div>
+        <div class="p-6 pb-0">
+          <p class="text-gray-800 mb-4">{{ order.text }}</p>
+        </div>
+
+        <!-- Post image (optionnelle) -->
+        @if (order.image && order.image.length) {
+          <div
+            class="grid gap-2 p-6 pt-0"
+            [ngClass]="{
+              'grid-cols-1': order.image?.length === 1,
+              'grid-cols-2': order.image?.length === 2,
+              'grid-cols-3': (order.image?.length ?? 0) >= 3,
+            }"
+          >
+            <!-- <div
+              *ngFor="let img of order.image"
+              class="overflow-hidden rounded-2xl bg-gray-100 flex items-center justify-center"
+            >
+              <img [src]="img" alt="Post Image" class="max-w-full max-h-48 object-contain" />
+            </div> -->
+
+            @for (img of order.image; track img) {
+              <div class="overflow-hidden rounded-2xl bg-gray-100 flex justify-center">
+                <img
+                  [src]="img"
+                  class="w-full h-auto object-contain"
+                />
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Actions (like, comment, share) -->
+        <div class="flex justify-around text-sm text-gray-500 border-t border-border/50 py-4 mt-2">
+          <button class="flex gap-2 hover:text-blue-600 items-center">
+            <lucide-icon [img]="ThumbsUp" class="w-4 h-4"></lucide-icon> J’aime
+          </button>
+          <button class="flex gap-2 hover:text-blue-600 items-center">
+            <lucide-icon [img]="MessageSquareMore" class="w-4 h-4"></lucide-icon> Commenter
+          </button>
+          <button class="flex gap-2 hover:text-blue-600 items-center">
+            <lucide-icon [img]="Forward" class="w-4 h-4"></lucide-icon> Partager
+          </button>
+        </div>
+      </app-card-content>
+    </app-card>
+  }
+</div>

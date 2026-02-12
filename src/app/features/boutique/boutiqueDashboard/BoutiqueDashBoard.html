@@ -78,6 +78,7 @@
       <app-boutique-products *ngIf="activeSection === 'products'"></app-boutique-products>
       <app-boutique-orders *ngIf="activeSection === 'orders'"></app-boutique-orders>
       <app-boutique-stats *ngIf="activeSection === 'stats'"></app-boutique-stats>
+      <app-boutique-posts *ngIf="activeSection === 'posts'"></app-boutique-posts>
 
       <app-empty
         *ngIf="!['overview', 'products', 'orders', 'stats'].includes(activeSection)"

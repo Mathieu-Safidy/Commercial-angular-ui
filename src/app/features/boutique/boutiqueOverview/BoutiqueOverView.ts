@@ -25,7 +25,7 @@ import { IconsModule } from '../../../module/IconsModule';
     NgClass,
     IconsModule
   ],
-  templateUrl: './BoutiqueOverview.html'
+  templateUrl: './BoutiqueOverView.html'
 })
 export class BoutiqueOverviewComponent {
 

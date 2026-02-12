@@ -11,12 +11,13 @@ import {SeparatorComponent} from '../../../components/ui/separator';
 import {ProgressComponent} from '../../../components/ui/progress';
 import {EmptyComponent} from '../../../components/ui/empty';
 import { IconsModule } from '../../../module/IconsModule';
+import { BoutiquePostsComponent } from "../boutiquePosts/BoutiquePosts";
 
 type Section = 'overview' | 'products' | 'orders' | 'stats' | 'promos' | 'posts' | 'settings';
 
 @Component({
   selector: 'app-boutique-dashboard',
-  templateUrl: './BoutiqueDashboard.html',
+  templateUrl: './BoutiqueDashBoard.html',
   imports: [
     BoutiqueOrdersComponent,
     BoutiqueStatsComponent,
@@ -32,8 +33,9 @@ type Section = 'overview' | 'products' | 'orders' | 'stats' | 'promos' | 'posts'
     ProgressComponent,
     EmptyComponent,
     LucideAngularModule,
-    IconsModule
-  ],
+    IconsModule,
+    BoutiquePostsComponent
+],
   // styleUrls: ['./boutique-dashboard.component.scss']
 })
 export class BoutiqueDashboardComponent {
