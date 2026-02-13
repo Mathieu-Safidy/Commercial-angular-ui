@@ -1,0 +1,78 @@
+<div class="animate-fade-in">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <app-card class="border-none! shadow-none! p-3 rounded-xl bg-muted/20!">
+      <div class="flex justify-center p-5">
+        <div
+          class="inline-block h-auto w-9/12 rounded-full border-4 border-primary bg-card relative"
+        >
+          <img
+            [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=115'"
+            alt="Avatar"
+            class="rounded-full"
+          />
+          <div
+            class="w-15 h-15 flex justify-center items-center absolute bottom-0 right-3 bg-primary hover:bg-primary/90 transition-colors cursor-pointer rounded-full border-2 border-primary"
+          >
+            <lucide-angular [img]="icons.Camera" class="w-9 h-9 text-white"></lucide-angular>
+          </div>
+        </div>
+      </div>
+    </app-card>
+    <app-card class="border-none shadow-elegant bg-card lg:col-span-2 p-3 rounded-xl space-y-4">
+      <!-- HEADER -->
+      <app-card-header class="flex flex-row items-center justify-between pb-2 p-3!">
+        <h3 app-card-title class="text-xl font-bold flex items-center gap-2 text-primary">
+          <!-- <lucide-icon [img]="icons.User" class="w-5 h-5 text-primary"></lucide-icon> -->
+          Information de la boutique
+        </h3>
+        <button app-button variant="outline" size="icon" class="h-9 w-9 rounded-full cursor-pointer hover:text-primary-foreground">
+          <lucide-angular [img]="icons.SquarePenIcon" class="w-4 h-4"></lucide-angular>
+        </button>
+      </app-card-header>
+
+      <!-- CONTENT -->
+      <app-card-content class="p-3 pt-0!">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Nom -->
+          <div class="space-y-1">
+            <p app-card-description>Nom de la boutique</p>
+            <p class="font-semibold text-base">Tech Store Mada</p>
+          </div>
+
+          <!-- Email -->
+          <div class="space-y-1">
+            <p app-card-description>Email</p>
+            <p class="font-semibold text-base">contact@techstore.mg</p>
+          </div>
+
+          <!-- Téléphone -->
+          <div class="space-y-1">
+            <p app-card-description>Téléphone</p>
+            <p class="font-semibold text-base">+261 34 00 000 00</p>
+          </div>
+
+          <!-- Adresse -->
+          <div class="space-y-1">
+            <p app-card-description>Adresse</p>
+            <p class="font-semibold text-base">Antananarivo, Madagascar</p>
+          </div>
+
+          <!-- Statut -->
+          <div class="space-y-1 md:col-span-2">
+            <p app-card-description>Statut</p>
+            <span
+              class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700"
+            >
+              Actif
+            </span>
+          </div>
+        </div>
+      </app-card-content>
+    </app-card>
+  </div>
+  <div class="flex-1 overflow-y-auto">
+    <div class="max-w-7xl space-y-10">
+      <app-client-reviews [titleReviews]="false"></app-client-reviews>
+    </div>
+  </div>
+</div>

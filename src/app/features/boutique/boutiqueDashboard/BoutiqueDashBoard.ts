@@ -4,7 +4,7 @@ import {BoutiqueStatsComponent} from '../boutiqueStats/BoutiqueStats';
 import {BoutiqueProductsComponent} from '../boutiqueProducts/BoutiqueProducts';
 import {BoutiqueOverviewComponent} from '../boutiqueOverview/BoutiqueOverView';
 import {CommonModule, NgClass, NgForOf, NgIf} from '@angular/common';
-import {ChartColumn, Image, LayoutDashboard, LucideAngularModule, LucideIconData, Package, Plus, Section, Settings, ShoppingCart, Tag} from 'lucide-angular';
+import {ChartColumn, Image, LayoutDashboard, LucideAngularModule, LucideIconData, MessageSquare, Package, Plus, Section, Settings, ShoppingCart, Tag, User} from 'lucide-angular';
 import {ButtonComponent} from '../../../components/ui/button';
 import {BadgeComponent} from '../../../components/ui/badge';
 import {SeparatorComponent} from '../../../components/ui/separator';
@@ -12,8 +12,10 @@ import {ProgressComponent} from '../../../components/ui/progress';
 import {EmptyComponent} from '../../../components/ui/empty';
 import { IconsModule } from '../../../module/IconsModule';
 import { BoutiquePostsComponent } from "../boutiquePosts/BoutiquePosts";
+import { ClientReviewsComponent } from '../../client/clientReviews/ClientReviews';
+import { BoutiqueProfilComponent } from '../boutiqueProfil/BoutiqueProfil';
 
-type Section = 'overview' | 'products' | 'orders' | 'stats' | 'promos' | 'posts' | 'settings';
+type Section = 'overview' | 'products' | 'orders' | 'stats' | 'promos' | 'posts' | 'settings' | 'avis';
 
 @Component({
   selector: 'app-boutique-dashboard',
@@ -34,7 +36,9 @@ type Section = 'overview' | 'products' | 'orders' | 'stats' | 'promos' | 'posts'
     EmptyComponent,
     LucideAngularModule,
     IconsModule,
-    BoutiquePostsComponent
+    BoutiquePostsComponent,
+    ClientReviewsComponent,
+    BoutiqueProfilComponent
 ],
   // styleUrls: ['./boutique-dashboard.component.scss']
 })
@@ -59,6 +63,7 @@ export class BoutiqueDashboardComponent {
     { id: 'posts', label: 'Actualités' , icon: Image },
     { id: 'stats', label: 'Statistiques' , icon: ChartColumn },
     { id: 'settings', label: 'Configuration' , icon: Settings },
+    { id: 'avis', label: 'Profil', icon: User }
   ];
 
   setSection(section: Section) {

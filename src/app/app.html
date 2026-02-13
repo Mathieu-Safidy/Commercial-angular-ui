@@ -65,13 +65,13 @@
           app-button
           variant="ghost"
           size="icon"
-          class="h-9 w-9 rounded-full"
+          class="h-9 w-9 rounded-full hover:text-primary-foreground cursor-pointer"
           (click)="toggleDarkMode()"
         >
           <lucide-icon [img]="isDarkMode ? Sun : Moon" class="w-4 h-4"></lucide-icon>
         </button>
 
-        <button app-button variant="ghost" size="icon" class="relative h-9 w-9 rounded-full">
+        <button app-button variant="ghost" size="icon" class="relative h-9 w-9 rounded-full hover:text-primary-foreground cursor-pointer">
           <lucide-icon [img]="Bell" class="w-4 h-4"></lucide-icon>
           <app-badge variant="dot" class="absolute top-1 right-1 h-2 w-2 p-0 rounded-full bg-primary"></app-badge>
         </button>

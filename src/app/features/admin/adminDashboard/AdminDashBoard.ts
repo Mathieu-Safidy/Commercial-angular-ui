@@ -14,7 +14,7 @@ type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 's
 
 @Component({
   selector: 'app-admin-dashboard',
-  templateUrl: './AdminDashboard.html',
+  templateUrl: './AdminDashBoard.html',
   imports: [
     NgClass,
     NgForOf,
