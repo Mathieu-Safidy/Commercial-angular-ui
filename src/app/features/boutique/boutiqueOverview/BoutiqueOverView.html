@@ -1,0 +1,87 @@
+<div class="space-y-10 animate-fade-in">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <h2 class="text-3xl font-black tracking-tight">Tableau de bord</h2>
+    <app-badge
+      variant="outline"
+      class="h-8 px-4 rounded-full border-primary/20 bg-primary/5 text-primary"
+    >
+      Derniers 30 jours
+    </app-badge>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <app-card *ngFor="let stat of stats" class="border-none shadow-elegant group overflow-hidden">
+      <app-card-content class="p-6 pt-6">
+        <div class="flex justify-between items-start mb-4">
+          <div class="p-3 rounded-xl bg-muted/50 transition-colors group-hover:bg-primary/10">
+            <lucide-icon [name]="stat.icon" class="w-6 h-6" [ngClass]="stat.color"></lucide-icon>
+          </div>
+          <app-badge variant="secondary" class="border-none font-bold" [ngClass]="stat.trendColor">
+            {{ stat.trend }}
+          </app-badge>
+        </div>
+        <div class="space-y-1">
+          <p class="text-sm font-bold text-muted-foreground uppercase tracking-wider">
+            {{ stat.label }}
+          </p>
+          <h4 class="text-3xl font-black">{{ stat.value }}</h4>
+        </div>
+      </app-card-content>
+    </app-card>
+  </div>
+
+  <!-- Sales chart -->
+  <div class="grid grid-cols-3 gap-8">
+    <app-card class="lg:col-span-2 border-none shadow-elegant">
+      <app-card-header class="flex flex-row items-center justify-between pb-8">
+        <app-card-title class="text-xl font-bold">Performance des ventes</app-card-title>
+        <div class="flex gap-2">
+          <button app-button variant="ghost" size="sm" class="h-8 rounded-lg">Hebdomadaire</button>
+          <button
+            app-button
+            variant="secondary"
+            size="sm"
+            class="h-8 rounded-lg bg-primary/10 text-primary"
+          >
+            Mensuel
+          </button>
+        </div>
+      </app-card-header>
+
+      <app-card-content class="h-[300px] flex items-end gap-4 px-6 pb-6">
+        <div
+          *ngFor="let h of bars"
+          class="flex-1 bg-muted/30 rounded-t-lg relative group overflow-hidden"
+        >
+          <div
+            class="absolute bottom-0 inset-x-0 bg-primary transition-all duration-500 rounded-t-lg"
+            [style.height.%]="h"
+          ></div>
+        </div>
+      </app-card-content>
+    </app-card>
+
+    <!-- Audience section -->
+      <app-card class="border-none shadow-elegant overflow-hidden">
+        <app-card-header class="pb-4">
+          <app-card-title>Audience</app-card-title>
+        </app-card-header>
+        <app-card-content class="space-y-6">
+          <div *ngFor="let item of audience" class="space-y-1.5">
+            <div class="flex justify-between text-xs font-bold uppercase">
+              <span>{{ item.label }}</span>
+              <span>{{ item.val }}%</span>
+            </div>
+            <app-progress [value]="item.val" class="h-1.5"></app-progress>
+          </div>
+          <app-separator></app-separator>
+          <button app-button variant="outline" class="w-full rounded-xl gap-2 font-bold py-6">
+            Détails de l'audience
+            <lucide-icon [img]="ArrowUpRight" class="w-4 h-4"></lucide-icon>
+          </button>
+        </app-card-content>
+      </app-card>
+  </div>
+</div>

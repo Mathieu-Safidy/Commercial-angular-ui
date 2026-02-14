@@ -9,7 +9,8 @@ import {
   CheckCircle2,
   Truck,
   ChevronRight,
-  Clock
+  Clock,
+  ShoppingCart
 } from 'lucide-angular';
 import { ButtonComponent } from '../../../components/ui/button';
 import { BadgeComponent } from '../../../components/ui/badge';
@@ -38,6 +39,7 @@ export class ClientHistoryComponent {
   readonly truck = Truck;
   readonly chevronRight = ChevronRight;
   readonly clock = Clock;
+  readonly ShoppingCart = ShoppingCart;
 
   cartItems = [
     { id: 1, name: "Montre Minimaliste", boutique: "Eco Luxe", price: 129, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200" },

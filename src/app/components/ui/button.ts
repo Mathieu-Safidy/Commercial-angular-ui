@@ -7,9 +7,9 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-white shadow hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        outline: "border border-input ng-[hsl(var(--background))] shadow-sm hover:bg-accent hover:text-accent-foreground",
+        outline: "border border-primary/20 bg-primary/5 text-primary shadow-sm hover:bg-accent hover:text-accent-foreground",
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
@@ -31,9 +31,9 @@ export const buttonVariants = cva(
 type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 @Component({
-  selector: 'button[app-button], a[app-button]', // S'applique aux balises <button> ou <a>
+  selector: 'button[app-button], a[app-button]',
   standalone: true,
-  template: `<ng-content />`, // Projette le texte/icônes à l'intérieur
+  template: `<ng-content />`,
 })
 export class ButtonComponent {
   // Inputs utilisant les Signals

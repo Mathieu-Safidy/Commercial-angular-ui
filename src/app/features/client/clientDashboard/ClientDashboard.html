@@ -29,24 +29,29 @@
       <app-tabs-list className="inline-flex bg-muted/50 p-1.5 h-auto rounded-xl ">
         <!-- <div class="bg-gray-100 rounded-xl p-1.5 shadow-inner"> -->
 
-          <button appTabsTrigger value="shop" class="gap-2 px-6 py-2.5 rounded-lg bg-white">
+          <button appTabsTrigger  [value]="'shop'" class="gap-2 px-6 py-2.5 rounded-lg">
             <lucide-icon [img]="LayoutGrid" class="w-4 h-4"></lucide-icon>
             <span>Explorer</span>
           </button>
   
-          <button appTabsTrigger value="history" class="gap-2 px-6 py-2.5 rounded-lg">
+          <button appTabsTrigger [value]="'history'" class="gap-2 px-6 py-2.5 rounded-lg">
             <lucide-icon [img]="ShoppingCart" class="w-4 h-4"></lucide-icon>
             <span>Mes Achats</span>
           </button>
   
-          <button appTabsTrigger value="rentals" class="gap-2 px-6 py-2.5 rounded-lg">
+          <button appTabsTrigger [value]="'rentals'" class="gap-2 px-6 py-2.5 rounded-lg">
             <lucide-icon [img]="MapPin" class="w-4 h-4"></lucide-icon>
             <span>Locations</span>
           </button>
   
-          <button appTabsTrigger value="reviews" class="gap-2 px-6 py-2.5 rounded-lg">
+          <button appTabsTrigger [value]="'reviews'" class="gap-2 px-6 py-2.5 rounded-lg">
             <lucide-icon [img]="MessageSquare" class="w-4 h-4"></lucide-icon>
             <span>Avis</span>
+          </button>
+          
+          <button appTabsTrigger [value]="'posts'" class="gap-2 px-6 py-2.5 rounded-lg">
+            <lucide-icon [img]="MessageSquare" class="w-4 h-4"></lucide-icon>
+            <span>Posts</span>
           </button>
 
         <!-- </div> -->
@@ -68,6 +73,10 @@
 
     <div appTabsContent value="reviews" class="block animate-in fade-in slide-in-from-bottom-4 duration-500">
       <app-client-reviews></app-client-reviews>
+    </div>
+    
+    <div appTabsContent value="posts" class="block animate-in fade-in slide-in-from-bottom-4 duration-500 pt-5">
+      <app-boutique-posts></app-boutique-posts>
     </div>
 
   </app-tabs>

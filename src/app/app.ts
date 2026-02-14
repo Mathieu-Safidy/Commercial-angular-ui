@@ -15,6 +15,8 @@ import { ButtonComponent } from './components/ui/button';
 import { InputComponent } from './components/ui/input';
 import { BadgeComponent } from './components/ui/badge';
 import { SeparatorComponent } from './components/ui/separator';
+import {BoutiqueDashboardComponent} from './features/boutique/boutiqueDashboard/BoutiqueDashBoard';
+import {AdminDashboardComponent} from './features/admin/adminDashboard/AdminDashBoard';
 
 // Définition du type (en dehors ou dans la classe)
 type Profile = 'client' | 'boutique' | 'admin';
@@ -26,10 +28,11 @@ type Profile = 'client' | 'boutique' | 'admin';
     CommonModule,
     LucideAngularModule,
     ButtonComponent,
-    InputComponent,
     BadgeComponent,
     SeparatorComponent,
     ClientDashboardComponent,
+    BoutiqueDashboardComponent,
+    AdminDashboardComponent,
     // BoutiqueDashboardComponent,
     // AdminDashboardComponent
   ],

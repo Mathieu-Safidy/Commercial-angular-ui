@@ -1,6 +1,6 @@
 import { Component, input, HostBinding } from '@angular/core';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '../../lib/utils'; // Chemin relatif vers tes utils
+import { cn } from '../../lib/utils';
 
 // On définit les variantes exactement comme dans ton code React
 export const badgeVariants = cva(
@@ -9,12 +9,15 @@ export const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+          "border-transparent bg-emerald-500/10 text-emerald-500 shadow hover:bg-emerald-500/20",
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border-transparent bg-amber-500/10 text-amber-500 shadow hover:bg-amber-500/20",
+        primary:
+          "border-transparent bg-primary/20 text-primary shadow hover:bg-primary/20",
         destructive:
-          "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
+          "border-transparent bg-destructive/10 text-destructive shadow hover:bg-destructive/20",
         outline: "text-foreground",
+        dot : "px-0 py-0 border-transparent bg-emerald-500/10 text-emerald-500 shadow hover:bg-emerald-500/20"
       },
     },
     defaultVariants: {

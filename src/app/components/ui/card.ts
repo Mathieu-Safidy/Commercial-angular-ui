@@ -26,7 +26,7 @@ export class CardHeaderComponent {
 }
 
 @Component({
-  selector: 'h3[app-card-title]', // On l'utilise sur un h3 pour le SEO/Accessibilité
+  selector: 'app-card-title',
   standalone: true,
   template: `<ng-content />`,
 })

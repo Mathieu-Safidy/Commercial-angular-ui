@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -38,6 +38,8 @@ export class ClientReviewsComponent {
   readonly Award = Award;
   readonly MoreVertical = MoreVertical;
   readonly Camera = Camera;
+
+  titleReviews = input(true);
 
   // Données
   reviews = [

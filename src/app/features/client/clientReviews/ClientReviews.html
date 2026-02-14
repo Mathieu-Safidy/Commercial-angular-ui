@@ -52,8 +52,12 @@
 
   <div class="lg:col-span-2 space-y-6">
     <div class="flex items-center justify-between">
-      <h3 class="text-2xl font-bold">Historique des avis</h3>
-      <button app-button variant="ghost" size="sm" className="font-bold text-primary">Les plus récents</button>
+      @if (reviews.length > 0 && titleReviews()) {
+        <h3 class="text-2xl font-bold">Historique des avis</h3>
+        <button app-button variant="ghost" size="sm" className="font-bold text-primary">Les plus récents</button>
+      } @else {
+        <div class="p-4"></div>
+      }
     </div>
 
     <div class="space-y-6">

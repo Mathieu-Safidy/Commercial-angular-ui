@@ -1,10 +1,10 @@
 <div class="min-h-screen bg-background transition-colors duration-300">
-  <nav class="sticky top-0 z-50 w-full border-b border-border/80 backdrop-blur-md">
+  <nav class="sticky top-0 z-50 w-full border-b bg-background/80 border-border/80 backdrop-blur-md">
     <div class="container mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center gap-6">
         <div class="flex items-center gap-2 cursor-pointer" (click)="setActiveProfile('client')">
           <div
-            class="w-10 h-10 bg-primary  text-white rounded-xl flex items-center justify-center shadow-elegant"
+            class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-elegant"
           >
             <span class="text-primary-foreground font-bold text-xl italic">T</span>
           </div>
@@ -50,33 +50,30 @@
       </div>
 
       <div class="flex items-center gap-4">
-        <!-- <div class="hidden md:flex relative max-w-sm">
-          <lucide-icon [img]="Search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground"></lucide-icon>
-          <input app-input placeholder="Rechercher..." class="pl-9 h-9 w-[200px] lg:w-[300px] bg-muted/50 border-none focus-visible:ring-primary/20" />
-        </div> -->
-        <div class="relative hidden md:flex items-center w-full max-w-sm">
-          <lucide-icon [name]="Search" class="absolute left-[0.4rem] w-4 h-4 text-gray-400"> </lucide-icon>
-
+        <div class="hidden md:flex relative max-w-sm rounded-2xl">
+          <div class="absolute left-3 top-1/2 -translate-y-1/2">
+            <lucide-icon [img]="Search" class="w-4 h-4 text-muted-foreground"> </lucide-icon>
+          </div>
           <input
             app-input
-            type="text"
             placeholder="Rechercher..."
-            class="w-full h-9 pl-9 pr-3 rounded-md bg-gray-100 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:bg-white transition"
+            class="pl-9 h-9 w-[200px] lg:w-[300px] bg-muted/50 border-none focus-visible:ring-primary/20 rounded-xl"
           />
         </div>
+
         <button
           app-button
           variant="ghost"
           size="icon"
-          class="h-9 w-9 rounded-full"
+          class="h-9 w-9 rounded-full hover:text-primary-foreground cursor-pointer"
           (click)="toggleDarkMode()"
         >
           <lucide-icon [img]="isDarkMode ? Sun : Moon" class="w-4 h-4"></lucide-icon>
         </button>
 
-        <button app-button variant="ghost" size="icon" class="relative h-9 w-9 rounded-full">
+        <button app-button variant="ghost" size="icon" class="relative h-9 w-9 rounded-full hover:text-primary-foreground cursor-pointer">
           <lucide-icon [img]="Bell" class="w-4 h-4"></lucide-icon>
-          <app-badge class="absolute top-1 right-1 h-2 w-2 p-0 rounded-full bg-primary"></app-badge>
+          <app-badge variant="dot" class="absolute top-1 right-1 h-2 w-2 p-0 rounded-full bg-primary"></app-badge>
         </button>
 
         <app-separator orientation="vertical" class="h-6 mx-2 hidden sm:block"></app-separator>
@@ -100,13 +97,13 @@
     @if (activeProfile === 'client') {
       <app-client-dashboard></app-client-dashboard>
     } @else if (activeProfile === 'boutique') {
-      <!--      <app-boutique-dashboard></app-boutique-dashboard>-->
+      <app-boutique-dashboard></app-boutique-dashboard>
     } @else if (activeProfile === 'admin') {
-      <!--      //<app-admin-dashboard></app-admin-dashboard>-->
+      <app-admin-dashboard></app-admin-dashboard>
     }
   </main>
 
-  <footer class="py-20 border-t bg-muted/20 relative overflow-hidden">
+  <footer class="py-20 border-t bg-muted/20 border-border/50 relative overflow-hidden">
     <div
       class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[300px] bg-primary/5 blur-[120px] rounded-full -z-10"
     ></div>

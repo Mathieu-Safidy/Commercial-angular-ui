@@ -1,0 +1,167 @@
+<div class="space-y-10 animate-fade-in">
+
+  <!-- KPI CARDS -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Visites -->
+    <app-card class="border-none bg-card shadow-elegant p-8 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="p-3 rounded-2xl bg-primary/10 text-primary">
+          <lucide-icon [img]="items.Users" class="w-6 h-6"></lucide-icon>
+        </div>
+        <app-badge class="bg-emerald-500/10 text-emerald-500 font-black">+18%</app-badge>
+      </div>
+
+      <div>
+        <h4 class="text-3xl font-black">1.2M</h4>
+        <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+          Visites Mensuelles
+        </p>
+      </div>
+
+      <div class="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+        <div class="h-full bg-primary w-[85%]"></div>
+      </div>
+
+      <p class="text-[10px] text-muted-foreground font-medium italic">
+        Objectif 1.5M atteint à 85%
+      </p>
+    </app-card>
+
+    <!-- CTR -->
+    <app-card class="border-none bg-card shadow-elegant p-8 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="p-3 rounded-2xl bg-blue-500/10 text-blue-500">
+          <lucide-icon [img]="items.MousePointer2" class="w-6 h-6"></lucide-icon>
+        </div>
+        <app-badge class="bg-blue-500/10 text-blue-500 font-black">+5.2%</app-badge>
+      </div>
+
+      <div>
+        <h4 class="text-3xl font-black">4.8%</h4>
+        <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+          Taux de Clic Global
+        </p>
+      </div>
+
+      <div class="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+        <div class="h-full bg-blue-500 w-[60%]"></div>
+      </div>
+
+      <p class="text-[10px] text-muted-foreground font-medium italic">
+        Stabilité confirmée sur 3 mois
+      </p>
+    </app-card>
+
+    <!-- Conversion -->
+    <app-card class="border-none bg-card shadow-elegant p-8 space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="p-3 rounded-2xl bg-amber-500/10 text-amber-500">
+          <lucide-icon [img]="items.Target" class="w-6 h-6"></lucide-icon>
+        </div>
+        <app-badge class="bg-emerald-500/10 text-emerald-500 font-black">+12%</app-badge>
+      </div>
+
+      <div>
+        <h4 class="text-3xl font-black">15.4%</h4>
+        <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest mt-1">
+          Conversion Globale
+        </p>
+      </div>
+
+      <div class="h-1.5 w-full bg-muted rounded-full overflow-hidden">
+        <div class="h-full bg-amber-500 w-[72%]"></div>
+      </div>
+
+      <p class="text-[10px] text-muted-foreground font-medium italic">
+        Meilleure perf : Samedi / 18h
+      </p>
+    </app-card>
+
+  </div>
+
+  <!-- GRAPHS -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+    <!-- Peak days -->
+    <app-card class="border-none bg-card shadow-elegant">
+      <app-card-header class="p-8 pb-4">
+        <app-card-title class="text-xl font-black flex items-center gap-3 uppercase italic">
+          <lucide-icon [img]="items.MapPin" class="text-primary"></lucide-icon>
+          JOURS DE POINTE VENTES
+        </app-card-title>
+      </app-card-header>
+
+      <app-card-content class="p-8 pt-0 space-y-6">
+        <div *ngFor="let d of peakDays">
+          <div class="flex justify-between text-xs font-black uppercase mb-2">
+            <span>{{ d.day }}</span>
+            <span class="text-primary">{{ d.value }}%</span>
+          </div>
+
+          <div class="h-3 bg-muted rounded-lg overflow-hidden relative">
+            <div
+              class="absolute inset-y-0 left-0 transition-all duration-1000 shadow-sm"
+              [ngClass]="d.color"
+              [style.width.%]="+d.value"></div>
+        </div>
+  </div>
+  </app-card-content>
+  </app-card>
+
+  <!-- Top products -->
+  <app-card class="border-none shadow-elegant overflow-hidden">
+    <app-card-header class="p-8 pb-4">
+      <app-card-title class="text-xl font-black flex items-center gap-3 uppercase italic">
+        <lucide-icon [img]="items.TrendingUp" class="text-primary"></lucide-icon>
+        PRODUITS POPULAIRES / CATÉGORIE
+      </app-card-title>
+    </app-card-header>
+
+    <app-card-content class="p-0 divide-y divide-muted/50">
+      <div
+        *ngFor="let p of popularProducts"
+        class="px-8 py-5 flex items-center justify-between
+                 hover:bg-muted/10 transition-colors group cursor-pointer"
+      >
+        <div>
+          <p class="text-[10px] font-black text-muted-foreground uppercase tracking-widest">
+            {{ p.category }}
+          </p>
+          <p class="font-bold text-sm group-hover:text-primary transition-colors">
+            {{ p.name }}
+          </p>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <div class="text-right">
+            <p
+              class="font-black text-sm"
+              [ngClass]="p.growth.startsWith('+') ? 'text-emerald-500' : 'text-destructive'"
+            >
+              {{ p.growth }}
+            </p>
+            <p class="text-[9px] font-bold text-muted-foreground uppercase">
+              Tendance mois
+            </p>
+          </div>
+
+          <!-- conversion string "true"/"false" en bool -->
+          <app-badge
+            *ngIf="p.top === 'true'"
+            class="bg-primary/10 text-primary border-none text-[8px] h-4"
+          >
+            TOP
+          </app-badge>
+
+          <lucide-icon
+            [img]="items.ChevronRight"
+            class="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors"
+          ></lucide-icon>
+        </div>
+      </div>
+    </app-card-content>
+  </app-card>
+
+</div>
+</div>
