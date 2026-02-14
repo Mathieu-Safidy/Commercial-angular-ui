@@ -2,7 +2,7 @@
 
   <div class="lg:col-span-2 space-y-6">
     <h3 class="text-2xl font-bold flex items-center gap-2">
-      <span class="text-primary">🛒</span> Panier Actuel
+      <span class="text-primary"><lucide-icon [img]="ShoppingCart" class="w-5 h-5"></lucide-icon></span> Panier Actuel
     </h3>
 
     <app-card className="border-none shadow-elegant overflow-hidden">
@@ -25,8 +25,9 @@
                   <span class="w-8 text-center font-bold text-sm">1</span>
                   <button app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">+</button>
                 </div>
-                <button app-button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive transition-colors">
-                  🗑️ </button>
+                <button app-button variant="ghost" size="icon" className="text-muted-foreground hover:text-background cursor-pointer transition-colors">
+                <lucide-icon [img]="trash" class="w-4 h-4"></lucide-icon>  
+                </button>
               </div>
             </div>
             @if (idx < cartItems.length - 1) {
@@ -62,7 +63,7 @@
 
   <div class="space-y-6">
     <h3 class="text-2xl font-bold flex items-center gap-2">
-      <span class="text-primary">🕒</span>
+      <span class="text-primary"><lucide-icon [img]="clock" class="w-5 h-5"></lucide-icon></span>
       Historique
     </h3>
 
@@ -72,7 +73,7 @@
           <app-card-content className="p-5 flex items-center justify-between">
             <div class="flex items-center gap-4">
               <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                {{ order.status === 'Livré' ? '✅' : '🚚' }}
+                <lucide-icon [img]="order.status === 'Livré' ? checkCircle : truck" class="w-5 h-5"></lucide-icon>
               </div>
               <div>
                 <h5 class="font-bold text-sm">{{ order.id }}</h5>
