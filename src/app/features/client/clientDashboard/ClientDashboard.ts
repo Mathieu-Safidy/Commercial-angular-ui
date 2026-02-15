@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -18,6 +18,7 @@ import { ClientReviewsComponent } from '../clientReviews/ClientReviews';
 
 import { TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComponent } from '../../../components/ui/tabs';
 import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePosts';
+import { PanierService } from '../../../services/panierService/panier-service';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -43,6 +44,12 @@ export class ClientDashboardComponent {
   readonly LayoutGrid = LayoutGrid;
   readonly MessageSquare = MessageSquare;
   readonly MapPin = MapPin;
-
+  panierService = inject(PanierService);
+  constructor() { 
+  }
+  
+  async ngOnInit() {
+    await this.panierService.initializePanier();
+  }
   avatars = [1, 2, 3, 4];
 }

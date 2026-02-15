@@ -74,7 +74,7 @@
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      @for (product of products; track product.id) {
+      @for (product of products(); track product.id) {
         <div class="group cursor-pointer">
           <div class="relative aspect-square rounded-2xl overflow-hidden bg-muted mb-4 shadow-elegant">
             <img [src]="product.image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" [alt]="product.name" />
@@ -89,10 +89,18 @@
             </button>
 
             <div class="absolute bottom-4 left-4 right-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-              <button app-button className="w-full rounded-full gap-2 shadow-glow">
-                <lucide-icon [img]="ShoppingBag" class="w-4 h-4"></lucide-icon>
-                Panier
-              </button>
+              @if(verifInPanier(product.id)) {
+                <button app-button className="w-full rounded-full gap-2 bg-green-600 hover:bg-green-700 text-white shadow-glow">
+                  <lucide-icon [img]="Check" class="w-4 h-4"></lucide-icon>
+                  Ajouté
+                </button>
+              } @else {
+                <button (click)="addToCart(product.id)" app-button className="w-full rounded-full gap-2 shadow-glow cursor-pointer">
+                  <lucide-icon [img]="ShoppingBag" class="w-4 h-4"></lucide-icon>
+                  Panier
+                </button>
+              }
+
             </div>
           </div>
           <div class="space-y-1">

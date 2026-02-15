@@ -1,0 +1,46 @@
+import { inject, Injectable, signal } from '@angular/core';
+import { Utils } from '../utils/utils';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PanierService {
+  private http = inject(Utils);
+  public panier = signal<any>(null);
+
+  public async getPanier(idUSer: string) {
+    return await this.http.PGet(`/paniers/actif/${idUSer}`);
+  }
+  // public async addToPanier(idDetail: number, idProduit: number, quantite: number) {
+  //     return await this.http.PPost(`/paniers/add/details/${idDetail}`, { idProduit, quantite });
+  // }
+  public async addToPanier(iduser: string, idProduit: string, quantite: number) {
+    return await this.http.PPost(`/paniers/add/details/${iduser}`, { idProduit, quantite });
+  }
+  public async updatePanierDetail(idDetail: number, quantite: number) {
+    return await this.http.PPatch(`/paniers/modify/details/${idDetail}`, { quantite });
+  }
+  public async removeFromPanier(idDetail: number) {
+    return await this.http.PDelete(`/paniers/delete/details/${idDetail}`);
+  }
+  public async reloadPanier() {
+    this.panier.set(null);
+    await this.initializePanier();
+    return this.panier();
+  }
+  public async initializePanier() {
+    let panier: Panier = null as any;
+    if (this.panier()) {
+      panier = this.panier() as Panier;
+    } else {
+      panier = (await this.getPanier('698dfddc709de29d54628ca1')) as Panier;
+      this.panier.set(panier);
+    }
+    return this.panier();
+  }
+  public async deleteFromPanier(idDetail: number) {
+    await this.removeFromPanier(idDetail);
+    await this.reloadPanier();
+    return this.panier();
+  }
+}
