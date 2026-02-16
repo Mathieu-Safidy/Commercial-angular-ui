@@ -53,76 +53,92 @@
 
   <!-- Orders list -->
   <div class="grid grid-cols-1 gap-4">
-    <app-card
-      *ngFor="let order of orders"
-      class="border-none shadow-elegant hover:scale-[1.01] transition-all cursor-pointer group overflow-hidden"
-    >
+    <app-card *ngFor="let order of orders" class="border-none shadow-elegant hover:scale-[1.01] transition-all cursor-pointer group overflow-hidden">
       <app-card-content class="p-0!">
+
+        <!-- Infos commande -->
         <div class="relative flex flex-col lg:flex-row lg:items-center p-6 gap-6">
-
-          <!-- Status bar -->
-          <div
-            class="absolute left-0 inset-y-0 w-1.5"
-            [ngClass]="getStatusBarClass(order.status)">
-          </div>
-
-          <!-- Order info -->
+          <div class="absolute left-0 inset-y-0 w-1.5" [ngClass]="getStatusBarClass(order.status)"></div>
           <div class="flex-1 flex items-center gap-6">
             <div class="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center">
               <lucide-angular [img]="ShoppingBag" class="w-6 h-6 text-primary"></lucide-angular>
             </div>
-
             <div class="space-y-1">
               <div class="flex items-center gap-3">
                 <h4 class="font-black text-lg">{{ order.id }}</h4>
-                <app-badge
-                  class="font-bold border-none h-6"
-                  [ngClass]="getStatusBadgeClass(order.status)">
+                <app-badge class="font-bold border-none h-6" [ngClass]="getStatusBadgeClass(order.status)">
                   {{ order.status }}
                 </app-badge>
               </div>
-
               <div class="flex text-sm font-medium gap-4">
-                <p class="flex items-center gap-4"> <span><lucide-angular [img]="CircleCheck" class="w-4 h-4 text-primary"></lucide-angular></span> <span>{{ order.customer }}</span></p>
-                <p class="flex items-center gap-4 text-muted-foreground"> <span><lucide-angular [img]="Clock" class="w-4 h-4 text-muted-foreground"></lucide-angular></span> <span>{{ order.time }}</span></p>
+                <p class="flex items-center gap-4">
+                  <span><lucide-angular [img]="CircleCheck" class="w-4 h-4 text-primary"></lucide-angular></span>
+                  <span>{{ order.customer }}</span>
+                </p>
+                <p class="flex items-center gap-4 text-muted-foreground">
+                  <span><lucide-angular [img]="Clock" class="w-4 h-4 text-muted-foreground"></lucide-angular></span>
+                  <span>{{ order.time }}</span>
+                </p>
               </div>
             </div>
           </div>
 
-          <!-- Stats -->
+          <!-- Stats et bouton Gérer -->
           <div class="flex items-center justify-between lg:justify-end gap-12 border-t lg:border-t-0 pt-4 lg:pt-0">
             <div class="flex items-center gap-8">
               <div class="text-center">
                 <p class="text-[10px] font-bold text-muted-foreground uppercase">Articles</p>
                 <p class="font-black">{{ order.items }}</p>
               </div>
-
               <div class="text-center">
                 <p class="text-[10px] font-bold text-muted-foreground uppercase">Total</p>
                 <p class="font-black text-primary text-xl">{{ order.total }}</p>
               </div>
             </div>
-
             <div class="flex items-center gap-2">
-              <button app-button variant="secondary" className="rounded-xl h-10 px-6 font-bold">
-                Gérer
+              <button app-button variant="secondary" class="rounded-xl h-10 px-6 font-bold" (click)="showDetails(order)">
+                voir details
               </button>
-              <button app-button variant="ghost" size="icon" className="rounded-xl h-10 w-10">
-                ⋮
-              </button>
-              ➜
             </div>
           </div>
+        </div>
+
+        <!-- Détails dépliables -->
+        <div *ngIf="isExpanded(order) && order.details?.length" class="mt-4 p-4 bg-muted rounded-lg">
+          <h4 class="font-bold mb-2">Détails de la commande</h4>
+
+          <app-card *ngFor="let item of order.details" class="border-none shadow-elegant overflow-hidden">
+            <app-card-content class="p-0">
+              <div class="flex items-center gap-6 p-6 group">
+<!--                <div class="w-24 h-24 rounded-xl overflow-hidden bg-muted flex-shrink-0">-->
+<!--                  <img [src]="item.idProduit.image" [alt]="item.idProduit.nom" class="w-full h-full object-cover" />-->
+<!--                </div>-->
+                <div class="flex-1 space-y-1">
+                  <p class="text-xs font-bold text-primary uppercase">{{ item.idProduit.boutique }}</p>
+                  <h4 class="font-bold text-lg">{{ item.idProduit.nom }}</h4>
+                  <p class="text-primary font-bold">{{ item.idProduit.prixInitial }} Ar</p>
+                </div>
+                <div class="flex items-center gap-4">
+                  <div class="flex items-center bg-muted rounded-full px-2">
+                    <button app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">-</button>
+                    <span class="font-bold">{{ item.quantite }}</span>
+                    <button app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">+</button>
+                  </div>
+                  <button app-button variant="ghost" size="icon" className="text-muted-foreground hover:text-background cursor-pointer transition-colors">
+                    <lucide-icon [img]="trash" class="w-4 h-4"></lucide-icon>
+                  </button>
+                </div>
+              </div>
+
+            </app-card-content>
+          </app-card>
+          <app-separator />
+
 
         </div>
+
       </app-card-content>
     </app-card>
-
-    <button
-      app-button
-      variant="ghost"
-      className="w-full py-8 text-muted-foreground hover:text-primary font-bold rounded-2xl border-2 border-dashed border-muted">
-      Charger plus de commandes
-    </button>
   </div>
+
 </div>
