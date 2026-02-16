@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -7,13 +7,16 @@ import {
   Star,
   Heart,
   TrendingUp,
-  Sparkles
+  Sparkles,
+  Check,
 } from 'lucide-angular';
 
 // Imports de tes composants UI (assure-toi que les chemins sont corrects)
 import { ButtonComponent } from '../../../components/ui/button';
 import { BadgeComponent } from '../../../components/ui/badge';
 import { CardComponent, CardContentComponent } from '../../../components/ui/card';
+import { ProduitService } from '../../../services/produitService/produit-service';
+import { PanierService } from '../../../services/panierService/panier-service';
 
 @Component({
   selector: 'app-client-shop',
@@ -24,9 +27,9 @@ import { CardComponent, CardContentComponent } from '../../../components/ui/card
     ButtonComponent,
     BadgeComponent,
     CardComponent,
-    CardContentComponent
+    CardContentComponent,
   ],
-  templateUrl: './ClientShop.html'
+  templateUrl: './ClientShop.html',
 })
 export class ClientShopComponent {
   // Mapping des icônes
@@ -36,20 +39,119 @@ export class ClientShopComponent {
   readonly Heart = Heart;
   readonly TrendingUp = TrendingUp;
   readonly Sparkles = Sparkles;
+  readonly Check = Check;
+
+  produitService = inject(ProduitService);
+  panierService = inject(PanierService);
+
+  constructor() {
+    effect(() => {
+      const panier = this.panierService.panier();
+      if (!panier) return;
+      this.panier.set(panier);
+    })
+  }
 
   featuredBoutiques = [
-    { name: "Eco Luxe", category: "Mode", rating: 4.8, image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800" },
-    { name: "Artisans du Bois", category: "Déco", rating: 4.9, image: "https://images.unsplash.com/photo-1534073828943-f801091bb18c?auto=format&fit=crop&q=80&w=800" },
-    { name: "Urban Tech", category: "Électronique", rating: 4.7, image: "https://images.unsplash.com/photo-1491933382434-50028619b54b?auto=format&fit=crop&q=80&w=800" },
+    {
+      name: 'Eco Luxe',
+      category: 'Mode',
+      rating: 4.8,
+      image:
+        'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800',
+    },
+    {
+      name: 'Artisans du Bois',
+      category: 'Déco',
+      rating: 4.9,
+      image:
+        'https://images.unsplash.com/photo-1534073828943-f801091bb18c?auto=format&fit=crop&q=80&w=800',
+    },
+    {
+      name: 'Urban Tech',
+      category: 'Électronique',
+      rating: 4.7,
+      image:
+        'https://images.unsplash.com/photo-1491933382434-50028619b54b?auto=format&fit=crop&q=80&w=800',
+    },
   ];
 
-  products = [
-    { id: 1, name: "Montre Minimaliste", boutique: "Eco Luxe", price: "129€", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800" },
-    { id: 2, name: "Vase Céramique", boutique: "Artisans du Bois", price: "45€", image: "https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=800" },
-    { id: 3, name: "Casque ANC", boutique: "Urban Tech", price: "299€", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800" },
-    { id: 4, name: "Sac à dos Urbain", boutique: "Eco Luxe", price: "85€", image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=800" },
-  ];
+  details = signal<any>([]);
 
+  products = signal<any>([
+    {
+      id: 1,
+      name: 'Montre Minimaliste',
+      boutique: 'Eco Luxe',
+      price: '129€',
+      image:
+        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800',
+    },
+    {
+      id: 2,
+      name: 'Vase Céramique',
+      boutique: 'Artisans du Bois',
+      price: '45€',
+      image:
+        'https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=800',
+    },
+    {
+      id: 3,
+      name: 'Casque ANC',
+      boutique: 'Urban Tech',
+      price: '299€',
+      image:
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800',
+    },
+    {
+      id: 4,
+      name: 'Sac à dos Urbain',
+      boutique: 'Eco Luxe',
+      price: '85€',
+      image:
+        'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=800',
+    },
+  ]);
+  panier = signal<any>(null);
   // Helper pour simuler les avatars des abonnés
   subscriberIds = [1, 2, 3];
+
+  ngAfterViewInit() {
+    this.initProducts();
+  }
+
+  verifInPanier(idProduit: string): boolean {
+    if (!this.panier()) return false;
+    return this.panier().details.some((detail: PanierDetail) => detail.idProduit === idProduit);
+  }
+
+  async initProducts() {
+    // this.panier.set(await this.panierService.getPanier('698dfddc709de29d54628ca1') as Panier)
+    // let panierInit = await this.panierService.initializePanier();
+    // this.panier.set(panierInit);
+    let produits: Produit[] = (await this.produitService.getProduits()) as Produit[];
+    console.log(produits);
+
+    this.products.set(
+      produits.map((produit) => ({
+        id: produit._id,
+        name: produit.nom,
+        boutique: produit.boutique.nom,
+        price: produit.prixInitial + '€',
+        image:
+          'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800', // Placeholder, à remplacer par produit.image si disponible,
+      })),
+    );
+  }
+
+  async addToCart(idProduit: string) {
+    let idUser = "698dfddc709de29d54628ca1";
+    let quantite = 1;
+    // Appel à ton service pour ajouter le produit au panier
+    await this.panierService.addToPanier(idUser, idProduit, quantite);
+    let panier = await this.panierService.reloadPanier(); // Recharge le panier pour obtenir les dernières données
+    this.panier.set(panier);
+    // Logique pour ajouter le produit au panier
+    console.log(`Produit ${idProduit} ajouté au panier`);
+  }
 }

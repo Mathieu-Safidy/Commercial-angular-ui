@@ -7,7 +7,7 @@
 
     <app-card className="border-none shadow-elegant overflow-hidden">
       <app-card-content className="p-0">
-        @for (item of cartItems; track item.id; let idx = $index) {
+        @for (item of cartItems(); track item.id; let idx = $index) {
           <div>
             <div class="flex items-center gap-6 p-6 group">
               <div class="w-24 h-24 rounded-xl overflow-hidden bg-muted flex-shrink-0">
@@ -15,22 +15,22 @@
               </div>
               <div class="flex-1 space-y-1">
                 <p class="text-xs font-bold text-primary uppercase">{{ item.boutique }}</p>
-                <h4 class="font-bold text-lg">{{ item.name }}</h4>
+                <h4 class="font-bold text-lg">{{ item.nom }}</h4>
                 <p class="text-primary font-bold">{{ item.price }}€</p>
               </div>
 
               <div class="flex items-center gap-4">
                 <div class="flex items-center bg-muted rounded-full px-2">
-                  <button app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">-</button>
-                  <span class="w-8 text-center font-bold text-sm">1</span>
-                  <button app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">+</button>
+                  <button (click)="minusNumber(idx, 1)" app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">-</button>
+                  <span class="w-8 text-center font-bold text-sm">{{ item.quantite }}</span>
+                  <button (click)="addNumber(idx, 1)" app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">+</button>
                 </div>
-                <button app-button variant="ghost" size="icon" className="text-muted-foreground hover:text-background cursor-pointer transition-colors">
+                <button (click)="removeItem(idx)" app-button variant="ghost" size="icon" className="text-muted-foreground hover:text-background cursor-pointer transition-colors">
                 <lucide-icon [img]="trash" class="w-4 h-4"></lucide-icon>  
                 </button>
               </div>
             </div>
-            @if (idx < cartItems.length - 1) {
+            @if (idx < cartItems().length - 1) {
               <app-separator />
             }
           </div>
@@ -39,21 +39,21 @@
         <div class="p-6 bg-muted/30 space-y-4">
           <div class="flex justify-between font-medium">
             <span class="text-muted-foreground">Sous-total</span>
-            <span>174€</span>
+            <span>{{ priceFinal() }}€</span>
           </div>
-          <div class="flex justify-between font-medium text-destructive">
+          <!-- <div class="flex justify-between font-medium text-destructive">
             <span class="text-muted-foreground">Remise boutique</span>
             <span>-15€</span>
-          </div>
+          </div> -->
           <app-separator />
           <div class="flex justify-between items-end">
             <span class="font-bold text-lg">Total</span>
-            <span class="text-3xl font-black text-primary">159€</span>
+            <span class="text-3xl font-black text-primary">{{ priceFinal() }}€</span>
           </div>
 
           <div class="pt-4">
             <button app-button className="w-full h-14 rounded-2xl font-bold text-lg shadow-glow">
-              Confirmer l'achat (159€)
+              Confirmer l'achat ({{ priceFinal() }}€)
             </button>
           </div>
         </div>
@@ -68,7 +68,7 @@
     </h3>
 
     <div class="space-y-4">
-      @for (order of orders; track order.id) {
+      @for (order of orders(); track order.id) {
         <app-card className="border-none shadow-elegant hover:scale-[1.02] transition-transform cursor-pointer">
           <app-card-content className="p-5 flex items-center justify-between">
             <div class="flex items-center gap-4">

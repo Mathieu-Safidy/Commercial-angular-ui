@@ -3,11 +3,7 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-<<<<<<< HEAD
     "analytics": false
-=======
-    "analytics": "a4ca5f1b-4ae2-454b-b7f1-44a1cd252b30"
->>>>>>> Admin-Boutique-UI
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -35,6 +31,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "./src/environments/environment.ts",
+                  "with": "./src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
