@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { Utils } from '../utils/utils';
 
 @Injectable({
@@ -8,7 +8,13 @@ export class ProduitService {
   http = inject(Utils);
   
   produits = signal<Produit[]>([]);
-  prduitSelectionne = signal<Produit | null>(null);
+  produitSelectionne = signal<Produit | null>(null);
+
+  constructor() {
+    effect(() => {
+      console.log("Produit sélectionné:", this.produitSelectionne());
+    })
+  }
 
   public async initializeProduits() {
     if (this.produits().length === 0) {

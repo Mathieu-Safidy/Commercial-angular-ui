@@ -121,7 +121,7 @@ import { ProduitService } from '../../../services/produitService/produit-service
         </div>
 
         <!-- Footer -->
-        <div class="border-t px-6 sm:px-8 py-5 bg-muted/40 flex justify-end gap-3">
+        <!-- <div class="border-t px-6 sm:px-8 py-5 bg-muted/40 flex justify-end gap-3">
           <button 
             app-button 
             variant="outline" 
@@ -137,7 +137,7 @@ import { ProduitService } from '../../../services/produitService/produit-service
           >
             Éditer
           </button>
-        </div>
+        </div> -->
 
       </ui-alert-dialog-content>
     </ui-alert-dialog>
@@ -151,15 +151,29 @@ import { ProduitService } from '../../../services/produitService/produit-service
 export class ProductDetailDialogComponent {
 //   @Input() product: any = null;
   productService = inject(ProduitService);
-  product = computed(() => this.productService.prduitSelectionne());
+  // product = computed(() => this.productService.produitSelectionne());
+  product = signal<Produit | null>(null);
+  state = signal(false);
+  onClose() {
+    this.productService.produitSelectionne.set(null);
+  }
   constructor() {
-    // effect(() => {
-    //     this.product.set(this.productService.prduitSelectionne());
-    // })
+    effect(() => {
+      console.log("Produit sélectionné dans le dialogue:", this.productService.produitSelectionne());
+      this.product.set(this.productService.produitSelectionne());
+      // if (this.productService.produitSelectionne()) {
+      //   this.product.set(this.productService.produitSelectionne());
+      //   this.state.set(true);
+      // } else {
+      //   this.product.set(null);
+      //   this.state.set(false);
+      // }
+      // this.product.set(this.productService.produitSelectionne());
+    })
   }
   X = X;
   dialog = inject(AlertDialogService);
-  defaultPlaceholder = 'https://images.unsplash.com/photo-...400';
+  defaultPlaceholder = 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=400';
 
   close() {
     this.dialog.close();

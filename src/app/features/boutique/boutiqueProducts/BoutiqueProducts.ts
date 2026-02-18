@@ -10,19 +10,19 @@ import {
   Eye,
   Edit3,
   Trash2,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-angular';
-import {CardComponent} from '../../../components/ui/card';
-import {ButtonComponent} from '../../../components/ui/button';
-import {BadgeComponent} from '../../../components/ui/badge';
-import {InputComponent} from '../../../components/ui/input';
+import { CardComponent } from '../../../components/ui/card';
+import { ButtonComponent } from '../../../components/ui/button';
+import { BadgeComponent } from '../../../components/ui/badge';
+import { InputComponent } from '../../../components/ui/input';
 import { ProduitService } from '../../../services/produitService/produit-service';
-import { AlertDialogComponent } from "../../../components/ui/alert-dialog/alert-dialog.component";
-import { AlertDialogTriggerComponent } from "../../../components/ui/alert-dialog/alert-dialog-trigger.component";
-import { AlertDialogContentComponent } from "../../../components/ui/alert-dialog/alert-dialog-content.component";
-import { AlertDialogCancelComponent } from "../../../components/ui/alert-dialog/alert-dialog-cancel.component";
+import { AlertDialogComponent } from '../../../components/ui/alert-dialog/alert-dialog.component';
+import { AlertDialogTriggerComponent } from '../../../components/ui/alert-dialog/alert-dialog-trigger.component';
+import { AlertDialogContentComponent } from '../../../components/ui/alert-dialog/alert-dialog-content.component';
+import { AlertDialogCancelComponent } from '../../../components/ui/alert-dialog/alert-dialog-cancel.component';
 import { AlertDialogService } from '../../../components/ui/alert-dialog/alert-dialog.service';
-import { ProductDetailDialogComponent } from "../../../components/ui/produitDialogue/produitDalogue";
+import { ProductDetailDialogComponent } from '../../../components/ui/produitDialogue/produitDalogue';
 
 @Component({
   selector: 'app-boutique-products',
@@ -39,12 +39,11 @@ import { ProductDetailDialogComponent } from "../../../components/ui/produitDial
     AlertDialogTriggerComponent,
     AlertDialogContentComponent,
     AlertDialogCancelComponent,
-    ProductDetailDialogComponent
-],
-  templateUrl: './BoutiqueProducts.html'
+    ProductDetailDialogComponent,
+  ],
+  templateUrl: './BoutiqueProducts.html',
 })
 export class BoutiqueProductsComponent {
-
   produitService = inject(ProduitService);
 
   readonly Plus = Plus;
@@ -55,8 +54,6 @@ export class BoutiqueProductsComponent {
   readonly Edit3 = Edit3;
   readonly Trash2 = Trash2;
   readonly AlertCircle = AlertCircle;
-
- 
 
   //  _id: string;
   //   nom: string;
@@ -70,9 +67,8 @@ export class BoutiqueProductsComponent {
   //   deletedAt: Date | null;
   //   quantiteDisponible: number;
   //   boutique: Boutique;
-  
-  
-  products= signal<Produit[]>([
+
+  products = signal<Produit[]>([
     {
       _id: '699075f6489c38b47f628ca1',
       nom: 'Montre Minimaliste',
@@ -86,8 +82,9 @@ export class BoutiqueProductsComponent {
       deletedAt: null,
       quantiteDisponible: 12,
       status: 'En stock',
-      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400',
-      boutique: {} as any
+      image:
+        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400',
+      boutique: {} as any,
     },
     {
       _id: '699075f6489c38b47f628ca2',
@@ -102,8 +99,9 @@ export class BoutiqueProductsComponent {
       deletedAt: null,
       quantiteDisponible: 5,
       status: 'Stock faible',
-      image: 'https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=400',
-      boutique: {} as any
+      image:
+        'https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=400',
+      boutique: {} as any,
     },
     {
       _id: '699075f6489c38b47f628ca3',
@@ -118,8 +116,9 @@ export class BoutiqueProductsComponent {
       deletedAt: null,
       quantiteDisponible: 0,
       status: 'Rupture',
-      image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400',
-      boutique: {} as any
+      image:
+        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400',
+      boutique: {} as any,
     },
     {
       _id: '699075f6489c38b47f628ca4',
@@ -134,21 +133,27 @@ export class BoutiqueProductsComponent {
       deletedAt: null,
       quantiteDisponible: 24,
       status: 'En stock',
-      image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=400',
-      boutique: {} as any
-    }
+      image:
+        'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=400',
+      boutique: {} as any,
+    },
   ]);
   dialog = inject(AlertDialogService);
   constructor() {
     effect(() => {
-      this.products.set(this.produitService.produits());
-    })
+        const prods = this.produitService.produits();
+        this.products.set(prods);
+        const prod = this.produitService.produitSelectionne();
+        if (prod) {
+          this.dialog.show(); // ← on utilise le service !
+        } else {
+          this.produitService.produitSelectionne.set(null);
+          this.dialog.close();
+        }
+    });
   }
   openProductDetail(product: Produit) {
-    this.produitService.prduitSelectionne.set(product);
+    this.produitService.produitSelectionne.set(product);
     this.dialog.show();
   }
-
-  
-
 }
