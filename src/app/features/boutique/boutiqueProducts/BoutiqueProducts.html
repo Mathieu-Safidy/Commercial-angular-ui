@@ -74,19 +74,19 @@
         </thead>
 
         <tbody class="divide-y">
-          <tr *ngFor="let product of products" class="group hover:bg-muted/30 transition-colors border-b border-border">
+          <tr *ngFor="let product of products()" class="group hover:bg-muted/30 transition-colors border-b border-border">
             <td class="px-6 py-4">
               <div class="flex items-center gap-4">
                 <div class="w-14 h-14 rounded-xl overflow-hidden bg-muted shadow-sm">
                   <img
-                    [src]="product.image"
-                    [alt]="product.name"
+                    [src]="product.image || 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=400'"
+                    [alt]="product.nom"
                     class="w-full h-full object-cover"
                   />
                 </div>
                 <div>
-                  <p class="font-bold text-sm">{{ product.name }}</p>
-                  <p class="text-[10px] text-muted-foreground font-mono">SKU-00{{ product.id }}X</p>
+                  <p class="font-bold text-sm">{{ product.nom }}</p>
+                  <p class="text-[10px] text-muted-foreground font-mono">SKU-00{{ product._id }}X</p>
                 </div>
               </div>
             </td>
@@ -106,15 +106,15 @@
               </app-badge>
             </td>
 
-            <td class="px-6 py-4 font-bold text-sm">{{ product.stock }} unités</td>
+            <td class="px-6 py-4 font-bold text-sm">{{ product.quantiteDisponible }} unités</td>
 
             <td class="px-6 py-4 font-black text-primary">
-              {{ product.price }}
+              {{ product.prixInitial | currency:'EUR':'symbol':'1.2-2' }}
             </td>
 
             <td class="px-6 py-4 text-right">
               <div class="flex items-center justify-end gap-1">
-                <button app-button variant="ghost" size="icon" class="h-8 w-8 rounded-lg">
+                <button app-button variant="ghost" size="icon" class="h-8 w-8 rounded-lg" (click)="openProductDetail(product)">
                   <lucide-icon [img]="Eye" class="w-4 h-4"></lucide-icon>
                 </button>
 
@@ -168,4 +168,5 @@
       Réapprovisionner maintenant
     </button>
   </div>
+  <app-product-detail-dialog></app-product-detail-dialog>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {BoutiqueOrdersComponent} from '../boutiqueOrders/BoutiqueOrders';
 import {BoutiqueStatsComponent} from '../boutiqueStats/BoutiqueStats';
 import {BoutiqueProductsComponent} from '../boutiqueProducts/BoutiqueProducts';
@@ -14,6 +14,7 @@ import { IconsModule } from '../../../module/IconsModule';
 import { BoutiquePostsComponent } from "../boutiquePosts/BoutiquePosts";
 import { ClientReviewsComponent } from '../../client/clientReviews/ClientReviews';
 import { BoutiqueProfilComponent } from '../boutiqueProfil/BoutiqueProfil';
+import { ProduitService } from '../../../services/produitService/produit-service';
 
 type Section = 'overview' | 'products' | 'orders' | 'stats' | 'promos' | 'posts' | 'settings' | 'avis';
 
@@ -42,7 +43,7 @@ type Section = 'overview' | 'products' | 'orders' | 'stats' | 'promos' | 'posts'
   // styleUrls: ['./boutique-dashboard.component.scss']
 })
 export class BoutiqueDashboardComponent {
-
+  produitService = inject(ProduitService);
   readonly Plus = Plus;
   readonly LayoutDashboard = LayoutDashboard;
   readonly Package = Package;
@@ -53,6 +54,10 @@ export class BoutiqueDashboardComponent {
   readonly ShoppingCart = ShoppingCart;
 
   activeSection: Section = 'overview';
+
+  constructor() {
+    this.produitService.initializeProduits();
+  }
 
   sidebarItems: { id: Section; label: string; badge?: string; icon?: LucideIconData }[] = [
     { id: 'overview', label: "Vue d'ensemble" , icon: LayoutDashboard },

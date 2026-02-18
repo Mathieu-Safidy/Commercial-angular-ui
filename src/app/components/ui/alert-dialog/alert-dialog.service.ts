@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
-
-@Injectable()
+import { Injectable, signal } from '@angular/core';
+@Injectable({ providedIn: 'root'  })
 export class AlertDialogService {
-  open = false;
+  open = signal(false);
 
   show() {
-    this.open = true;
+    console.log("Console log show");
+    
+    this.open.set(true);
   }
 
   close() {
-    this.open = false;
+    this.open.set(false);
   }
 }

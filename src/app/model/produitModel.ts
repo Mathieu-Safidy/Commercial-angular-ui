@@ -34,4 +34,7 @@ interface Produit {
     deletedAt: Date | null;
     quantiteDisponible: number;
     boutique: Boutique;
+    status?: string; // Ajout d'un champ de statut pour la gestion du stock
+    image?: string; // URL de l'image du produit
+    categorie?: string; // Nom de la catégorie du produit
 }
