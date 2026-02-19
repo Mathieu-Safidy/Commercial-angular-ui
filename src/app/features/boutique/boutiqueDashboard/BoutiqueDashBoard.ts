@@ -4,7 +4,7 @@ import {BoutiqueStatsComponent} from '../boutiqueStats/BoutiqueStats';
 import {BoutiqueProductsComponent} from '../boutiqueProducts/BoutiqueProducts';
 import {BoutiqueOverviewComponent} from '../boutiqueOverview/BoutiqueOverView';
 import {CommonModule, NgClass, NgForOf, NgIf} from '@angular/common';
-import {ChartColumn, Image, LayoutDashboard, LucideAngularModule, LucideIconData, MessageSquare, Package, Plus, Section, Settings, ShoppingCart, Tag, User} from 'lucide-angular';
+import {ChartColumn, Download, Image, LayoutDashboard, LucideAngularModule, LucideIconData, MessageSquare, Package, Plus, Section, Settings, ShoppingCart, Tag, User} from 'lucide-angular';
 import {ButtonComponent} from '../../../components/ui/button';
 import {BadgeComponent} from '../../../components/ui/badge';
 import {SeparatorComponent} from '../../../components/ui/separator';
@@ -15,8 +15,9 @@ import { BoutiquePostsComponent } from "../boutiquePosts/BoutiquePosts";
 import { ClientReviewsComponent } from '../../client/clientReviews/ClientReviews';
 import { BoutiqueProfilComponent } from '../boutiqueProfil/BoutiqueProfil';
 import { ProduitService } from '../../../services/produitService/produit-service';
+import { StockApprovisionnementComponent } from '../approBoutique/ApproBoutique';
 
-type Section = 'overview' | 'products' | 'orders' | 'stats' | 'promos' | 'posts' | 'settings' | 'avis';
+type Section = 'overview' | 'products' | 'stock' | 'orders' | 'stats' | 'promos' | 'posts' | 'settings' | 'avis';
 
 @Component({
   selector: 'app-boutique-dashboard',
@@ -38,7 +39,8 @@ type Section = 'overview' | 'products' | 'orders' | 'stats' | 'promos' | 'posts'
     LucideAngularModule,
     IconsModule,
     BoutiquePostsComponent,
-    BoutiqueProfilComponent
+    BoutiqueProfilComponent,
+    StockApprovisionnementComponent
 ],
   // styleUrls: ['./boutique-dashboard.component.scss']
 })
@@ -52,6 +54,7 @@ export class BoutiqueDashboardComponent {
   readonly ChartColumn = ChartColumn;
   readonly Settings = Settings;
   readonly ShoppingCart = ShoppingCart;
+  readonly Download = Download;
 
   activeSection: Section = 'overview';
 
@@ -62,6 +65,7 @@ export class BoutiqueDashboardComponent {
   sidebarItems: { id: Section; label: string; badge?: string; icon?: LucideIconData }[] = [
     { id: 'overview', label: "Vue d'ensemble" , icon: LayoutDashboard },
     { id: 'products', label: 'Catalogue', badge: 'New' , icon: Package },
+    // { id: 'stock', label: 'Approvisionnement' , icon: Download },
     { id: 'orders', label: 'Commandes' , icon: ShoppingCart },
     { id: 'promos', label: 'Promotions' , icon: Tag },
     { id: 'posts', label: 'Actualités' , icon: Image },

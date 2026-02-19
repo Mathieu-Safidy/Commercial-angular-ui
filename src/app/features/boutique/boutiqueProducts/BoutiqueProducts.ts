@@ -139,10 +139,17 @@ export class BoutiqueProductsComponent {
     },
   ]);
   dialog = inject(AlertDialogService);
+  totalStock = signal(0);
+  stockFaibleCount = signal(0);
+  ruptureCount = signal(0);
   constructor() {
     effect(() => {
         const prods = this.produitService.produits();
+        this.totalStock.set(this.calculeStockTotal());
+        this.stockFaibleCount.set(this.calculerStockFaible(1, 5));
+        this.ruptureCount.set(this.calculerStockFaible(0, 0));
         this.products.set(prods);
+        this.checkStatus();
         const prod = this.produitService.produitSelectionne();
         if (prod) {
           this.dialog.show(); // ← on utilise le service !
@@ -151,6 +158,26 @@ export class BoutiqueProductsComponent {
           this.dialog.close();
         }
     });
+  }
+
+  calculeStockTotal() {
+    return this.products().reduce((total, produit) => total + produit.quantiteDisponible, 0);
+  }
+  checkStatus() {
+    const prods = this.products();
+    prods.forEach(p => {
+      if (p.quantiteDisponible === 0) {
+        p.status = 'Rupture';
+      } else if (p.quantiteDisponible <= 5) {
+        p.status = 'Stock faible';
+      } else {
+        p.status = 'En stock';
+      }
+    });
+    this.products.set(prods);
+  }
+  calculerStockFaible(min: number = 5, max: number = Infinity) {
+    return this.products().filter(p => p.quantiteDisponible >= min && p.quantiteDisponible <= max).length;
   }
   openProductDetail(product: Produit) {
     this.produitService.produitSelectionne.set(product);

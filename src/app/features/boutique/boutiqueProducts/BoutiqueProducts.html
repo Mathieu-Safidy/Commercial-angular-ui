@@ -23,22 +23,22 @@
   <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
     <div class="bg-background rounded-2xl p-4 border border-border/50 shadow-sm space-y-1">
       <p class="text-[10px] font-bold text-muted-foreground uppercase">Total Produits</p>
-      <p class="text-xl font-black">45</p>
+      <p class="text-xl font-black">{{ products().length }}</p>
     </div>
 
     <div class="bg-background rounded-2xl p-4 border border-border/50 shadow-sm space-y-1">
       <p class="text-[10px] font-bold text-muted-foreground uppercase">En stock</p>
-      <p class="text-xl font-black text-emerald-500">38</p>
+      <p class="text-xl font-black text-emerald-500">{{ totalStock() }}</p>
     </div>
 
     <div class="bg-background rounded-2xl p-4 border border-border/50 shadow-sm space-y-1">
       <p class="text-[10px] font-bold text-muted-foreground uppercase">Stock faible</p>
-      <p class="text-xl font-black text-amber-500">5</p>
+      <p class="text-xl font-black text-amber-500">{{ stockFaibleCount() }}</p>
     </div>
 
     <div class="bg-background rounded-2xl p-4 border border-border/50 shadow-sm space-y-1">
       <p class="text-[10px] font-bold text-muted-foreground uppercase">Rupture</p>
-      <p class="text-xl font-black text-destructive">2</p>
+      <p class="text-xl font-black text-destructive">{{ ruptureCount() }}</p>
     </div>
   </div>
 

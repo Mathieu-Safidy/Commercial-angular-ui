@@ -15,8 +15,7 @@ import { AsyncPipe, NgIf } from '@angular/common';
   class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
 >
   <div
-    class="relative w-full max-w-2xl max-h-[96vh] rounded-xl bg-background shadow-xl
-           flex flex-col overflow-hidden"
+    class="relative w-full max-h-[96vh] rounded-xl bg-background shadow-xl"
   >
     <ng-content></ng-content>
   </div>

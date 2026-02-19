@@ -26,7 +26,7 @@ interface Produit {
     nom: string;
     description: string;
     idBoutique: string;
-    idCategorie: string;
+    idCategorie: any;
     prixInitial: number;
     consultationCount: number;
     modifiedAt: Date | null;
