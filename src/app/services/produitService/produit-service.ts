@@ -37,4 +37,12 @@ export class ProduitService {
   public async getProduits() {
     return await this.http.PGet('/produits');
   }
+
+  public async ajouterProduit(formData: FormData) {
+    return await this.http.PPost('/produits', formData);
+  }
+
+  public async modifierProduit(id: string, formData: FormData) {
+    return await this.http.PPatch(`/produits/${id}`, formData);
+  }
 }

@@ -1,5 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Utils } from '../utils/utils';
+import { Environments } from '../../environements/environments';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +8,7 @@ import { Utils } from '../utils/utils';
 export class PanierService {
   private http = inject(Utils);
   public panier = signal<any>(null);
-
+  public backendLink = Environments.BACKEND || "http://localhost:3000";
   public async getPanier(idUSer: string) {
     return await this.http.PGet(`/paniers/actif/${idUSer}`);
   }

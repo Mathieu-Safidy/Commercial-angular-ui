@@ -19,6 +19,7 @@ import { ClientReviewsComponent } from '../clientReviews/ClientReviews';
 import { TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComponent } from '../../../components/ui/tabs';
 import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePosts';
 import { PanierService } from '../../../services/panierService/panier-service';
+import { ProductsCatalogueComponent } from "../catalogue/products-catalogue";
 
 @Component({
   selector: 'app-client-dashboard',
@@ -34,8 +35,9 @@ import { PanierService } from '../../../services/panierService/panier-service';
     TabsListComponent,
     TabsTriggerComponent,
     TabsContentComponent,
-    BoutiquePostsComponent
-  ],
+    BoutiquePostsComponent,
+    ProductsCatalogueComponent
+],
   templateUrl: './ClientDashboard.html'
 })
 export class ClientDashboardComponent {

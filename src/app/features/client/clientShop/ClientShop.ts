@@ -17,6 +17,7 @@ import { BadgeComponent } from '../../../components/ui/badge';
 import { CardComponent, CardContentComponent } from '../../../components/ui/card';
 import { ProduitService } from '../../../services/produitService/produit-service';
 import { PanierService } from '../../../services/panierService/panier-service';
+import { Environments } from '../../../environements/environments';
 
 @Component({
   selector: 'app-client-shop',
@@ -43,7 +44,9 @@ export class ClientShopComponent {
 
   produitService = inject(ProduitService);
   panierService = inject(PanierService);
-
+  hovered = false;
+  toggleWishlist(id: string) { /* votre logique */ }
+  isWishlisted(id: string): boolean { /* votre logique */ return false; }
   constructor() {
     effect(() => {
       const panier = this.panierService.panier();
@@ -113,6 +116,7 @@ export class ClientShopComponent {
     },
   ]);
   panier = signal<any>(null);
+  backendLink = Environments.BACKEND || 'http://localhost:3000'; // Remplace par l'URL de ton backend
   // Helper pour simuler les avatars des abonnés
   subscriberIds = [1, 2, 3];
 
@@ -138,8 +142,7 @@ export class ClientShopComponent {
         name: produit.nom,
         boutique: produit.boutique.nom,
         price: produit.prixInitial + '€',
-        image:
-          'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800', // Placeholder, à remplacer par produit.image si disponible,
+        image: produit.image ?this.backendLink + '/' + produit.image : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800', // Placeholder, à remplacer par produit.image si disponible,
       })),
     );
   }

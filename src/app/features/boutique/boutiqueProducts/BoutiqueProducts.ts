@@ -23,6 +23,9 @@ import { AlertDialogContentComponent } from '../../../components/ui/alert-dialog
 import { AlertDialogCancelComponent } from '../../../components/ui/alert-dialog/alert-dialog-cancel.component';
 import { AlertDialogService } from '../../../components/ui/alert-dialog/alert-dialog.service';
 import { ProductDetailDialogComponent } from '../../../components/ui/produitDialogue/produitDalogue';
+import { CreationDialogueComponent } from '../../../components/ui/produitDialogue/creationProduit';
+import { MatDialog } from '@angular/material/dialog';
+import { Environments } from '../../../environements/environments';
 
 @Component({
   selector: 'app-boutique-products',
@@ -54,6 +57,8 @@ export class BoutiqueProductsComponent {
   readonly Edit3 = Edit3;
   readonly Trash2 = Trash2;
   readonly AlertCircle = AlertCircle;
+
+  backendLink = Environments.BACKEND;
 
   //  _id: string;
   //   nom: string;
@@ -139,24 +144,25 @@ export class BoutiqueProductsComponent {
     },
   ]);
   dialog = inject(AlertDialogService);
+  dialogueCreation = inject(MatDialog);
   totalStock = signal(0);
   stockFaibleCount = signal(0);
   ruptureCount = signal(0);
   constructor() {
     effect(() => {
-        const prods = this.produitService.produits();
-        this.totalStock.set(this.calculeStockTotal());
-        this.stockFaibleCount.set(this.calculerStockFaible(1, 5));
-        this.ruptureCount.set(this.calculerStockFaible(0, 0));
-        this.products.set(prods);
-        this.checkStatus();
-        const prod = this.produitService.produitSelectionne();
-        if (prod) {
-          this.dialog.show(); // ← on utilise le service !
-        } else {
-          this.produitService.produitSelectionne.set(null);
-          this.dialog.close();
-        }
+      const prods = this.produitService.produits();
+      this.totalStock.set(this.calculeStockTotal());
+      this.stockFaibleCount.set(this.calculerStockFaible(1, 5));
+      this.ruptureCount.set(this.calculerStockFaible(0, 0));
+      this.products.set(prods);
+      this.checkStatus();
+      const prod = this.produitService.produitSelectionne();
+      if (prod) {
+        this.dialog.show(); // ← on utilise le service !
+      } else {
+        this.produitService.produitSelectionne.set(null);
+        this.dialog.close();
+      }
     });
   }
 
@@ -165,7 +171,7 @@ export class BoutiqueProductsComponent {
   }
   checkStatus() {
     const prods = this.products();
-    prods.forEach(p => {
+    prods.forEach((p) => {
       if (p.quantiteDisponible === 0) {
         p.status = 'Rupture';
       } else if (p.quantiteDisponible <= 5) {
@@ -176,8 +182,77 @@ export class BoutiqueProductsComponent {
     });
     this.products.set(prods);
   }
+  modifierProduit(produit: Produit) {
+    // this.produitService.produitSelectionne.set(produit);
+    let dialogRef = this.dialogueCreation.open(CreationDialogueComponent, {
+      width: '800px',
+      maxHeight: '90vh',
+      data: produit,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) return;
+
+      const formData = new FormData();
+      formData.append('nom', result.nom);
+      formData.append('description', result.description);
+      formData.append('prixInitial', result.prixInitial);
+      formData.append('idCategorie', result.idCategorie);
+      formData.append('idBoutique', '698dff42709de29d54628ca3');
+      if (result.imageFile) {
+        formData.append('image', result.imageFile); // upload fichier
+      }
+
+      this.produitService.modifierProduit(produit._id, formData).then(() => {
+        this.produitService.reloadProduits();
+      });
+    });
+  }
+
+  ajouterProduit() {
+    const dialogRef = this.dialogueCreation.open(CreationDialogueComponent, {
+      width: '800px',
+      maxHeight: '90vh',
+      data: null,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) return;
+
+      const formData = new FormData();
+      formData.append('nom', result.nom);
+      formData.append('description', result.description);
+      formData.append('prixInitial', result.prixInitial);
+      formData.append('idCategorie', result.idCategorie);
+      formData.append('idBoutique', '698dff42709de29d54628ca3');
+      if (result.imageFile) {
+        formData.append('image', result.imageFile); // upload fichier
+      }
+
+      this.produitService.ajouterProduit(formData).then(() => {
+        this.produitService.reloadProduits();
+      });
+      // const produit : Produit = {
+      //   nom: result.nom,
+      //   description: result.description,
+      //   prixInitial: result.prixInitial,
+      //   idCategorie: result.idCategorie,
+      //   idBoutique: result.idBoutique,
+      //   quantiteDisponible: result.quantiteDisponible,
+      //   image: '', // L'URL de l'image sera définie par le backend après l'upload
+      //   boutique: {} as any,
+      //   _id: '',
+      //   consultationCount: 0,
+      //   modifiedAt: null,
+      //   createdAt: new Date(),
+      //   deletedAt: null,
+
+      // }
+    });
+  }
+
   calculerStockFaible(min: number = 5, max: number = Infinity) {
-    return this.products().filter(p => p.quantiteDisponible >= min && p.quantiteDisponible <= max).length;
+    return this.products().filter((p) => p.quantiteDisponible >= min && p.quantiteDisponible <= max)
+      .length;
   }
   openProductDetail(product: Produit) {
     this.produitService.produitSelectionne.set(product);
