@@ -65,7 +65,7 @@
     </div>
 
     <div appTabsContent value="shop" class="block animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <app-client-shop></app-client-shop>
+      <app-client-shop (navigateTo)="navigateTo($event)"></app-client-shop>
     </div>
 
     <div appTabsContent value="history" class="block animate-in fade-in slide-in-from-bottom-4 duration-500">

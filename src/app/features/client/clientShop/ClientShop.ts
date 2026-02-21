@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -18,6 +18,7 @@ import { CardComponent, CardContentComponent } from '../../../components/ui/card
 import { ProduitService } from '../../../services/produitService/produit-service';
 import { PanierService } from '../../../services/panierService/panier-service';
 import { Environments } from '../../../environements/environments';
+import { TabsTriggerComponent } from '../../../components/ui/tabs';
 
 @Component({
   selector: 'app-client-shop',
@@ -29,6 +30,7 @@ import { Environments } from '../../../environements/environments';
     BadgeComponent,
     CardComponent,
     CardContentComponent,
+    TabsTriggerComponent
   ],
   templateUrl: './ClientShop.html',
 })
@@ -42,6 +44,7 @@ export class ClientShopComponent {
   readonly Sparkles = Sparkles;
   readonly Check = Check;
 
+
   produitService = inject(ProduitService);
   panierService = inject(PanierService);
   hovered = false;
@@ -54,7 +57,11 @@ export class ClientShopComponent {
       this.panier.set(panier);
     })
   }
+  navigateTo = output<string>(); // émet la valeur du tab cible
 
+  goToAllProducts() {
+    this.navigateTo.emit('all-products');
+  }
   featuredBoutiques = [
     {
       name: 'Eco Luxe',

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -47,6 +47,11 @@ export class ClientDashboardComponent {
   readonly MessageSquare = MessageSquare;
   readonly MapPin = MapPin;
   panierService = inject(PanierService);
+  @ViewChild(TabsComponent) tabs!: TabsComponent;
+
+  navigateTo(value: string) {
+    this.tabs.value.set(value);
+  }
   constructor() { 
   }
   

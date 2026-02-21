@@ -66,11 +66,15 @@
   <section class="space-y-6">
     <div class="flex items-center justify-between">
       <h3 class="text-2xl font-bold">Nouveaux produits</h3>
-      <div class="flex gap-2">
+      <button app-button (click)="goToAllProducts()" variant="link" class="text-primary font-bold">
+        Tout voir
+      </button>
+      <!-- <button appTabsTrigger [value]="'all-products'" variant="link" className="text-primary font-bold">Tout voir</button> -->
+      <!-- <div class="flex gap-2">
         <app-badge variant="outline" className="rounded-full cursor-pointer hover:bg-muted">Vêtements</app-badge>
         <app-badge variant="outline" className="rounded-full cursor-pointer hover:bg-muted">Maison</app-badge>
         <app-badge variant="outline" className="rounded-full cursor-pointer hover:bg-muted">Accessoires</app-badge>
-      </div>
+      </div> -->
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">

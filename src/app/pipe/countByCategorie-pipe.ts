@@ -8,7 +8,7 @@ import { Product } from '../features/client/catalogue/products-catalogue';
   pure: true
 })
 export class CountByCategoryPipe implements PipeTransform {
-  transform(products: Product[], category: string): number {
-    return products.filter(p => p.category === category).length;
+  transform(products: Produit[], category: string): number {
+    return products.filter(p => p.idCategorie === category).length;
   }
 }

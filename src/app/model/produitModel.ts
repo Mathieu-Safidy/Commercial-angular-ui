@@ -37,4 +37,8 @@ interface Produit {
     status?: string; // Ajout d'un champ de statut pour la gestion du stock
     image?: string; // URL de l'image du produit
     categorie?: string; // Nom de la catégorie du produit
+    rating?: number; // Note moyenne du produit
+    isNew?: boolean; // Indique si le produit est nouveau
+    isSale?: boolean; // Indique si le produit est en promotion
+    salePercent?: number; // Pourcentage de réduction si le produit est en promotion
 }
