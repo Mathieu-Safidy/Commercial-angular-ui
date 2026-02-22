@@ -9,10 +9,10 @@
         <lucide-icon [img]="Info" class="w-4 h-4"></lucide-icon>
         Conditions de location
       </button>
-      <button app-button className="rounded-full shadow-glow gap-2">
-        <lucide-icon [img]="Box" class="w-4 h-4"></lucide-icon>
-        Réserver un Box
-      </button>
+<!--      <button app-button className="rounded-full shadow-glow gap-2">-->
+<!--        <lucide-icon [img]="Box" class="w-4 h-4"></lucide-icon>-->
+<!--        Réserver un Box-->
+<!--      </button>-->
     </div>
   </div>
 
@@ -67,14 +67,25 @@
         <app-card-footer className="pt-4 pb-6 px-6">
           <button
             app-button
-            [disabled]="space.status === 'Indisponible'"
-            className="w-full rounded-xl h-12 font-bold shadow-md hover:shadow-xl transition-all"
+            [disabled]="space.status === 'valide' || space.status === 'en attente'"
+            class="w-full rounded-xl h-12 font-bold shadow-md hover:shadow-xl transition-all"
+            (click)="onRequestLocation(space.id, space.name, space.priceFinal)"
           >
-            {{ space.status === "Disponible" ? "Demander une location" : "Plus disponible" }}
-            @if (space.status === 'Disponible') {
+
+            {{
+              space.status === 'valide'
+                ? 'Plus disponible'
+                : space.status === 'en attente'
+                  ? 'Demande en cours'
+                  : 'Demander une location'
+            }}
+
+            @if (space.status !== 'valide' && space.status !== 'en attente') {
               <lucide-icon [img]="ArrowRight" class="ml-2 w-4 h-4"></lucide-icon>
             }
+
           </button>
+
         </app-card-footer>
       </app-card>
     }

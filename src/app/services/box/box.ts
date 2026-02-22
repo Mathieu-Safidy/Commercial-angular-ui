@@ -4,18 +4,12 @@ import {Utils} from '../utils/utils';
 @Injectable({
   providedIn: 'root',
 })
-export class CommandeService {
-  private baseUrl = '/commandes';
+export class Box {
+  private baseUrl = '/boxes';
   private http = inject(Utils);
   constructor(private utils: Utils) {}
 
   public async getAll() {
     return this.utils.PGet(this.baseUrl);
   }
-
-  public async valideClientCommande(iduser: string) {
-    return await this.http.PPost(`${this.baseUrl}/confirme/${iduser}`, {});
-  }
-
 }
-

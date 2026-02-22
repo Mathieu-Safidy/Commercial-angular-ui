@@ -17,6 +17,7 @@ import { BadgeComponent } from '../../../components/ui/badge';
 import { CardComponent, CardContentComponent } from '../../../components/ui/card';
 import { SeparatorComponent } from '../../../components/ui/separator';
 import { PanierService } from '../../../services/panierService/panier-service';
+import {CommandeService} from '../../../services/commande/commande';
 
 @Component({
   selector: 'app-client-history',
@@ -42,6 +43,7 @@ export class ClientHistoryComponent {
   readonly clock = Clock;
   readonly ShoppingCart = ShoppingCart;
   panierService = inject(PanierService);
+  commandeService = inject(CommandeService);
   priceFinal = signal<number>(0);
   orders = signal<any>([
     { id: '#ORD-9821', date: '12 Jan 2026', status: 'Livré', total: '245€', items: 3 },
@@ -120,7 +122,7 @@ export class ClientHistoryComponent {
       this.panierService.deleteFromPanier(item._id);
     }
     this.panierService.reloadPanier();
-    
+
   }
 
   removeItem(index: number) {
@@ -132,6 +134,10 @@ export class ClientHistoryComponent {
       this.priceFinal.set(Number((this.priceFinal() - item.price * item.quantite).toFixed(2)));
       this.panierService.reloadPanier();
     }
+  }
+  async confirmeAchatClient(){
+    let idUser = "698dfddc709de29d54628ca1";
+    this.commandeService.valideClientCommande(idUser) ;
   }
 
   // async initItemProduct() {

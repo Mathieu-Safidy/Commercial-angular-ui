@@ -26,7 +26,7 @@
                   <button (click)="addNumber(idx, 1)" app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">+</button>
                 </div>
                 <button (click)="removeItem(idx)" app-button variant="ghost" size="icon" className="text-muted-foreground hover:text-background cursor-pointer transition-colors">
-                <lucide-icon [img]="trash" class="w-4 h-4"></lucide-icon>  
+                <lucide-icon [img]="trash" class="w-4 h-4"></lucide-icon>
                 </button>
               </div>
             </div>
@@ -52,7 +52,7 @@
           </div>
 
           <div class="pt-4">
-            <button app-button className="w-full h-14 rounded-2xl font-bold text-lg shadow-glow">
+            <button (click)="confirmeAchatClient()" app-button className="w-full h-14 rounded-2xl font-bold text-lg shadow-glow">
               Confirmer l'achat ({{ priceFinal() }}€)
             </button>
           </div>

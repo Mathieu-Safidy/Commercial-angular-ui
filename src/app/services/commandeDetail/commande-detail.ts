@@ -9,10 +9,10 @@ export class CommandeDetailService {
 
   constructor(private utils: Utils) {}
 
-  async getAll() {
+  public async getAll() {
     return this.utils.PGet(this.baseUrl);
   }
-  async getByCommandeId(idCommande: string) {
+  public async getByCommandeId(idCommande: string) {
     return this.utils.PGet(`${this.baseUrl}/commande/${idCommande}`);
   }
 }

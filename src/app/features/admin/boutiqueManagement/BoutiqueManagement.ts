@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
-
+import { DetailLocation} from '../../../model/detailLocationModel';
+import { LocationDetail } from '../../../services/locationDetail/location-detail' ;
 import {
   Building2,
   Search,
@@ -15,6 +16,7 @@ import {
 } from 'lucide-angular';
 import {BadgeComponent} from '../../../components/ui/badge';
 import { ButtonComponent } from '../../../components/ui/button';
+import {Location} from "../../../services/location/location";
 
 @Component({
   selector: 'app-boutique-management',
@@ -39,33 +41,18 @@ export class BoutiqueManagementComponent {
     Clock,
     Wrench
   };
+  detailLocations: DetailLocation[] = [];
 
-  boxes = [
-    {
-      id: 'BOX-A1',
-      size: '15m²',
-      price: '450€',
-      status: 'Occupé',
-      tenant: 'Eco Luxe',
-      maintenance: 'Effectuée'
-    },
-    {
-      id: 'BOX-B4',
-      size: '25m²',
-      price: '850€',
-      status: 'Libre',
-      tenant: '-',
-      maintenance: 'En attente'
-    },
-    {
-      id: 'BOX-C2',
-      size: '12m²',
-      price: '320€',
-      status: 'Occupé',
-      tenant: 'Urban Tech',
-      maintenance: 'Effectuée'
-    }
-  ];
+  constructor(private detailLocationService: LocationDetail , private locationService: Location) {}
+
+
+  async ngOnInit() {
+    this.detailLocations = await this.detailLocationService.getAll() as any[];
+  }
+
+  async valideLocation(idUser : string , idBox: string) {
+    await this.locationService.validateLocationBox(idUser , idBox) ;
+  }
 
   avatars = [1, 2];
 
