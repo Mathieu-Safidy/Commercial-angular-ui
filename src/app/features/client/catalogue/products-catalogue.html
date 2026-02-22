@@ -403,7 +403,7 @@
 
             <!-- Info -->
             <div class="px-1 space-y-0.5">
-              <p class="text-[10px] font-black text-muted-foreground uppercase tracking-widest truncate">{{ product.boutique }}</p>
+              <p class="text-[10px] font-black text-muted-foreground uppercase tracking-widest truncate">{{ product.boutique.nom }}</p>
               <div class="flex items-start justify-between gap-1">
                 <h5 class="font-bold text-sm leading-snug line-clamp-2 flex-1">{{ product.nom }}</h5>
               </div>
@@ -435,7 +435,7 @@
 
             <!-- Info -->
             <div class="flex-1 min-w-0">
-              <p class="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-0.5">{{ product.boutique }} · {{ product.categorie }}</p>
+              <p class="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-0.5">{{ product.boutique.nom }} · {{ product.idCategorie.nom }}</p>
               <h5 class="font-bold text-sm truncate mb-1">{{ product.nom }}</h5>
               <div class="flex items-center gap-3">
                 <div class="flex items-center gap-0.5">
