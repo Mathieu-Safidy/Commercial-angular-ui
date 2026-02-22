@@ -81,8 +81,7 @@ export class ClientHistoryComponent {
           boutique: detail.produit.boutique.nom,
           price: detail.produit.prixInitial,
           quantite: detail.quantite,
-          image:
-            'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200',
+          image: detail.produit.image ? this.panierService.backendLink + '/' + detail.produit.image : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200', // Placeholder, à remplacer par detail.produit.image si disponible,
         })),
       );
       let total = panier.details.reduce( (total: number, detail: PanierDetail) => total + detail.produit.prixInitial * detail.quantite, 0, )

@@ -7,7 +7,7 @@
 
     <app-card className="border-none shadow-elegant overflow-hidden">
       <app-card-content className="p-0">
-        @for (item of cartItems(); track item.id; let idx = $index) {
+        @for (item of cartItems(); track item.id ?? $index; let idx = $index) {
           <div>
             <div class="flex items-center gap-6 p-6 group">
               <div class="w-24 h-24 rounded-xl overflow-hidden bg-muted flex-shrink-0">

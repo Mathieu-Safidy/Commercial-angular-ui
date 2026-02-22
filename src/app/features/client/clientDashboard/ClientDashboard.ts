@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -19,6 +19,7 @@ import { ClientReviewsComponent } from '../clientReviews/ClientReviews';
 import { TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComponent } from '../../../components/ui/tabs';
 import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePosts';
 import { PanierService } from '../../../services/panierService/panier-service';
+import { ProductsCatalogueComponent } from "../catalogue/products-catalogue";
 
 @Component({
   selector: 'app-client-dashboard',
@@ -34,8 +35,9 @@ import { PanierService } from '../../../services/panierService/panier-service';
     TabsListComponent,
     TabsTriggerComponent,
     TabsContentComponent,
-    BoutiquePostsComponent
-  ],
+    BoutiquePostsComponent,
+    ProductsCatalogueComponent
+],
   templateUrl: './ClientDashboard.html'
 })
 export class ClientDashboardComponent {
@@ -45,6 +47,11 @@ export class ClientDashboardComponent {
   readonly MessageSquare = MessageSquare;
   readonly MapPin = MapPin;
   panierService = inject(PanierService);
+  @ViewChild(TabsComponent) tabs!: TabsComponent;
+
+  navigateTo(value: string) {
+    this.tabs.value.set(value);
+  }
   constructor() { 
   }
   

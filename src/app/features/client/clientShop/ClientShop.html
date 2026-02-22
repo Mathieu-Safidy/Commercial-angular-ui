@@ -66,49 +66,128 @@
   <section class="space-y-6">
     <div class="flex items-center justify-between">
       <h3 class="text-2xl font-bold">Nouveaux produits</h3>
-      <div class="flex gap-2">
+      <button app-button (click)="goToAllProducts()" variant="link" class="text-primary font-bold">
+        Tout voir
+      </button>
+      <!-- <button appTabsTrigger [value]="'all-products'" variant="link" className="text-primary font-bold">Tout voir</button> -->
+      <!-- <div class="flex gap-2">
         <app-badge variant="outline" className="rounded-full cursor-pointer hover:bg-muted">Vêtements</app-badge>
         <app-badge variant="outline" className="rounded-full cursor-pointer hover:bg-muted">Maison</app-badge>
         <app-badge variant="outline" className="rounded-full cursor-pointer hover:bg-muted">Accessoires</app-badge>
-      </div>
+      </div> -->
     </div>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
       @for (product of products(); track product.id) {
-        <div class="group cursor-pointer">
-          <div class="relative aspect-square rounded-2xl overflow-hidden bg-muted mb-4 shadow-elegant">
-            <img [src]="product.image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" [alt]="product.name" />
+       <div
+  class="group cursor-pointer select-none"
+  (mouseenter)="hovered = true"
+  (mouseleave)="hovered = false"
+>
+  <!-- Image Container -->
+  <div class="relative aspect-square rounded-3xl overflow-hidden bg-muted mb-4 shadow-sm ring-1 ring-border/40 transition-all duration-500 group-hover:shadow-xl group-hover:ring-primary/20">
 
-            <button
-              app-button
-              size="icon"
-              variant="secondary"
-              className="absolute top-4 right-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
-            >
-              <lucide-icon [img]="Heart" class="w-4 h-4"></lucide-icon>
-            </button>
+    <!-- Product Image -->
+    <img
+      [src]="product.image"
+      [alt]="product.name"
+      class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+    />
 
-            <div class="absolute bottom-4 left-4 right-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-              @if(verifInPanier(product.id)) {
-                <button app-button className="w-full rounded-full gap-2 bg-green-600 hover:bg-green-700 text-white shadow-glow">
-                  <lucide-icon [img]="Check" class="w-4 h-4"></lucide-icon>
-                  Ajouté
-                </button>
-              } @else {
-                <button (click)="addToCart(product.id)" app-button className="w-full rounded-full gap-2 shadow-glow cursor-pointer">
-                  <lucide-icon [img]="ShoppingBag" class="w-4 h-4"></lucide-icon>
-                  Panier
-                </button>
-              }
+    <!-- Subtle gradient overlay always visible at bottom -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-            </div>
-          </div>
-          <div class="space-y-1">
-            <p class="text-xs font-bold text-primary uppercase tracking-widest">{{ product.boutique }}</p>
-            <h5 class="font-bold text-lg">{{ product.name }}</h5>
-            <p class="text-primary font-black text-xl">{{ product.price }}</p>
-          </div>
-        </div>
+    <!-- Top bar : badge boutique + wishlist -->
+    <div class="absolute top-3 left-3 right-3 flex items-center justify-between">
+
+      <!-- Boutique badge -->
+      <span
+        class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md bg-background/80 text-foreground border border-border/30 shadow-sm
+               opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+      >
+        {{ product.boutique }}
+      </span>
+
+      <!-- Wishlist button -->
+      <button
+        app-button
+        size="icon"
+        variant="secondary"
+        (click)="$event.stopPropagation(); toggleWishlist(product.id)"
+        class="rounded-full w-9 h-9 shadow-md backdrop-blur-md bg-background/80 border border-border/20
+               opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 delay-75
+               hover:scale-110 active:scale-95"
+        [class.text-rose-500]="isWishlisted(product.id)"
+      >
+        <lucide-icon
+          [img]="Heart"
+          class="w-4 h-4 transition-transform duration-200"
+          [class.fill-rose-500]="isWishlisted(product.id)"
+          [class.stroke-rose-500]="isWishlisted(product.id)"
+        ></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Stock badge (optionnel) -->
+    <div
+      *ngIf="product.stock !== undefined && product.stock <= 5 && product.stock > 0"
+      class="absolute top-3 left-1/2 -translate-x-1/2"
+    >
+      <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-amber-500/90 text-white backdrop-blur-sm shadow-sm">
+        Plus que {{ product.stock }} !
+      </span>
+    </div>
+
+    <!-- CTA bottom slide-up -->
+    <div class="absolute bottom-3 left-3 right-3 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out delay-75">
+
+      @if (verifInPanier(product.id)) {
+        <!-- Already in cart -->
+        <button
+          app-button
+          (click)="$event.stopPropagation()"
+          class="w-full h-10 rounded-2xl font-bold text-sm gap-2 bg-emerald-500/90 hover:bg-emerald-600 text-white border-none backdrop-blur-sm shadow-lg cursor-default"
+        >
+          <lucide-icon [img]="Check" class="w-4 h-4"></lucide-icon>
+          Dans le panier
+        </button>
+      } @else {
+        <!-- Add to cart -->
+        <button
+          (click)="$event.stopPropagation(); addToCart(product.id)"
+          app-button
+          class="w-full h-10 rounded-2xl font-bold text-sm gap-2 backdrop-blur-sm shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform"
+        >
+          <lucide-icon [img]="ShoppingBag" class="w-4 h-4"></lucide-icon>
+          Ajouter au panier
+        </button>
+      }
+
+    </div>
+  </div>
+
+  <!-- Product Info -->
+  <div class="px-1 space-y-1">
+
+    <!-- Name + price row -->
+    <div class="flex items-start justify-between gap-2">
+      <h5 class="font-bold text-base leading-snug line-clamp-2 flex-1">{{ product.name }}</h5>
+      <p class="font-black text-base text-primary whitespace-nowrap tabular-nums">{{ product.price }}</p>
+    </div>
+
+    <!-- Boutique + rating -->
+    <div class="flex items-center justify-between">
+      <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest truncate">{{ product.boutique }}</p>
+
+      <!-- Stars (optionnel, si product.rating existe) -->
+      <div *ngIf="product.rating" class="flex items-center gap-1">
+        <lucide-icon [img]="Star" class="w-3 h-3 fill-amber-400 stroke-amber-400"></lucide-icon>
+        <span class="text-xs font-bold text-muted-foreground">{{ product.rating }}</span>
+      </div>
+    </div>
+
+  </div>
+</div>
       }
     </div>
   </section>

@@ -4,7 +4,7 @@ import { AlertDialogService } from './alert-dialog.service';
 @Component({
   selector: 'ui-alert-dialog',
   template: `<ng-content></ng-content>`,
-  providers: [AlertDialogService]
+  // providers: [AlertDialogService]
 })
 export class AlertDialogComponent {
   constructor(public dialog: AlertDialogService) {}

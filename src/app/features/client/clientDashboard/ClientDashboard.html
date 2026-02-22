@@ -34,6 +34,11 @@
             <span>Explorer</span>
           </button>
   
+          <button appTabsTrigger  [value]="'all-products'" class="gap-2 px-6 py-2.5 rounded-lg">
+            <lucide-icon [img]="LayoutGrid" class="w-4 h-4"></lucide-icon>
+            <span>Tout les produis</span>
+          </button>
+  
           <button appTabsTrigger [value]="'history'" class="gap-2 px-6 py-2.5 rounded-lg">
             <lucide-icon [img]="ShoppingCart" class="w-4 h-4"></lucide-icon>
             <span>Mes Achats</span>
@@ -60,7 +65,7 @@
     </div>
 
     <div appTabsContent value="shop" class="block animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <app-client-shop></app-client-shop>
+      <app-client-shop (navigateTo)="navigateTo($event)"></app-client-shop>
     </div>
 
     <div appTabsContent value="history" class="block animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -77,6 +82,10 @@
     
     <div appTabsContent value="posts" class="block animate-in fade-in slide-in-from-bottom-4 duration-500 pt-5">
       <app-boutique-posts></app-boutique-posts>
+    </div>
+    
+    <div appTabsContent value="all-products" class="block animate-in fade-in slide-in-from-bottom-4 duration-500 pt-5">
+      <app-products-catalogue></app-products-catalogue>
     </div>
 
   </app-tabs>
