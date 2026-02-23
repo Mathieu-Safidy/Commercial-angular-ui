@@ -36,9 +36,11 @@ jobs:
           fi
 
           cd ${{ secrets.FRONT_DIR }};
+          git checkout ${{ secrets.BRANCH }};
 
           # Rebuild uniquement le service angular
           docker compose down angular;
           docker compose up -d --build angular;
 
           "
+
