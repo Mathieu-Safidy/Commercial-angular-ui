@@ -1,3 +1,3 @@
 export enum Environments {
-    BACKEND = 'http://api.m1p13mean-safidy-mirindra.dev',
+    BACKEND = 'http://localhost:3000',
 }
