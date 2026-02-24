@@ -1,0 +1,487 @@
+<div class="min-h-screen flex bg-background">
+
+  <!-- ═══════════════════════════════════════
+       PANNEAU GAUCHE
+  ═══════════════════════════════════════ -->
+  <div class="hidden lg:flex lg:w-[45%] relative overflow-hidden bg-foreground flex-col">
+
+    <!-- Grille d'images -->
+    <div class="absolute inset-0 grid grid-cols-3 gap-2 p-6 opacity-20 scale-110 rotate-2">
+      <div
+        *ngFor="let img of featuredImages; let i = index"
+        class="rounded-2xl overflow-hidden aspect-square"
+        [style.animation-delay]="(i * 0.2) + 's'"
+        style="animation: float 7s ease-in-out infinite alternate;"
+      >
+        <img [src]="img" class="w-full h-full object-cover" alt="" />
+      </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-gradient-to-br from-foreground/96 via-foreground/85 to-foreground/70"></div>
+
+    <!-- Points décoratifs -->
+    <div
+      class="absolute inset-0 opacity-[0.04]"
+      style="background-image: radial-gradient(circle, hsl(var(--background)) 1px, transparent 1px); background-size: 26px 26px;"
+    ></div>
+
+    <!-- Blob décoratif -->
+    <div class="absolute top-[-100px] right-[-100px] w-96 h-96 rounded-full bg-primary/15 blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-[-80px] left-[-80px] w-72 h-72 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
+
+    <!-- Contenu -->
+    <div class="relative z-10 flex flex-col h-full p-12">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
+          <lucide-icon [img]="Store" class="w-5 h-5 text-primary-foreground"></lucide-icon>
+        </div>
+        <span class="text-background font-black text-xl tracking-tight">MarketPlace</span>
+      </div>
+
+      <!-- Texte central -->
+      <div class="flex-1 flex flex-col justify-center space-y-8 max-w-sm">
+
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/30 w-fit mb-5">
+            <lucide-icon [img]="Sparkles" class="w-3.5 h-3.5 text-primary"></lucide-icon>
+            <span class="text-xs font-bold text-primary uppercase tracking-widest">Espace Client</span>
+          </div>
+          <h1 class="text-4xl font-black tracking-tight text-background leading-tight">
+            Rejoignez<br/>
+            <span class="text-primary">la communauté.</span>
+          </h1>
+          <p class="text-background/55 text-base leading-relaxed font-medium mt-4">
+            Créez votre compte client gratuitement et profitez de toutes les boutiques de la plateforme.
+          </p>
+        </div>
+
+        <!-- Avantages -->
+        <div class="space-y-3">
+          <div
+            *ngFor="let perk of perks"
+            class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-background/5 border border-background/8"
+          >
+            <span class="text-xl flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-xl bg-background/8">
+              {{ perk.icon }}
+            </span>
+            <div>
+              <p class="text-sm font-bold text-background leading-tight">{{ perk.title }}</p>
+              <p class="text-[11px] text-background/45 mt-0.5">{{ perk.desc }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Lien vers login -->
+      <div class="flex items-center justify-between p-4 rounded-2xl bg-background/5 border border-background/10">
+        <p class="text-sm text-background/55 font-medium">Déjà un compte ?</p>
+        <a href="/login" class="flex items-center gap-1.5 text-sm font-bold text-primary hover:text-primary/75 transition-colors">
+          Se connecter
+          <lucide-icon [img]="ChevronRight" class="w-4 h-4"></lucide-icon>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       PANNEAU DROIT — Formulaire
+  ═══════════════════════════════════════ -->
+  <div class="flex-1 flex flex-col items-center justify-center px-6 py-10 lg:px-14 overflow-y-auto">
+
+    <!-- Logo mobile -->
+    <div class="flex lg:hidden items-center gap-3 mb-8">
+      <div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center">
+        <lucide-icon [img]="Store" class="w-5 h-5 text-primary-foreground"></lucide-icon>
+      </div>
+      <span class="font-black text-xl tracking-tight">MarketPlace</span>
+    </div>
+
+    <div class="w-full max-w-md space-y-7">
+
+      <!-- Titre + stepper -->
+      <div class="space-y-5">
+        <div class="space-y-1">
+          <h2 class="text-3xl font-black tracking-tight">Créer un compte</h2>
+          <p class="text-muted-foreground font-medium text-sm">
+            Étape {{ currentStep() }} sur {{ TOTAL_STEPS }} —
+            <span class="text-foreground font-bold">{{ steps[currentStep() - 1].label }}</span>
+          </p>
+        </div>
+
+        <!-- Barre de progression -->
+        <div class="space-y-2">
+          <div class="flex gap-1.5">
+            <div
+              *ngFor="let step of steps"
+              class="flex-1 h-1.5 rounded-full overflow-hidden bg-muted"
+            >
+              <div
+                class="h-full rounded-full bg-primary transition-all duration-500"
+                [style.width]="currentStep() >= step.number ? '100%' : '0%'"
+              ></div>
+            </div>
+          </div>
+          <!-- Étiquettes -->
+          <div class="flex justify-between">
+            <span
+              *ngFor="let step of steps"
+              class="text-[10px] font-bold transition-colors"
+              [class.text-primary]="currentStep() === step.number"
+              [class.text-muted-foreground]="currentStep() !== step.number"
+              [class.opacity-60]="currentStep() < step.number"
+            >
+              {{ step.label }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ÉTAPE 1 : Identifiants ── -->
+      <div *ngIf="currentStep() === 1" class="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
+
+        <!-- Email -->
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <lucide-icon [img]="Mail" class="w-3.5 h-3.5"></lucide-icon>
+            Adresse email
+          </label>
+          <input
+            type="email"
+            [formControl]="step1.controls.email"
+            placeholder="vous@exemple.com"
+            autocomplete="email"
+            class="w-full h-12 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+            [class.border-border]="!hasError('step1','email')"
+            [class.focus:ring-primary/25]="!hasError('step1','email')"
+            [class.focus:border-primary]="!hasError('step1','email')"
+            [class.border-destructive]="hasError('step1','email')"
+            [class.focus:ring-destructive/25]="hasError('step1','email')"
+            [class.bg-destructive/5]="hasError('step1','email')"
+          />
+          <p *ngIf="hasError('step1','email','required')" class="text-xs text-destructive font-medium">L'email est requis.</p>
+          <p *ngIf="hasError('step1','email','email')" class="text-xs text-destructive font-medium">Adresse email invalide.</p>
+        </div>
+
+        <!-- Mot de passe -->
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <lucide-icon [img]="Lock" class="w-3.5 h-3.5"></lucide-icon>
+            Mot de passe
+          </label>
+          <div class="relative">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              [formControl]="step1.controls.password"
+              placeholder="Minimum 8 caractères"
+              autocomplete="new-password"
+              class="w-full h-12 px-4 pr-12 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+              [class.border-border]="!hasError('step1','password')"
+              [class.focus:ring-primary/25]="!hasError('step1','password')"
+              [class.focus:border-primary]="!hasError('step1','password')"
+              [class.border-destructive]="hasError('step1','password')"
+              [class.focus:ring-destructive/25]="hasError('step1','password')"
+              [class.bg-destructive/5]="hasError('step1','password')"
+            />
+            <button type="button" (click)="showPassword.set(!showPassword())"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-lg">
+              <lucide-icon [img]="showPassword() ? EyeOff : Eye" class="w-4 h-4"></lucide-icon>
+            </button>
+          </div>
+
+          <!-- Indicateur de force -->
+          <div *ngIf="step1.controls.password.value" class="space-y-1.5">
+            <div class="flex gap-1">
+              <div
+                *ngFor="let bar of strengthBars; let i = index"
+                class="flex-1 h-1 rounded-full overflow-hidden bg-muted"
+              >
+                <div
+                  class="h-full rounded-full transition-all duration-300"
+                  [class]="passwordStrength().color"
+                  [style.width]="passwordStrength().level > i ? '100%' : '0%'"
+                ></div>
+              </div>
+            </div>
+            <p class="text-[11px] font-bold" [class]="
+              passwordStrength().level === 1 ? 'text-destructive' :
+              passwordStrength().level === 2 ? 'text-amber-500' :
+              passwordStrength().level === 3 ? 'text-blue-500' : 'text-emerald-500'
+            ">
+              {{ passwordStrength().label }}
+              <span class="text-muted-foreground font-normal ml-1">— Utilisez majuscules, chiffres et symboles</span>
+            </p>
+          </div>
+          <p *ngIf="hasError('step1','password','required')" class="text-xs text-destructive font-medium">Le mot de passe est requis.</p>
+          <p *ngIf="hasError('step1','password','minlength')" class="text-xs text-destructive font-medium">Minimum 8 caractères.</p>
+        </div>
+
+        <!-- Confirmation mot de passe -->
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <lucide-icon [img]="Lock" class="w-3.5 h-3.5"></lucide-icon>
+            Confirmer le mot de passe
+          </label>
+          <div class="relative">
+            <input
+              [type]="showConfirmPassword() ? 'text' : 'password'"
+              [formControl]="step1.controls.confirmPassword"
+              placeholder="Répétez votre mot de passe"
+              autocomplete="new-password"
+              class="w-full h-12 px-4 pr-12 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+              [class.border-border]="!hasError('step1','confirmPassword') && !hasFormError('passwordMismatch')"
+              [class.focus:ring-primary/25]="!hasError('step1','confirmPassword') && !hasFormError('passwordMismatch')"
+              [class.focus:border-primary]="!hasError('step1','confirmPassword') && !hasFormError('passwordMismatch')"
+              [class.border-destructive]="hasError('step1','confirmPassword') || hasFormError('passwordMismatch')"
+              [class.focus:ring-destructive/25]="hasError('step1','confirmPassword') || hasFormError('passwordMismatch')"
+              [class.bg-destructive/5]="hasError('step1','confirmPassword') || hasFormError('passwordMismatch')"
+            />
+            <button type="button" (click)="showConfirmPassword.set(!showConfirmPassword())"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-lg">
+              <lucide-icon [img]="showConfirmPassword() ? EyeOff : Eye" class="w-4 h-4"></lucide-icon>
+            </button>
+          </div>
+          <p *ngIf="hasError('step1','confirmPassword','required')" class="text-xs text-destructive font-medium">La confirmation est requise.</p>
+          <p *ngIf="hasFormError('passwordMismatch')" class="text-xs text-destructive font-medium">Les mots de passe ne correspondent pas.</p>
+        </div>
+
+        <!-- Bouton suivant -->
+        <button
+          type="button"
+          (click)="nextStep()"
+          app-button
+          class="w-full h-12 rounded-2xl font-bold text-sm gap-2 mt-2"
+        >
+          Continuer
+          <lucide-icon [img]="ArrowRight" class="w-4 h-4"></lucide-icon>
+        </button>
+
+        <p class="text-center text-sm text-muted-foreground">
+          Déjà un compte ?
+          <a href="/login" class="font-bold text-primary hover:text-primary/70 transition-colors underline underline-offset-2 ml-1">Se connecter</a>
+        </p>
+      </div>
+
+      <!-- ── ÉTAPE 2 : Informations personnelles ── -->
+      <div *ngIf="currentStep() === 2" class="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
+
+        <!-- Prénom + Nom -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              <lucide-icon [img]="User" class="w-3.5 h-3.5"></lucide-icon>
+              Prénom
+            </label>
+            <input
+              type="text"
+              [formControl]="step2.controls.prenom"
+              placeholder="Alex"
+              class="w-full h-12 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+              [class.border-border]="!hasError('step2','prenom')"
+              [class.focus:ring-primary/25]="!hasError('step2','prenom')"
+              [class.focus:border-primary]="!hasError('step2','prenom')"
+              [class.border-destructive]="hasError('step2','prenom')"
+              [class.bg-destructive/5]="hasError('step2','prenom')"
+            />
+            <p *ngIf="hasError('step2','prenom','required')" class="text-xs text-destructive font-medium">Requis.</p>
+          </div>
+
+          <div class="space-y-2">
+            <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              <lucide-icon [img]="User" class="w-3.5 h-3.5"></lucide-icon>
+              Nom
+            </label>
+            <input
+              type="text"
+              [formControl]="step2.controls.nom"
+              placeholder="Dupont"
+              class="w-full h-12 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+              [class.border-border]="!hasError('step2','nom')"
+              [class.focus:ring-primary/25]="!hasError('step2','nom')"
+              [class.focus:border-primary]="!hasError('step2','nom')"
+              [class.border-destructive]="hasError('step2','nom')"
+              [class.bg-destructive/5]="hasError('step2','nom')"
+            />
+            <p *ngIf="hasError('step2','nom','required')" class="text-xs text-destructive font-medium">Requis.</p>
+          </div>
+        </div>
+
+        <!-- Téléphone -->
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <lucide-icon [img]="Phone" class="w-3.5 h-3.5"></lucide-icon>
+            Téléphone
+          </label>
+          <input
+            type="tel"
+            [formControl]="step2.controls.telephone"
+            placeholder="+261 34 00 000 00"
+            autocomplete="tel"
+            class="w-full h-12 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+            [class.border-border]="!hasError('step2','telephone')"
+            [class.focus:ring-primary/25]="!hasError('step2','telephone')"
+            [class.focus:border-primary]="!hasError('step2','telephone')"
+            [class.border-destructive]="hasError('step2','telephone')"
+            [class.bg-destructive/5]="hasError('step2','telephone')"
+          />
+          <p *ngIf="hasError('step2','telephone','required')" class="text-xs text-destructive font-medium">Le téléphone est requis.</p>
+          <p *ngIf="hasError('step2','telephone','pattern')" class="text-xs text-destructive font-medium">Numéro de téléphone invalide.</p>
+        </div>
+
+        <!-- CGU -->
+        <div class="space-y-1">
+          <label class="flex items-start gap-3 cursor-pointer group" (click)="toggleCheckbox('acceptTerms')">
+            <div
+              class="w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all mt-0.5"
+              [class.border-primary]="getValue('step2','acceptTerms')"
+              [class.bg-primary]="getValue('step2','acceptTerms')"
+              [class.border-destructive]="hasError('step2','acceptTerms')"
+              [class.border-border]="!getValue('step2','acceptTerms') && !hasError('step2','acceptTerms')"
+            >
+              <svg *ngIf="getValue('step2','acceptTerms')" class="w-3 h-3 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+              </svg>
+            </div>
+            <span class="text-sm text-muted-foreground leading-relaxed group-hover:text-foreground transition-colors">
+              J'accepte les
+              <a href="/terms" class="font-bold text-primary hover:underline" (click)="$event.stopPropagation()">conditions d'utilisation</a>
+              et la
+              <a href="/privacy" class="font-bold text-primary hover:underline" (click)="$event.stopPropagation()">politique de confidentialité</a>.
+            </span>
+          </label>
+          <p *ngIf="hasError('step2','acceptTerms')" class="text-xs text-destructive font-medium pl-8">Vous devez accepter les conditions.</p>
+        </div>
+
+        <!-- Boutons -->
+        <div class="flex gap-3 pt-1">
+          <button
+            type="button"
+            (click)="prevStep()"
+            app-button
+            variant="outline"
+            class="h-12 px-5 rounded-2xl font-bold text-sm gap-2 flex-shrink-0"
+          >
+            <lucide-icon [img]="ArrowLeft" class="w-4 h-4"></lucide-icon>
+            Retour
+          </button>
+          <button
+            type="button"
+            (click)="nextStep()"
+            app-button
+            class="flex-1 h-12 rounded-2xl font-bold text-sm gap-2"
+          >
+            Continuer
+            <lucide-icon [img]="ArrowRight" class="w-4 h-4"></lucide-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── ÉTAPE 3 : Confirmation ── -->
+      <div *ngIf="currentStep() === 3" class="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
+
+        <div class="p-5 rounded-2xl bg-muted/30 border border-border/60 space-y-4">
+          <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest">Récapitulatif</p>
+
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-muted-foreground">Email</span>
+              <span class="text-sm font-bold truncate max-w-[200px]">{{ getValue('step1','email') }}</span>
+            </div>
+            <div class="h-px bg-border/50"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-muted-foreground">Prénom</span>
+              <span class="text-sm font-bold">{{ getValue('step2','prenom') }}</span>
+            </div>
+            <div class="h-px bg-border/50"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-muted-foreground">Nom</span>
+              <span class="text-sm font-bold">{{ getValue('step2','nom') }}</span>
+            </div>
+            <div class="h-px bg-border/50"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-muted-foreground">Téléphone</span>
+              <span class="text-sm font-bold">{{ getValue('step2','telephone') }}</span>
+            </div>
+            <div class="h-px bg-border/50"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-muted-foreground">Type de compte</span>
+              <span class="flex items-center gap-1.5 text-sm font-bold text-primary">
+                <lucide-icon [img]="ShoppingBag" class="w-3.5 h-3.5"></lucide-icon>
+                Client
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message erreur global -->
+        <div
+          *ngIf="errorMessage()"
+          class="flex items-center gap-3 p-4 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium"
+        >
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+          </svg>
+          {{ errorMessage() }}
+        </div>
+
+        <!-- Boutons -->
+        <div class="flex gap-3">
+          <button
+            type="button"
+            (click)="prevStep()"
+            app-button
+            variant="outline"
+            class="h-12 px-5 rounded-2xl font-bold text-sm gap-2 flex-shrink-0"
+          >
+            <lucide-icon [img]="ArrowLeft" class="w-4 h-4"></lucide-icon>
+            Retour
+          </button>
+          <button
+            type="button"
+            (click)="onSubmit()"
+            app-button
+            [disabled]="isLoading()"
+            class="flex-1 h-12 rounded-2xl font-bold text-sm gap-2 disabled:opacity-60"
+          >
+            <span *ngIf="!isLoading()" class="flex items-center gap-2">
+              <lucide-icon [img]="Check" class="w-4 h-4"></lucide-icon>
+              Créer mon compte
+            </span>
+            <span *ngIf="isLoading()" class="flex items-center gap-2">
+              <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+              </svg>
+              Création en cours...
+            </span>
+          </button>
+        </div>
+
+        <p class="text-center text-xs text-muted-foreground/60 leading-relaxed">
+          En créant votre compte, vous acceptez nos
+          <a href="/terms" class="text-primary hover:underline">conditions d'utilisation</a>
+          et notre
+          <a href="/privacy" class="text-primary hover:underline">politique de confidentialité</a>.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <p class="mt-10 text-xs text-muted-foreground/50 text-center">
+      © 2026 MarketPlace · Tous droits réservés
+    </p>
+  </div>
+
+</div>
+
+<style>
+  @keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    100% { transform: translateY(-14px) rotate(1.5deg); }
+  }
+</style>

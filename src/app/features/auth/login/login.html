@@ -1,0 +1,288 @@
+<div class="min-h-screen flex bg-background">
+
+  <!-- ═══════════════════════════════════════
+       PANNEAU GAUCHE — Visuel immersif
+  ═══════════════════════════════════════ -->
+  <div class="hidden lg:flex lg:w-[52%] relative overflow-hidden bg-foreground flex-col">
+
+    <!-- Grille d'images flottantes -->
+    <div class="absolute inset-0 grid grid-cols-3 gap-2 p-6 opacity-30 scale-110 rotate-3">
+      <div
+        *ngFor="let img of featuredImages; let i = index"
+        class="rounded-2xl overflow-hidden aspect-square"
+        [style.animation-delay]="(i * 0.15) + 's'"
+        style="animation: float 6s ease-in-out infinite alternate;"
+      >
+        <img [src]="img" class="w-full h-full object-cover" alt="" />
+      </div>
+    </div>
+
+    <!-- Overlay gradient -->
+    <div class="absolute inset-0 bg-gradient-to-br from-foreground/95 via-foreground/80 to-foreground/60"></div>
+
+    <!-- Motif de points décoratif -->
+    <div
+      class="absolute inset-0 opacity-5"
+      style="background-image: radial-gradient(circle, hsl(var(--background)) 1px, transparent 1px); background-size: 28px 28px;"
+    ></div>
+
+    <!-- Contenu du panneau gauche -->
+    <div class="relative z-10 flex flex-col h-full p-12">
+
+      <!-- Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
+          <lucide-icon [img]="Store" class="w-5 h-5 text-primary-foreground"></lucide-icon>
+        </div>
+        <span class="text-background font-black text-xl tracking-tight">MarketPlace</span>
+      </div>
+
+      <!-- Texte central -->
+      <div class="flex-1 flex flex-col justify-center space-y-6 max-w-md">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/20 border border-primary/30 w-fit">
+          <lucide-icon [img]="Sparkles" class="w-3.5 h-3.5 text-primary"></lucide-icon>
+          <span class="text-xs font-bold text-primary uppercase tracking-widest">Plateforme de commerce</span>
+        </div>
+
+        <h1 class="text-5xl font-black tracking-tight text-background leading-tight">
+          Votre boutique,<br/>
+          <span class="text-primary">votre succès.</span>
+        </h1>
+
+        <p class="text-background/60 text-lg leading-relaxed font-medium">
+          Accédez à votre espace boutique et gérez vos produits, commandes et clients en toute simplicité.
+        </p>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-4 pt-4">
+          <div
+            *ngFor="let stat of stats"
+            class="text-center p-4 rounded-2xl bg-background/5 border border-background/10 backdrop-blur-sm"
+          >
+            <p class="text-2xl font-black text-background">{{ stat.value }}</p>
+            <p class="text-xs text-background/50 font-medium mt-0.5 leading-tight">{{ stat.label }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Témoignage / Quote -->
+      <div class="p-5 rounded-2xl bg-background/5 border border-background/10 backdrop-blur-sm space-y-3">
+        <div class="flex items-center gap-3">
+          <img
+            src="https://api.dicebear.com/7.x/avataaars/svg?seed=merchant42"
+            class="w-10 h-10 rounded-full border-2 border-primary/30"
+            alt="Avatar"
+          />
+          <div>
+            <p class="text-sm font-bold text-background">Massin Tech</p>
+            <p class="text-xs text-background/50">Boutique vérifiée · 340 ventes</p>
+          </div>
+          <div class="ml-auto flex gap-0.5">
+            <span *ngFor="let s of [1,2,3,4,5]" class="text-primary text-sm">★</span>
+          </div>
+        </div>
+        <p class="text-sm text-background/70 italic leading-relaxed">
+          "Depuis que j'utilise cette plateforme, mes ventes ont augmenté de 40%. Interface intuitive et support réactif."
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       PANNEAU DROIT — Formulaire
+  ═══════════════════════════════════════ -->
+  <div class="flex-1 flex flex-col items-center justify-center px-6 py-12 lg:px-16">
+
+    <!-- Logo mobile uniquement -->
+    <div class="flex lg:hidden items-center gap-3 mb-10">
+      <div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
+        <lucide-icon [img]="Store" class="w-5 h-5 text-primary-foreground"></lucide-icon>
+      </div>
+      <span class="font-black text-xl tracking-tight">MarketPlace</span>
+    </div>
+
+    <div class="w-full max-w-md space-y-8">
+
+      <!-- Titre -->
+      <div class="space-y-2">
+        <h2 class="text-3xl font-black tracking-tight">Bon retour 👋</h2>
+        <p class="text-muted-foreground font-medium">
+          Connectez-vous à votre espace boutique.
+        </p>
+      </div>
+
+      <!-- Formulaire -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5" novalidate>
+
+        <!-- Email -->
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+            <lucide-icon [img]="Mail" class="w-3.5 h-3.5"></lucide-icon>
+            Adresse email
+          </label>
+          <div class="relative">
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="vous@exemple.com"
+              autocomplete="email"
+              class="w-full h-12 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+              [class.border-border]="!hasError('email')"
+              [class.focus:ring-primary/25]="!hasError('email')"
+              [class.focus:border-primary]="!hasError('email')"
+              [class.border-destructive]="hasError('email')"
+              [class.focus:ring-destructive/25]="hasError('email')"
+              [class.bg-destructive/5]="hasError('email')"
+            />
+          </div>
+          <p *ngIf="hasError('email', 'required')" class="text-xs text-destructive font-medium flex items-center gap-1">
+            L'email est requis.
+          </p>
+          <p *ngIf="hasError('email', 'email')" class="text-xs text-destructive font-medium">
+            Adresse email invalide.
+          </p>
+        </div>
+
+        <!-- Mot de passe -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              <lucide-icon [img]="Lock" class="w-3.5 h-3.5"></lucide-icon>
+              Mot de passe
+            </label>
+            <a href="/forgot-password" class="text-xs font-bold text-primary hover:text-primary/70 transition-colors underline underline-offset-2">
+              Mot de passe oublié ?
+            </a>
+          </div>
+          <div class="relative">
+            <input
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              class="w-full h-12 px-4 pr-12 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+              [class.border-border]="!hasError('password')"
+              [class.focus:ring-primary/25]="!hasError('password')"
+              [class.focus:border-primary]="!hasError('password')"
+              [class.border-destructive]="hasError('password')"
+              [class.focus:ring-destructive/25]="hasError('password')"
+              [class.bg-destructive/5]="hasError('password')"
+            />
+            <button
+              type="button"
+              (click)="showPassword.set(!showPassword())"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-lg"
+            >
+              <lucide-icon [img]="showPassword() ? EyeOff : Eye" class="w-4 h-4"></lucide-icon>
+            </button>
+          </div>
+          <p *ngIf="hasError('password', 'required')" class="text-xs text-destructive font-medium">
+            Le mot de passe est requis.
+          </p>
+          <p *ngIf="hasError('password', 'minlength')" class="text-xs text-destructive font-medium">
+            Minimum 6 caractères.
+          </p>
+        </div>
+
+        <!-- Se souvenir de moi -->
+        <label class="flex items-center gap-3 cursor-pointer group">
+          <div
+            class="w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all"
+            [class.border-primary]="form.get('rememberMe')?.value"
+            [class.bg-primary]="form.get('rememberMe')?.value"
+            [class.border-border]="!form.get('rememberMe')?.value"
+            (click)="form.get('rememberMe')?.setValue(!form.get('rememberMe')?.value)"
+          >
+            <svg *ngIf="form.get('rememberMe')?.value" class="w-3 h-3 text-primary-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <span class="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+            Se souvenir de moi
+          </span>
+        </label>
+
+        <!-- Message d'erreur global -->
+        <div
+          *ngIf="errorMessage()"
+          class="flex items-center gap-3 p-4 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive text-sm font-medium"
+        >
+          <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+          </svg>
+          {{ errorMessage() }}
+        </div>
+
+        <!-- Bouton connexion -->
+        <button
+          type="submit"
+          app-button
+          [disabled]="isLoading()"
+          class="w-full h-12 rounded-2xl font-bold text-sm gap-2 shadow-sm hover:shadow-md transition-all active:scale-[0.98] disabled:opacity-60"
+        >
+          <span *ngIf="!isLoading()" class="flex items-center gap-2">
+            Se connecter
+            <lucide-icon [img]="ArrowRight" class="w-4 h-4"></lucide-icon>
+          </span>
+          <span *ngIf="isLoading()" class="flex items-center gap-2">
+            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            Connexion en cours...
+          </span>
+        </button>
+
+      </form>
+
+      <!-- Séparateur -->
+      <div class="relative flex items-center gap-4">
+        <div class="flex-1 h-px bg-border"></div>
+        <span class="text-xs font-bold text-muted-foreground uppercase tracking-widest">ou</span>
+        <div class="flex-1 h-px bg-border"></div>
+      </div>
+
+      <!-- Lien inscription -->
+      <p class="text-center text-sm text-muted-foreground">
+        Pas encore de compte ?
+        <a href="/register" class="font-bold text-primary hover:text-primary/70 transition-colors underline underline-offset-2 ml-1">
+          Créer un compte
+        </a>
+      </p>
+
+      <!-- Accès boutique vs client -->
+      <!-- <div class="grid grid-cols-2 gap-3">
+        <a
+          href="/login/client"
+          class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-border bg-muted/20 hover:bg-muted/40 hover:border-primary/30 transition-all cursor-pointer group text-center"
+        >
+          <lucide-icon [img]="ShoppingBag" class="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors"></lucide-icon>
+          <span class="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">Espace Client</span>
+        </a>
+        <a
+          href="/login/boutique"
+          class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-primary/30 bg-primary/5 hover:bg-primary/10 transition-all cursor-pointer group text-center"
+        >
+          <lucide-icon [img]="Store" class="w-5 h-5 text-primary transition-colors"></lucide-icon>
+          <span class="text-xs font-bold text-primary">Espace Boutique</span>
+        </a>
+      </div> -->
+
+    </div>
+
+    <!-- Footer -->
+    <p class="mt-12 text-xs text-muted-foreground/50 text-center">
+      © 2026 MarketPlace · Tous droits réservés ·
+      <a href="/privacy" class="hover:text-muted-foreground transition-colors">Confidentialité</a>
+    </p>
+  </div>
+
+</div>
+
+<style>
+  @keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    100% { transform: translateY(-12px) rotate(1deg); }
+  }
+</style>
