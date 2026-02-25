@@ -10,7 +10,7 @@ export class AuthDirective {
   constructor() { }
   
   hasRole = input<role>();
-
+  
   verify(role: string): boolean {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return user.roles && user.roles.includes(role);

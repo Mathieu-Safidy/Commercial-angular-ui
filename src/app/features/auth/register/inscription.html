@@ -59,7 +59,7 @@
         </div>
 
         <!-- Avantages -->
-        <div class="space-y-3">
+        <!-- <div class="space-y-3">
           <div
             *ngFor="let perk of perks"
             class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-background/5 border border-background/8"
@@ -72,7 +72,7 @@
               <p class="text-[11px] text-background/45 mt-0.5">{{ perk.desc }}</p>
             </div>
           </div>
-        </div>
+        </div> -->
 
       </div>
 
@@ -143,6 +143,27 @@
 
       <!-- ── ÉTAPE 1 : Identifiants ── -->
       <div *ngIf="currentStep() === 1" class="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
+        <!-- Nom utilisateur -->
+
+        <div class="space-y-2">
+            <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              <lucide-icon [img]="User" class="w-3.5 h-3.5"></lucide-icon>
+              Prénom
+            </label>
+            <input
+              type="text"
+              [formControl]="step1.controls.username"
+              placeholder="Alex"
+              class="w-full h-12 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+              [class.border-border]="!hasError('step1','username')"
+              [class.focus:ring-primary/25]="!hasError('step1','username')"
+              [class.focus:border-primary]="!hasError('step1','username')"
+              [class.border-destructive]="hasError('step1','username')"
+              [class.bg-destructive/5]="hasError('step1','username')"
+            />
+            <p *ngIf="hasError('step1','username','required')" class="text-xs text-destructive font-medium">Requis.</p>
+            <p *ngIf="hasError('step1','username','minlength')" class="text-xs text-destructive font-medium">Minimum 3 caractères.</p>
+          </div>
 
         <!-- Email -->
         <div class="space-y-2">
@@ -267,9 +288,8 @@
       </div>
 
       <!-- ── ÉTAPE 2 : Informations personnelles ── -->
-      <div *ngIf="currentStep() === 2" class="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
+      <!-- <div *ngIf="currentStep() === 2" class="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
 
-        <!-- Prénom + Nom -->
         <div class="grid grid-cols-2 gap-4">
           <div class="space-y-2">
             <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -310,7 +330,6 @@
           </div>
         </div>
 
-        <!-- Téléphone -->
         <div class="space-y-2">
           <label class="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground">
             <lucide-icon [img]="Phone" class="w-3.5 h-3.5"></lucide-icon>
@@ -332,7 +351,6 @@
           <p *ngIf="hasError('step2','telephone','pattern')" class="text-xs text-destructive font-medium">Numéro de téléphone invalide.</p>
         </div>
 
-        <!-- CGU -->
         <div class="space-y-1">
           <label class="flex items-start gap-3 cursor-pointer group" (click)="toggleCheckbox('acceptTerms')">
             <div
@@ -356,7 +374,6 @@
           <p *ngIf="hasError('step2','acceptTerms')" class="text-xs text-destructive font-medium pl-8">Vous devez accepter les conditions.</p>
         </div>
 
-        <!-- Boutons -->
         <div class="flex gap-3 pt-1">
           <button
             type="button"
@@ -378,10 +395,10 @@
             <lucide-icon [img]="ArrowRight" class="w-4 h-4"></lucide-icon>
           </button>
         </div>
-      </div>
+      </div> -->
 
       <!-- ── ÉTAPE 3 : Confirmation ── -->
-      <div *ngIf="currentStep() === 3" class="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
+      <div *ngIf="currentStep() === 2" class="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
 
         <div class="p-5 rounded-2xl bg-muted/30 border border-border/60 space-y-4">
           <p class="text-xs font-bold text-muted-foreground uppercase tracking-widest">Récapitulatif</p>
@@ -393,19 +410,19 @@
             </div>
             <div class="h-px bg-border/50"></div>
             <div class="flex items-center justify-between">
-              <span class="text-sm text-muted-foreground">Prénom</span>
-              <span class="text-sm font-bold">{{ getValue('step2','prenom') }}</span>
+              <span class="text-sm text-muted-foreground">Nom d'utilisateur</span>
+              <span class="text-sm font-bold">{{ getValue('step1','username') }}</span>
             </div>
             <div class="h-px bg-border/50"></div>
-            <div class="flex items-center justify-between">
+            <!-- <div class="flex items-center justify-between">
               <span class="text-sm text-muted-foreground">Nom</span>
               <span class="text-sm font-bold">{{ getValue('step2','nom') }}</span>
-            </div>
-            <div class="h-px bg-border/50"></div>
+            </div> -->
+            <!-- <div class="h-px bg-border/50"></div>
             <div class="flex items-center justify-between">
               <span class="text-sm text-muted-foreground">Téléphone</span>
               <span class="text-sm font-bold">{{ getValue('step2','telephone') }}</span>
-            </div>
+            </div> -->
             <div class="h-px bg-border/50"></div>
             <div class="flex items-center justify-between">
               <span class="text-sm text-muted-foreground">Type de compte</span>

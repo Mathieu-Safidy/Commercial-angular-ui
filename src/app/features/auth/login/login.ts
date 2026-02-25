@@ -14,6 +14,7 @@ import {
   Store,
 } from 'lucide-angular';
 import { ButtonComponent } from '../../../components/ui/button';
+import { AuthServices } from '../../../services/authService/auth.services';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +30,7 @@ import { ButtonComponent } from '../../../components/ui/button';
 export class Login {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private authService = inject(AuthServices);
 
   readonly Eye = Eye;
   readonly EyeOff = EyeOff;
@@ -68,6 +70,7 @@ export class Login {
   async onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      
       return;
     }
     this.isLoading.set(true);
@@ -75,8 +78,22 @@ export class Login {
     try {
       // Remplacez par votre service d'authentification
       // await this.authService.login(this.form.value.email, this.form.value.password);
-      await new Promise(r => setTimeout(r, 1000)); // simulation
-      this.router.navigate(['/dashboard']);
+      let payload = {
+        email: this.form.value.email!,
+        password: this.form.value.password!
+      }
+      await this.authService.login(payload.email, payload.password);
+      const user = this.authService.currentUserSubject.value;
+      // await new Promise(r => setTimeout(r, 1000)); // simulation
+      const roleRedirectMap: Record<string, string> = {
+        Admin: '/acceuil/admin',
+        Boutique: '/acceuil/boutique',
+        User: '/acceuil/client'
+      };
+
+      const redirectPath = roleRedirectMap[user?.role ?? ''] || '/acceuil';
+
+      this.router.navigate([redirectPath]);
     } catch (err: any) {
       this.errorMessage.set(err?.message ?? 'Email ou mot de passe incorrect.');
     } finally {

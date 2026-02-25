@@ -9,6 +9,7 @@ import {
   ShoppingBag, Check, Phone, ChevronRight,
 } from 'lucide-angular';
 import { ButtonComponent } from '../../../components/ui/button';
+import { AuthServices } from '../../../services/authService/auth.services';
 
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
   const password = control.get('password')?.value;
@@ -25,6 +26,7 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
 export class RegisterClientComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private authService = inject(AuthServices);
 
   readonly Eye = Eye;
   readonly EyeOff = EyeOff;
@@ -53,24 +55,25 @@ export class RegisterClientComponent {
 
   steps = [
     { number: 1, label: 'Identifiants' },
-    { number: 2, label: 'Informations' },
-    { number: 3, label: 'Confirmation' },
+    // { number: 2, label: 'Informations' },
+    { number: 2, label: 'Confirmation' },
   ];
 
   // ── Étape 1 : Email + mot de passe ──
   step1 = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
+    username: ['', [Validators.required, Validators.minLength(3)]],
     confirmPassword: ['', Validators.required],
   }, { validators: passwordMatchValidator });
 
   // ── Étape 2 : Infos personnelles ──
-  step2 = this.fb.group({
-    prenom: ['', [Validators.required, Validators.minLength(2)]],
-    nom: ['', [Validators.required, Validators.minLength(2)]],
-    telephone: ['', [Validators.required, Validators.pattern(/^[0-9+\s\-]{8,15}$/)]],
-    acceptTerms: [false, Validators.requiredTrue],
-  });
+  // step2 = this.fb.group({
+  //   prenom: ['', [Validators.required, Validators.minLength(2)]],
+  //   nom: ['', [Validators.required, Validators.minLength(2)]],
+  //   telephone: ['', [Validators.required, Validators.pattern(/^[0-9+\s\-]{8,15}$/)]],
+  //   acceptTerms: [false, Validators.requiredTrue],
+  // });
 
   // ── Force du mot de passe ──
   passwordStrength = computed(() => {
@@ -95,10 +98,10 @@ export class RegisterClientComponent {
       this.step1.markAllAsTouched();
       if (this.step1.invalid) return;
     }
-    if (this.currentStep() === 2) {
-      this.step2.markAllAsTouched();
-      if (this.step2.invalid) return;
-    }
+    // if (this.currentStep() === 2) {
+    //   this.step2.markAllAsTouched();
+    //   if (this.step2.invalid) return;
+    // }
     if (this.currentStep() < this.TOTAL_STEPS) {
       this.currentStep.update(s => s + 1);
       this.errorMessage.set('');
@@ -114,7 +117,8 @@ export class RegisterClientComponent {
 
   // ── Helpers ──
   hasError(form: 'step1' | 'step2', field: string, error = ''): boolean {
-    const ctrl = (form === 'step1' ? this.step1.get(field) : this.step2.get(field));
+    // const ctrl = (form === 'step1' ? this.step1.get(field) : this.step2.get(field));
+    const ctrl = this.step1.get(field);
     if (!ctrl?.touched || !ctrl?.invalid) return false;
     return error ? ctrl.hasError(error) : ctrl.invalid;
   }
@@ -124,14 +128,14 @@ export class RegisterClientComponent {
   }
 
   getValue(form: 'step1' | 'step2', field: string): any {
-    return (form === 'step1' ? this.step1.get(field) : this.step2.get(field))?.value;
+    return (form === 'step1' ? this.step1.get(field) : this.step1.get(field))?.value;
   }
 
-  toggleCheckbox(field: string) {
-    const ctrl = this.step2.get(field);
-    ctrl?.setValue(!ctrl.value);
-    ctrl?.markAsTouched();
-  }
+  // toggleCheckbox(field: string) {
+  //   const ctrl = this.step2.get(field);
+  //   ctrl?.setValue(!ctrl.value);
+  //   ctrl?.markAsTouched();
+  // }
 
   // ── Submit ──
   async onSubmit() {
@@ -139,16 +143,21 @@ export class RegisterClientComponent {
     this.errorMessage.set('');
     try {
       const payload = {
-        email: this.step1.value.email,
-        password: this.step1.value.password,
-        prenom: this.step2.value.prenom,
-        nom: this.step2.value.nom,
-        telephone: this.step2.value.telephone,
-        role: 'client',
+        email: this.step1.value.email!,
+        password: this.step1.value.password!,
+        username: this.step1.value.username!
       };
-      // await this.authService.register(payload);
-      await new Promise(r => setTimeout(r, 1200)); // ← remplacer par authService
-      this.router.navigate(['/login'], { queryParams: { registered: true } });
+      await this.authService.register(payload);
+      const user = this.authService.currentUserSubject.value;
+      // await new Promise(r => setTimeout(r, 1000)); // simulation
+      const roleRedirectMap: Record<string, string> = {
+        Admin: '/acceuil/admin',
+        Boutique: '/acceuil/boutique',
+        User: '/acceuil/client'
+      };
+
+      const redirectPath = roleRedirectMap[user?.role ?? ''] || '/acceuil';
+      this.router.navigate([redirectPath]);
     } catch (err: any) {
       this.errorMessage.set(err?.message ?? 'Une erreur est survenue. Veuillez réessayer.');
       this.currentStep.set(1);
@@ -159,10 +168,10 @@ export class RegisterClientComponent {
 
   // ── Panel gauche ──
   perks = [
-    { icon: '🛍️', title: 'Des milliers de produits', desc: 'Explorez le catalogue de boutiques locales' },
-    { icon: '⚡', title: 'Commandes rapides', desc: 'Ajoutez au panier et commandez en quelques clics' },
-    { icon: '🔒', title: 'Compte sécurisé', desc: 'Vos données sont protégées et chiffrées' },
-    { icon: '📦', title: 'Suivi en temps réel', desc: 'Suivez chaque étape de vos livraisons' },
+    // { icon: '🛍️', title: 'Des milliers de produits', desc: 'Explorez le catalogue de boutiques locales' },
+    // { icon: '⚡', title: 'Commandes rapides', desc: 'Ajoutez au panier et commandez en quelques clics' },
+    // { icon: '🔒', title: 'Compte sécurisé', desc: 'Vos données sont protégées et chiffrées' },
+    // { icon: '📦', title: 'Suivi en temps réel', desc: 'Suivez chaque étape de vos livraisons' },
   ];
 
   featuredImages = [

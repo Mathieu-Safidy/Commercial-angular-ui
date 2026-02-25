@@ -94,13 +94,14 @@
   </nav>
 
   <main class="min-h-[calc(100vh-16rem)]">
-    @if (activeProfile === 'client') {
+    <!-- @if (activeProfile === 'client') {
       <app-client-dashboard></app-client-dashboard>
     } @else if (activeProfile === 'boutique') {
       <app-boutique-dashboard></app-boutique-dashboard>
     } @else if (activeProfile === 'admin') {
       <app-admin-dashboard></app-admin-dashboard>
-    }
+    } -->
+    <router-outlet></router-outlet>
   </main>
 
   <footer class="py-20 border-t bg-muted/20 border-border/50 relative overflow-hidden">

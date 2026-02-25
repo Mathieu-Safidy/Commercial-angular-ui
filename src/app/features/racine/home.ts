@@ -10,6 +10,7 @@ import { SeparatorComponent } from '../../components/ui/separator';
 import { ClientDashboardComponent } from '../client/clientDashboard/ClientDashboard';
 import { BoutiqueDashboardComponent } from '../boutique/boutiqueDashboard/BoutiqueDashBoard';
 import { AdminDashboardComponent } from '../admin/adminDashboard/AdminDashBoard';
+import { RouterModule } from "@angular/router";
 
 // --- N'oublie pas d'importer tes composants ici ---
 // import { ClientDashboardComponent } from './features/client/clientDashboard/ClientDashboard';
@@ -39,9 +40,8 @@ type Profile = 'client' | 'boutique' | 'admin';
     ClientDashboardComponent,
     BoutiqueDashboardComponent,
     AdminDashboardComponent,
-    // BoutiqueDashboardComponent,
-    // AdminDashboardComponent
-  ],
+    RouterModule
+],
   templateUrl: './home.html'
 })
 export class Home {
