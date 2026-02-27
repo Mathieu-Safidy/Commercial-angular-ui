@@ -74,20 +74,37 @@
 
   <div class="flex-1 overflow-y-auto p-4 lg:p-10">
     <div class="max-w-7xl mx-auto space-y-10">
-      <app-boutique-overview *ngIf="activeSection === 'overview'"></app-boutique-overview>
-      <app-boutique-products *ngIf="activeSection === 'products'"></app-boutique-products>
-      <app-boutique-orders *ngIf="activeSection === 'orders'"></app-boutique-orders>
-      <app-boutique-stats *ngIf="activeSection === 'stats'"></app-boutique-stats>
-      <app-boutique-posts *ngIf="activeSection === 'posts'"></app-boutique-posts>
-      <app-boutique-profil *ngIf="activeSection === 'avis'"></app-boutique-profil>
-      <app-stock-approvisionnement *ngIf="activeSection === 'stock'"></app-stock-approvisionnement>
+<!--      <app-boutique-overview *ngIf="activeSection === 'overview'"></app-boutique-overview>-->
+<!--      <app-boutique-products *ngIf="activeSection === 'products'"></app-boutique-products>-->
+<!--      <app-boutique-orders *ngIf="activeSection === 'orders'"></app-boutique-orders>-->
+<!--      <app-boutique-stats *ngIf="activeSection === 'stats'"></app-boutique-stats>-->
+<!--      <app-boutique-posts *ngIf="activeSection === 'posts'"></app-boutique-posts>-->
+<!--      <app-boutique-profil *ngIf="activeSection === 'avis'"></app-boutique-profil>-->
+<!--      <app-stock-approvisionnement *ngIf="activeSection === 'stock'"></app-stock-approvisionnement>-->
 
-      <app-empty
-        *ngIf="!['overview', 'products', 'orders', 'stats'].includes(activeSection)"
-        title="Section en développement"
-        description="Cette partie du UI Kit sera disponible prochainement"
-      >
-      </app-empty>
+<!--      <app-empty-->
+<!--        *ngIf="!['overview', 'products', 'orders', 'stats'].includes(activeSection)"-->
+<!--        title="Section en développement"-->
+<!--        description="Cette partie du UI Kit sera disponible prochainement"-->
+<!--      >-->
+<!--      </app-empty>-->
+
+      <ng-container [ngSwitch]="activeSection">
+
+        <app-boutique-overview *ngSwitchCase="'overview'"></app-boutique-overview>
+        <app-boutique-products *ngSwitchCase="'products'"></app-boutique-products>
+        <app-boutique-orders *ngSwitchCase="'orders'"></app-boutique-orders>
+        <app-boutique-stats *ngSwitchCase="'stats'"></app-boutique-stats>
+        <app-boutique-posts *ngSwitchCase="'posts'"></app-boutique-posts>
+        <app-boutique-profil *ngSwitchCase="'avis'"></app-boutique-profil>
+
+        <app-empty
+          *ngSwitchDefault
+          title="Section en développement"
+          description="Cette partie sera disponible prochainement">
+        </app-empty>
+
+      </ng-container>
     </div>
   </div>
 </div>
