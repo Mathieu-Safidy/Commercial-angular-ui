@@ -16,8 +16,8 @@ import { ProduitService } from '../../../services/produitService/produit-service
 import { Environments } from '../../../environements/environments';
 import { PanierService } from '../../../services/panierService/panier-service';
 import { AlertDialogService } from '../../../components/ui/alert-dialog/alert-dialog.service';
-import { ProductDetailDialogComponent } from '../../../components/ui/produitDialogue/produitDalogue';
 import {AuthServices} from '../../../services/authService/auth.services';
+import { Router } from '@angular/router';
 
 export interface Product {
   id: string;
@@ -47,8 +47,7 @@ type ViewMode = 'grid' | 'list';
     LucideAngularModule,
     ButtonComponent,
     BadgeComponent,
-    CountByCategoryPipe,
-    ProductDetailDialogComponent
+    CountByCategoryPipe
   ],
   templateUrl: './products-catalogue.html',
 })
@@ -68,7 +67,7 @@ export class ProductsCatalogueComponent implements OnInit {
   readonly Sparkles = Sparkles;
   readonly ArrowUpDown = ArrowUpDown;
   readonly Package = Package;
-
+  private router = inject(Router);
   authService = inject(AuthServices);
   user: User | any = this.authService.currentUserSubject.value || { } ;
   userId = this.user._id;
@@ -137,8 +136,12 @@ export class ProductsCatalogueComponent implements OnInit {
 
 
   openDetails(product: Produit) {
-    this.produitService.produitSelectionne.set(product);
-    this.dialog.show();
+    // this.produitService.produitSelectionne.set(product);
+    // this.dialog.show();
+    console.log('Navigate to:', product._id);
+    console.log('Mandeha');
+    
+    this.router.navigate(['/acceuil/client/produit', product._id]);
   }
 
   ngAfterViewInit() {
