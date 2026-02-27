@@ -46,7 +46,7 @@ export class AuthServices {
 
   public async register(payload: { email: string; password: string; username: string }) {
     try {
-      const result: any = await this.http.PPost('/auth/register', payload, undefined ,false);
+      const result: any = await this.http.PPost('/auth/register', payload, false);
       let user = result.user;
       if (user && user.idProfil) {
         user.role = user.idProfil.nom; // mappe idProfil.nom à user.role
@@ -78,7 +78,16 @@ export class AuthServices {
   refreshToken() {
     try {
       const result: any = this.http.PPost('/auth/refresh-token', {});
+      let user = result.user;
+      if (user && user.idProfil) {
+        user.role = user.idProfil.nom; // mappe idProfil.nom à user.role
+        user.idProfil = undefined; // optionnel : supprime idProfil pour éviter la confusion
+      }
+      this.currentUserSubject.next(user);
       this.accessTokenSubject.next(result.accessToken);
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      localStorage.setItem('accessToken', result.accessToken);
+      return result.accessToken;
     } catch (error) {
       throw new Error('Token refresh failed');
     }
