@@ -1,0 +1,224 @@
+<div class="min-h-screen bg-foreground flex flex-col items-center justify-center relative overflow-hidden px-6">
+
+  <!-- ── Fond : grille + lumières ── -->
+
+  <!-- Grille de points -->
+  <div
+    class="absolute inset-0 opacity-[0.06]"
+    style="background-image: radial-gradient(circle, hsl(var(--background)) 1px, transparent 1px); background-size: 30px 30px;"
+  ></div>
+
+  <!-- Lumière rouge centrale -->
+  <div
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
+    style="background: radial-gradient(circle, hsl(0 84% 60% / 0.12) 0%, transparent 70%); animation: pulse-glow 3s ease-in-out infinite;"
+  ></div>
+
+  <!-- Lumière rouge haut-gauche -->
+  <div
+    class="absolute -top-32 -left-32 w-96 h-96 rounded-full pointer-events-none"
+    style="background: radial-gradient(circle, hsl(0 84% 60% / 0.08) 0%, transparent 70%);"
+  ></div>
+
+  <!-- Lumière rouge bas-droit -->
+  <div
+    class="absolute -bottom-32 -right-32 w-96 h-96 rounded-full pointer-events-none"
+    style="background: radial-gradient(circle, hsl(0 84% 60% / 0.06) 0%, transparent 70%);"
+  ></div>
+
+  <!-- Ligne horizontale décorative -->
+  <div
+    class="absolute left-0 right-0 h-px top-1/2 -translate-y-16 pointer-events-none"
+    style="background: linear-gradient(90deg, transparent 0%, hsl(0 84% 60% / 0.15) 30%, hsl(0 84% 60% / 0.4) 50%, hsl(0 84% 60% / 0.15) 70%, transparent 100%);"
+  ></div>
+
+  <!-- ── Contenu principal ── -->
+  <div class="relative z-10 flex flex-col items-center text-center max-w-lg w-full space-y-8">
+
+    <!-- Icône bouclier -->
+    <div
+      class="relative"
+      style="animation: float-icon 4s ease-in-out infinite alternate;"
+    >
+      <!-- Halo pulsant -->
+      <div
+        class="absolute inset-0 rounded-3xl"
+        style="background: hsl(0 84% 60% / 0.15); animation: ping-slow 2s ease-in-out infinite; border-radius: 24px;"
+      ></div>
+      <div
+        class="relative w-24 h-24 rounded-3xl flex items-center justify-center border"
+        style="background: hsl(0 84% 60% / 0.1); border-color: hsl(0 84% 60% / 0.3);"
+      >
+        <lucide-icon
+          [img]="ShieldX"
+          class="w-11 h-11"
+          style="color: hsl(0 84% 60%);"
+        ></lucide-icon>
+      </div>
+    </div>
+
+    <!-- Code erreur -->
+    <div class="space-y-1">
+      <p
+        class="font-black leading-none tracking-tighter select-none"
+        style="
+          font-size: clamp(7rem, 18vw, 11rem);
+          color: transparent;
+          background: linear-gradient(180deg, hsl(0 84% 65%) 0%, hsl(0 84% 40%) 100%);
+          -webkit-background-clip: text;
+          background-clip: text;
+          filter: drop-shadow(0 0 40px hsl(0 84% 60% / 0.4));
+          animation: flicker 6s ease-in-out infinite;
+          letter-spacing: -0.04em;
+        "
+      >
+        403
+      </p>
+
+      <!-- Ligne décorative sous le 403 -->
+      <div
+        class="h-px w-32 mx-auto"
+        style="background: linear-gradient(90deg, transparent, hsl(0 84% 60% / 0.6), transparent);"
+      ></div>
+    </div>
+
+    <!-- Texte -->
+    <div class="space-y-3">
+      <h1 class="text-3xl font-black tracking-tight" style="color: hsl(var(--background));">
+        Accès refusé
+      </h1>
+      <p style="color: hsl(var(--background) / 0.5);" class="text-base leading-relaxed font-medium">
+        Vous n'avez pas les permissions nécessaires pour accéder à cette page.
+        <br/>Veuillez vous connecter avec un compte autorisé.
+      </p>
+    </div>
+
+    <!-- Compte à rebours -->
+    <div
+      class="w-full p-4 rounded-2xl space-y-3"
+      style="background: hsl(var(--background) / 0.05); border: 1px solid hsl(var(--background) / 0.08);"
+    >
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <lucide-icon [img]="Lock" class="w-3.5 h-3.5" style="color: hsl(0 84% 60%);"></lucide-icon>
+          <span class="text-xs font-bold uppercase tracking-widest" style="color: hsl(var(--background) / 0.4);">
+            Redirection automatique
+          </span>
+        </div>
+        <span
+          class="text-sm font-black tabular-nums"
+          style="color: hsl(0 84% 60%);"
+        >
+          {{ countdown() }}s
+        </span>
+      </div>
+
+      <!-- Barre de progression -->
+      <div class="h-1.5 rounded-full overflow-hidden" style="background: hsl(var(--background) / 0.1);">
+        <div
+          class="h-full rounded-full transition-all duration-1000 ease-linear"
+          style="background: linear-gradient(90deg, hsl(0 84% 60%), hsl(0 84% 45%));"
+          [style.width]="progressWidth()"
+        ></div>
+      </div>
+
+      <p class="text-xs text-center" style="color: hsl(var(--background) / 0.35);">
+        Vous serez redirigé vers la page de connexion dans {{ countdown() }} seconde{{ countdown() > 1 ? 's' : '' }}.
+      </p>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row gap-3 w-full">
+
+      <button
+        type="button"
+        (click)="goBack()"
+        class="flex items-center justify-center gap-2 h-12 px-5 rounded-2xl font-bold text-sm transition-all"
+        style="
+          background: hsl(var(--background) / 0.06);
+          border: 1px solid hsl(var(--background) / 0.12);
+          color: hsl(var(--background) / 0.7);
+        "
+        onmouseenter="this.style.background='hsl(var(--background) / 0.12)'"
+        onmouseleave="this.style.background='hsl(var(--background) / 0.06)'"
+      >
+        <lucide-icon [img]="ArrowLeft" class="w-4 h-4"></lucide-icon>
+        Retour
+      </button>
+
+      <button
+        type="button"
+        (click)="goHome()"
+        class="flex items-center justify-center gap-2 h-12 px-5 rounded-2xl font-bold text-sm transition-all"
+        style="
+          background: hsl(var(--background) / 0.06);
+          border: 1px solid hsl(var(--background) / 0.12);
+          color: hsl(var(--background) / 0.7);
+        "
+        onmouseenter="this.style.background='hsl(var(--background) / 0.12)'"
+        onmouseleave="this.style.background='hsl(var(--background) / 0.06)'"
+      >
+        <lucide-icon [img]="Home" class="w-4 h-4"></lucide-icon>
+        Accueil
+      </button>
+
+      <button
+        type="button"
+        (click)="goLogin()"
+        class="flex-1 flex items-center justify-center gap-2 h-12 px-5 rounded-2xl font-bold text-sm transition-all active:scale-[0.98]"
+        style="
+          background: hsl(0 84% 60%);
+          color: white;
+          box-shadow: 0 0 20px hsl(0 84% 60% / 0.3);
+        "
+        onmouseenter="this.style.background='hsl(0 84% 55%)'; this.style.boxShadow='0 0 30px hsl(0 84% 60% / 0.5)'"
+        onmouseleave="this.style.background='hsl(0 84% 60%)'; this.style.boxShadow='0 0 20px hsl(0 84% 60% / 0.3)'"
+      >
+        <lucide-icon [img]="LogIn" class="w-4 h-4"></lucide-icon>
+        Se connecter
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- ── Logo en bas ── -->
+  <div class="absolute bottom-8 flex items-center gap-2.5 opacity-30">
+    <div
+      class="w-7 h-7 rounded-xl flex items-center justify-center"
+      style="background: hsl(var(--primary));"
+    >
+      <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 11H4L5 9z"/>
+      </svg>
+    </div>
+    <span class="font-black text-sm tracking-tight" style="color: hsl(var(--background));">MarketPlace</span>
+  </div>
+
+</div>
+
+<style>
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+  }
+
+  @keyframes float-icon {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-8px); }
+  }
+
+  @keyframes ping-slow {
+    0% { transform: scale(1); opacity: 0.6; }
+    70% { transform: scale(1.6); opacity: 0; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  @keyframes flicker {
+    0%, 95%, 100% { opacity: 1; }
+    96% { opacity: 0.85; }
+    97% { opacity: 1; }
+    98% { opacity: 0.9; }
+    99% { opacity: 1; }
+  }
+</style>
