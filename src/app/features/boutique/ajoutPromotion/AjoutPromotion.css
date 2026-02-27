@@ -1,0 +1,178 @@
+/* ─────────────────────────────────────────────────────────────
+   Angular Material overrides — cannot be done with Tailwind
+   ───────────────────────────────────────────────────────────── */
+
+/* MAT FORM FIELD — outline + dark bg */
+.promo-field .mat-mdc-form-field-flex {
+  background: hsl(var(--muted) / 0.4) !important;
+  border-radius: 12px !important;
+}
+
+.promo-field .mdc-notched-outline__leading,
+.promo-field .mdc-notched-outline__notch,
+.promo-field .mdc-notched-outline__trailing {
+  border-color: hsl(var(--border) / 0.5) !important;
+}
+
+.promo-field .mdc-text-field--focused .mdc-notched-outline__leading,
+.promo-field .mdc-text-field--focused .mdc-notched-outline__notch,
+.promo-field .mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #f59e0b !important;
+  border-width: 2px !important;
+}
+
+.promo-field .mat-mdc-form-field-focus-overlay {
+  opacity: 0 !important;
+}
+
+.promo-field input.mat-mdc-input-element {
+  color: hsl(var(--foreground)) !important;
+}
+
+.promo-field .mat-mdc-form-field-icon-suffix,
+.promo-field .mat-datepicker-toggle {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+.promo-field .mat-mdc-form-field-icon-suffix mat-icon,
+.promo-field .mat-datepicker-toggle mat-icon {
+  color: hsl(var(--muted-foreground)) !important;
+}
+
+/* MAT SLIDER — amber track & thumb */
+.promo-slider .mdc-slider__track--active_fill {
+  background: linear-gradient(90deg, #f59e0b, #fb923c) !important;
+  border-color: #f59e0b !important;
+}
+
+.promo-slider .mdc-slider__track--inactive {
+  background: hsl(var(--border)) !important;
+  opacity: 1 !important;
+}
+
+.promo-slider .mdc-slider__thumb-knob {
+  background: #f59e0b !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 6px rgba(245, 158, 11, 0.15) !important;
+}
+
+.promo-slider .mdc-slider__thumb--focused .mdc-slider__thumb-knob {
+  box-shadow: 0 0 0 10px rgba(245, 158, 11, 0.2) !important;
+}
+
+.promo-slider .mdc-slider__value-indicator {
+  background: #f59e0b !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   MAT DATEPICKER — calendar modal styling
+   ───────────────────────────────────────────────────────────── */
+
+/* Conteneur principal du calendrier */
+.mat-datepicker-content {
+  border-radius: 18px !important;
+  background: hsl(var(--background)) !important;
+  border: 1px solid hsl(var(--border) / 0.5) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35), 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+  overflow: hidden !important;
+}
+
+/* Header du calendrier (mois + année + flèches) */
+.mat-calendar-header {
+  background: hsl(var(--muted) / 0.5) !important;
+  padding: 8px 12px 4px !important;
+  border-bottom: 1px solid hsl(var(--border) / 0.4) !important;
+}
+
+.mat-calendar-controls {
+  margin: 0 !important;
+}
+
+/* Bouton mois/année au centre */
+.mat-calendar-period-button {
+  color: hsl(var(--foreground)) !important;
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: -0.2px !important;
+  border-radius: 8px !important;
+}
+.mat-calendar-period-button:hover {
+  background: hsl(var(--muted)) !important;
+}
+
+/* Flèches précédent / suivant */
+.mat-calendar-previous-button,
+.mat-calendar-next-button {
+  color: hsl(var(--muted-foreground)) !important;
+  border-radius: 8px !important;
+}
+.mat-calendar-previous-button:hover,
+.mat-calendar-next-button:hover {
+  background: hsl(var(--muted)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Noms des jours (Lun, Mar…) */
+.mat-calendar-table-header th,
+.mat-calendar-body-label {
+  color: hsl(var(--muted-foreground)) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.6px !important;
+}
+
+/* Cellules des jours */
+.mat-calendar-body-cell-content {
+  color: hsl(var(--foreground)) !important;
+  border-radius: 10px !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  transition: background 0.15s, color 0.15s !important;
+}
+
+/* Hover sur un jour */
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+  background: hsl(var(--muted)) !important;
+  color: hsl(var(--foreground)) !important;
+}
+
+/* Jour sélectionné — amber */
+.mat-calendar-body-selected {
+  background: #f59e0b !important;
+  color: #fff !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4) !important;
+}
+
+/* Jour aujourd'hui */
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border: 2px solid #f59e0b !important;
+  color: #f59e0b !important;
+  background: rgba(245, 158, 11, 0.08) !important;
+}
+
+/* Jours désactivés */
+.mat-calendar-body-disabled > .mat-calendar-body-cell-content {
+  color: hsl(var(--muted-foreground) / 0.4) !important;
+}
+
+/* Vue mois / années (quand on clique sur le titre) */
+.mat-calendar-body-cell-content.mat-focus-indicator {
+  border-radius: 10px !important;
+}
+
+/* MAT DIALOG PANEL — remove default padding & shadow */
+.promo-dialog-panel .mat-mdc-dialog-container {
+  padding: 0 !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35) !important;
+}
+
+.promo-dialog-panel .mdc-dialog__surface {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}

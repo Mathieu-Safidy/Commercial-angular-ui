@@ -22,7 +22,8 @@ import { TabsTriggerComponent } from '../../../components/ui/tabs';
 import {DetailBoutique} from '../../../model/detailBoutiqueModel';
 import {DetailBoutiqueService} from '../../../services/detailBoutiqueService/detail-boutique-service';
 import {AuthServices} from '../../../services/authService/auth.services';
-
+import {PromotionService} from '../../../services/promotionService/promotion-service';
+import {Promotion} from '../../../model/promotionModel';
 @Component({
   selector: 'app-client-shop',
   standalone: true,
@@ -57,7 +58,7 @@ export class ClientShopComponent {
   hovered = false;
   toggleWishlist(id: string) { /* votre logique */ }
   isWishlisted(id: string): boolean { /* votre logique */ return false; }
-  constructor( private detailBoutiqueService: DetailBoutiqueService ) {
+  constructor( private detailBoutiqueService: DetailBoutiqueService , private promotionService: PromotionService ) {
     effect(() => {
       const panier = this.panierService.panier();
       if (!panier) return;
@@ -160,6 +161,7 @@ export class ClientShopComponent {
         name: produit.nom,
         boutique: produit.boutique.nom,
         price: produit.prixInitial + '€',
+        reduction: produit.reduction || 0,
         image: produit.image ?this.backendLink + '/' + produit.image : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800', // Placeholder, à remplacer par produit.image si disponible,
       })),
     );
@@ -175,4 +177,5 @@ export class ClientShopComponent {
     // Logique pour ajouter le produit au panier
     console.log(`Produit ${idProduit} ajouté au panier`);
   }
-}
+
+} 

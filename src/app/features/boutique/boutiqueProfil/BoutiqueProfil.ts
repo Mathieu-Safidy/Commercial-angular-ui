@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from "@angular/core";
+import {Component, inject, OnInit, signal} from "@angular/core";
 import { CardComponent, CardContentComponent, CardHeaderComponent } from "../../../components/ui/card";
 import { CommonModule } from "@angular/common";
 import {ArrowRight, Camera, LucideAngularModule, MessageSquare, SquarePenIcon} from "lucide-angular";
@@ -31,8 +31,8 @@ import {AuthServices} from '../../../services/authService/auth.services';
 export class BoutiqueProfilComponent  {
 
   form!: FormGroup;
-  detailBoutique: DetailBoutique | null = null;
-  isEditMode = false;
+  detailBoutique = signal<DetailBoutique | null>(null);
+  isEditMode = signal(false);
   showToast: boolean = false;
   toastMessage: string = '';
   authService = inject(AuthServices);
@@ -75,33 +75,33 @@ export class BoutiqueProfilComponent  {
     try {
       const response = await this.detailBoutiqueService.getDetailBoutiqueByUserId(this.userId);
       if (!response) {
-        this.detailBoutique = null;
+        this.detailBoutique.set(null);
         this.boutiqueExistante = false;
         return;
       }
       const detail = Array.isArray(response) ? response[0] : response;
-      this.detailBoutique = detail as DetailBoutique;
+      this.detailBoutique.set(detail as DetailBoutique);
+    
       this.boutiqueExistante = true;
-
     } catch (err) {
       console.error('Erreur lors du chargement :', err);
-      this.detailBoutique = null;
+      this.detailBoutique.set(null);
       this.boutiqueExistante = false;
     }
   }
 
   enableEdit() {
-    this.isEditMode = true;
-    if (!this.detailBoutique) return;
+    this.isEditMode.set(true);
+    if (!this.detailBoutique()) return;
 
     this.form.patchValue({
-      nom: this.detailBoutique.idBoutique?.nom,
-      email: this.detailBoutique.email,
-      descriptionDetail: this.detailBoutique.description,
-      adresse: this.detailBoutique.adresse,
-      telephone: this.detailBoutique.telephone,
-      descriptionHoraire: this.detailBoutique.descriptionHoraire,
-      image: this.detailBoutique.image
+      nom: this.detailBoutique()?.idBoutique?.nom,
+      email: this.detailBoutique()?.email,
+      descriptionDetail: this.detailBoutique()?.description,
+      adresse: this.detailBoutique()?.adresse,
+      telephone: this.detailBoutique()?.telephone,
+      descriptionHoraire: this.detailBoutique()?.descriptionHoraire,
+      image: this.detailBoutique()?.image
     });
   }
 
@@ -115,7 +115,7 @@ export class BoutiqueProfilComponent  {
         await this.updateBoutique();
         this.triggerToast('Profil mis à jour !');
       }
-      this.isEditMode = false;
+      this.isEditMode.set(false);
       await this.loadDetailBoutique();
     } catch (err) {
       console.error(err);

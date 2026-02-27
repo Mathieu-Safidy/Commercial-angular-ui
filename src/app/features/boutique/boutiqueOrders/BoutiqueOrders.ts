@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import {CardComponent, CardContentComponent} from '../../../components/ui/card';
 import {NgClass, NgForOf, NgIf} from '@angular/common';
 import {BadgeComponent} from '../../../components/ui/badge';
@@ -28,6 +28,8 @@ interface OrderDetail {
     image?: string;
   };
   quantite: number;
+  reduction?: number;
+  prixPromotionnel ?: number;
 }
 
 interface Order {
@@ -66,14 +68,15 @@ export class BoutiqueOrdersComponent {
   readonly CircleCheck = CircleCheck;
   readonly Clock = Clock;
 
-  orders: Order[] = [];
-  expandedOrderId?: string;
+  // orders: Order[] = [];
+  orders = signal<Order[]>([] as Order[]);
+  expandedOrderId = signal("");
 
   constructor(private commandeService: CommandeService , private commandeDetailService: CommandeDetailService) {}
 
   async ngOnInit() {
     const data = await this.commandeService.getAll() as any[];
-    this.orders = data.map(cmd => ({
+    this.orders.set(data.map(cmd => ({
       id: cmd._id || cmd.id,
       customer: cmd.customer || 'Client inconnu',
       items: cmd.items || 0,
@@ -81,27 +84,22 @@ export class BoutiqueOrdersComponent {
       status: cmd.status || 'en_cours',
       time: cmd.time,
       details: [] as OrderDetail[]
-    }));
+    })));
   }
 
   async showDetails(order: Order) {
-
-    if (this.expandedOrderId === order.id) {
-      this.expandedOrderId = undefined;
+    if (this.expandedOrderId() === order.id) {
+      this.expandedOrderId.set("");
       return;
     }
-
-    this.expandedOrderId = order.id;
-
+    this.expandedOrderId.set(order.id);
 
     const details = await this.commandeDetailService.getByCommandeId(order.id) as OrderDetail[];
-
-    // Mettre à jour les détails pour l'order
-    order.details = details || [];
+    this.orders.set(this.orders().map(o => o.id === order.id ? {...o, details} : o));
   }
 
   isExpanded(order: Order): boolean {
-    return this.expandedOrderId === order.id;
+    return this.expandedOrderId() === order.id;
   }
 
   getStatusBarClass(status: OrderStatus) {
