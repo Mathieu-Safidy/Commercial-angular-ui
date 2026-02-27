@@ -17,6 +17,7 @@ import { BadgeComponent } from './components/ui/badge';
 import { SeparatorComponent } from './components/ui/separator';
 import {BoutiqueDashboardComponent} from './features/boutique/boutiqueDashboard/BoutiqueDashBoard';
 import {AdminDashboardComponent} from './features/admin/adminDashboard/AdminDashBoard';
+import { RouterModule } from "@angular/router";
 
 // Définition du type (en dehors ou dans la classe)
 type Profile = 'client' | 'boutique' | 'admin';
@@ -25,40 +26,31 @@ type Profile = 'client' | 'boutique' | 'admin';
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule,
-    LucideAngularModule,
-    ButtonComponent,
-    BadgeComponent,
-    SeparatorComponent,
-    ClientDashboardComponent,
-    BoutiqueDashboardComponent,
-    AdminDashboardComponent,
-    // BoutiqueDashboardComponent,
-    // AdminDashboardComponent
-  ],
+    RouterModule
+],
   templateUrl: './app.html'
 })
 export class App {
-  activeProfile: Profile = 'client';
-  isDarkMode: boolean = false;
+  // activeProfile: Profile = 'client';
+  // isDarkMode: boolean = false;
 
-  // Icônes pour le template
-  readonly User = User;
-  readonly Store = Store;
-  readonly ShieldCheck = ShieldCheck;
-  readonly Search = Search;
-  readonly Bell = Bell;
-  readonly Menu = Menu;
-  readonly Moon = Moon;
-  readonly Sun = Sun;
+  // // Icônes pour le template
+  // readonly User = User;
+  // readonly Store = Store;
+  // readonly ShieldCheck = ShieldCheck;
+  // readonly Search = Search;
+  // readonly Bell = Bell;
+  // readonly Menu = Menu;
+  // readonly Moon = Moon;
+  // readonly Sun = Sun;
 
-  // ✅ MÉTHODE POUR CHANGER LE PROFIL
-  setActiveProfile(profile: Profile) {
-    this.activeProfile = profile;
-  }
+  // // ✅ MÉTHODE POUR CHANGER LE PROFIL
+  // setActiveProfile(profile: Profile) {
+  //   this.activeProfile = profile;
+  // }
 
-  toggleDarkMode() {
-    this.isDarkMode = !this.isDarkMode;
-    document.documentElement.classList.toggle('dark');
-  }
+  // toggleDarkMode() {
+  //   this.isDarkMode = !this.isDarkMode;
+  //   document.documentElement.classList.toggle('dark');
+  // }
 }

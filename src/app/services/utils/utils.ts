@@ -14,10 +14,10 @@ export class Utils {
     public Patch = (url: string, body: any) => this.http.patch(this.BACKEND_URL + url, body);
     public Delete = (url: string) => this.http.delete(this.BACKEND_URL + url);
     
-    public PGet = (url: string) => firstValueFrom(this.http.get(this.BACKEND_URL + url));
-    public PPost = (url: string, body: any) => firstValueFrom(this.http.post(this.BACKEND_URL + url, body));
-    public PPatch = (url: string, body: any) => firstValueFrom(this.http.patch(this.BACKEND_URL + url, body));
-    public PDelete = (url: string) => firstValueFrom(this.http.delete(this.BACKEND_URL + url));
+    public PGet = (url: string, credentials?: boolean) => firstValueFrom(this.http.get(this.BACKEND_URL + url, {withCredentials: credentials ?? true}));
+    public PPost = (url: string, body: any, credentials?: boolean) => firstValueFrom(this.http.post(this.BACKEND_URL + url, body, {withCredentials: credentials ?? true}));
+    public PPatch = (url: string, body: any, credentials?: boolean) => firstValueFrom(this.http.patch(this.BACKEND_URL + url, body, {withCredentials: credentials ?? true}));
+    public PDelete = (url: string, credentials?: boolean) => firstValueFrom(this.http.delete(this.BACKEND_URL + url, {withCredentials: credentials ?? true}));
     
 
 } 
