@@ -22,8 +22,18 @@ export const routes: Routes = [
         children: [
           {
             path: 'client',
-            loadComponent: () => import('./features/client/clientDashboard/ClientDashboard').then(m => m.ClientDashboardComponent),
-            canActivate: [roleGuard(['User'])]
+            canActivate: [roleGuard(['User'])],
+            loadComponent: () => import('./features/client/principale/ClientPrincipaleComponent').then(m => m.ClientPrincipaleComponent),
+            children: [
+              {
+                path: '',
+                loadComponent: () => import('./features/client/clientDashboard/ClientDashboard').then(m => m.ClientDashboardComponent),
+              },
+              {
+                path: 'produit/:id',
+                loadComponent: () => import('./features/client/detailProduit/DetailProduit').then(m => m.ProductDetailPageComponent),
+              }
+            ]
           },
           {
             path: 'boutique',

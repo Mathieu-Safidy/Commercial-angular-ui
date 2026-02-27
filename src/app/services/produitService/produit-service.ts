@@ -25,7 +25,7 @@ export class ProduitService {
   }
 
   public async getProduitById(id: string) {
-    return await this.http.PGet(`/produits/${id}`);
+    return await this.http.PGet(`/produits/${id}`) as Produit;
   }
 
   public async reloadProduits() {

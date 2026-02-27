@@ -1,0 +1,446 @@
+<div *ngIf="produit()" class="bg-background min-h-screen">
+
+  <!-- ══════════════════════════════════════
+       HERO : Image + infos principales
+  ══════════════════════════════════════ -->
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+
+      <!-- ── Galerie d'images ── -->
+      <div class="space-y-3">
+
+        <!-- Image principale -->
+        <div class="relative aspect-square rounded-3xl overflow-hidden bg-muted shadow-xl ring-1 ring-border/30 group">
+          <img
+            [src]="productImages()[selectedImageIndex()]"
+            [alt]="produit()!.nom"
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+
+          <!-- Badges superposés -->
+          <div class="absolute top-4 left-4 flex flex-col gap-2">
+            <span *ngIf="produit()!.isNew"
+              class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-primary-foreground shadow-md">
+              Nouveau
+            </span>
+            <span *ngIf="produit()!.isSale && produit()!.salePercent"
+              class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-rose-500 text-white shadow-md">
+              -{{ produit()!.salePercent }}%
+            </span>
+            <span *ngIf="produit()!.quantiteDisponible === 0"
+              class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-muted text-muted-foreground border border-border shadow-md">
+              Épuisé
+            </span>
+            <span *ngIf="produit()!.quantiteDisponible > 0 && produit()!.quantiteDisponible <= 5"
+              class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-amber-500 text-white shadow-md">
+              Plus que {{ produit()!.quantiteDisponible }} !
+            </span>
+          </div>
+
+          <!-- Wishlist -->
+          <button
+            (click)="wishlist.set(!wishlist())"
+            class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center backdrop-blur-md bg-background/80 border border-border/30 shadow-md hover:scale-110 active:scale-95 transition-all"
+          >
+            <lucide-icon [img]="Heart" class="w-4 h-4 transition-colors"
+              [class.fill-rose-500]="wishlist()"
+              [class.text-rose-500]="wishlist()"
+              [class.text-foreground]="!wishlist()">
+            </lucide-icon>
+          </button>
+
+          <!-- Navigation images -->
+          <button *ngIf="selectedImageIndex() > 0"
+            (click)="prevImage()"
+            class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md bg-background/80 border border-border/30 shadow-md hover:scale-110 transition-all opacity-0 group-hover:opacity-100">
+            <lucide-icon [img]="ChevronLeft" class="w-4 h-4"></lucide-icon>
+          </button>
+          <button *ngIf="selectedImageIndex() < productImages().length - 1"
+            (click)="nextImage()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center backdrop-blur-md bg-background/80 border border-border/30 shadow-md hover:scale-110 transition-all opacity-0 group-hover:opacity-100">
+            <lucide-icon [img]="ChevronRight" class="w-4 h-4"></lucide-icon>
+          </button>
+        </div>
+
+        <!-- Miniatures -->
+        <div class="grid grid-cols-4 gap-2">
+          <button
+            *ngFor="let img of productImages(); let i = index"
+            (click)="selectedImageIndex.set(i)"
+            class="aspect-square rounded-2xl overflow-hidden ring-2 transition-all"
+            [class.ring-primary]="selectedImageIndex() === i"
+            [class.ring-transparent]="selectedImageIndex() !== i"
+            [class.opacity-60]="selectedImageIndex() !== i"
+          >
+            <img [src]="img" class="w-full h-full object-cover" [alt]="'Image ' + (i+1)" />
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Infos produit ── -->
+      <div class="space-y-6">
+
+        <!-- Breadcrumb boutique -->
+        <div class="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+          <lucide-icon [img]="Store" class="w-3.5 h-3.5"></lucide-icon>
+          <span>{{ produit()!.boutique?.nom ?? produit()!.idBoutique }}</span>
+          <lucide-icon [img]="ChevronRight" class="w-3 h-3"></lucide-icon>
+          <span *ngIf="produit()!.idCategorie?.nom ?? produit()!.categorie">
+            {{ produit()!.idCategorie?.nom ?? produit()!.categorie }}
+          </span>
+        </div>
+
+        <!-- Nom + note résumé -->
+        <div class="space-y-3">
+          <h1 class="text-3xl font-black tracking-tight leading-tight">{{ produit()!.nom }}</h1>
+
+          <div class="flex items-center gap-4 flex-wrap">
+            <!-- Étoiles moyenne -->
+            <div class="flex items-center gap-1.5">
+              <div class="flex gap-0.5">
+                <ng-container *ngFor="let s of getStars(moyenneNote())">
+                  <lucide-icon [img]="Star" class="w-4 h-4"
+                    [class.fill-amber-400]="s.filled"
+                    [class.text-amber-400]="s.filled"
+                    [class.text-muted-foreground]="!s.filled"
+                    [class.fill-transparent]="!s.filled">
+                  </lucide-icon>
+                </ng-container>
+              </div>
+              <span class="text-sm font-black">{{ moyenneNote().toFixed(1) }}</span>
+              <span class="text-xs text-muted-foreground font-medium">({{ avis().length }} avis)</span>
+            </div>
+
+            <!-- Consultations -->
+            <span class="text-xs text-muted-foreground font-medium">
+              {{ produit()!.consultationCount }} vues
+            </span>
+          </div>
+        </div>
+
+        <!-- Prix -->
+        <div class="flex items-end gap-3">
+          <p class="text-4xl font-black text-primary tabular-nums">
+            {{ formatPrice(produit()!.prixInitial) }}
+          </p>
+          <p *ngIf="produit()!.isSale && produit()!.salePercent" class="text-lg text-muted-foreground line-through mb-1">
+            {{ formatPrice(produit()!.prixInitial * (1 + produit()!.salePercent! / 100)) }}
+          </p>
+        </div>
+
+        <!-- Description -->
+        <div class="p-4 rounded-2xl bg-muted/30 border border-border/50">
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            {{ produit()!.description || 'Aucune description disponible pour ce produit.' }}
+          </p>
+        </div>
+
+        <!-- Stock indicator -->
+        <div class="flex items-center gap-2.5">
+          <div class="w-2 h-2 rounded-full flex-shrink-0"
+            [class.bg-emerald-500]="produit()!.quantiteDisponible > 5"
+            [class.bg-amber-500]="produit()!.quantiteDisponible > 0 && produit()!.quantiteDisponible <= 5"
+            [class.bg-destructive]="produit()!.quantiteDisponible === 0"
+          ></div>
+          <span class="text-sm font-bold"
+            [class.text-emerald-600]="produit()!.quantiteDisponible > 5"
+            [class.text-amber-500]="produit()!.quantiteDisponible > 0 && produit()!.quantiteDisponible <= 5"
+            [class.text-destructive]="produit()!.quantiteDisponible === 0"
+          >
+            {{ produit()!.quantiteDisponible === 0 ? 'Rupture de stock' :
+               produit()!.quantiteDisponible <= 5 ? produit()!.quantiteDisponible + ' unités restantes' :
+               'En stock (' + produit()!.quantiteDisponible + ' disponibles)' }}
+          </span>
+        </div>
+
+        <!-- CTA Panier -->
+        <div class="flex gap-3">
+          <button
+            (click)="addToCart()"
+            [disabled]="produit()!.quantiteDisponible === 0"
+            app-button
+            class="flex-1 h-13 rounded-2xl font-bold text-base gap-2.5 shadow-sm hover:shadow-md transition-all active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            <lucide-icon [img]="verifInPanier(produit()?._id ?? '') ? Check : ShoppingBag" class="w-5 h-5"></lucide-icon>
+            {{ verifInPanier(produit()?._id ?? '') ? 'Dans le panier' : 'Ajouter au panier' }}
+          </button>
+
+          <button
+            app-button
+            variant="outline"
+            class="h-13 w-13 rounded-2xl flex items-center justify-center"
+          >
+            <lucide-icon [img]="Share2" class="w-4 h-4"></lucide-icon>
+          </button>
+        </div>
+
+        <!-- Garanties -->
+        <!-- <div class="grid grid-cols-2 gap-3">
+          <div class="flex items-center gap-2.5 p-3 rounded-2xl bg-muted/20 border border-border/40">
+            <lucide-icon [img]="Package" class="w-4 h-4 text-primary flex-shrink-0"></lucide-icon>
+            <div>
+              <p class="text-[11px] font-black uppercase tracking-widest text-muted-foreground">Livraison</p>
+              <p class="text-xs font-bold">2–5 jours ouvrés</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2.5 p-3 rounded-2xl bg-muted/20 border border-border/40">
+            <lucide-icon [img]="Shield" class="w-4 h-4 text-primary flex-shrink-0"></lucide-icon>
+            <div>
+              <p class="text-[11px] font-black uppercase tracking-widest text-muted-foreground">Garantie</p>
+              <p class="text-xs font-bold">Retour 30 jours</p>
+            </div>
+          </div>
+        </div> -->
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SECTION AVIS
+  ══════════════════════════════════════ -->
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 pb-16">
+    <div class="border-t border-border/60 pt-10 space-y-10">
+
+      <!-- Header section avis -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <lucide-icon [img]="MessageSquare" class="w-5 h-5 text-primary"></lucide-icon>
+          <h2 class="text-2xl font-black tracking-tight">Avis clients</h2>
+          <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-black">
+            {{ avis().length }}
+          </span>
+        </div>
+        <button
+          (click)="reviewsExpanded.set(!reviewsExpanded())"
+          class="flex items-center gap-1.5 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {{ reviewsExpanded() ? 'Réduire' : 'Afficher' }}
+          <lucide-icon [img]="ChevronDown" class="w-4 h-4 transition-transform duration-200"
+            [class.rotate-180]="reviewsExpanded()">
+          </lucide-icon>
+        </button>
+      </div>
+
+      <div *ngIf="reviewsExpanded()" class="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-14">
+
+        <!-- ── Colonne gauche : résumé + formulaire ── -->
+        <div class="space-y-8">
+
+          <!-- Résumé des notes -->
+          <div class="p-6 rounded-3xl border border-border/60 bg-muted/20 space-y-5">
+
+            <!-- Note globale -->
+            <div class="text-center space-y-2">
+              <p class="text-6xl font-black tabular-nums text-foreground">{{ moyenneNote().toFixed(1) }}</p>
+              <div class="flex justify-center gap-0.5">
+                <ng-container *ngFor="let s of getStars(moyenneNote(), 'lg')">
+                  <lucide-icon [img]="Star" class="w-5 h-5"
+                    [class.fill-amber-400]="s.filled"
+                    [class.text-amber-400]="s.filled"
+                    [class.text-muted-foreground]="!s.filled"
+                    [class.fill-transparent]="!s.filled">
+                  </lucide-icon>
+                </ng-container>
+              </div>
+              <p class="text-xs text-muted-foreground font-medium">{{ avis().length }} avis vérifiés</p>
+            </div>
+
+            <!-- Répartition -->
+            <div class="space-y-2">
+              <div *ngFor="let r of repartitionNotes()" class="flex items-center gap-2.5">
+                <span class="text-xs font-black w-3 text-right text-muted-foreground">{{ r.note }}</span>
+                <lucide-icon [img]="Star" class="w-3 h-3 fill-amber-400 text-amber-400 flex-shrink-0"></lucide-icon>
+                <div class="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+                  <div
+                    class="h-full rounded-full bg-amber-400 transition-all duration-700"
+                    [style.width]="r.percent + '%'"
+                  ></div>
+                </div>
+                <span class="text-xs font-bold text-muted-foreground w-4 text-right">{{ r.count }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Formulaire nouvel avis ── -->
+          <div class="p-6 rounded-3xl border border-border/60 bg-background space-y-5">
+            <h3 class="font-black text-base flex items-center gap-2">
+              <lucide-icon [img]="Star" class="w-4 h-4 text-amber-400 fill-amber-400"></lucide-icon>
+              Laisser un avis
+            </h3>
+
+            <!-- Succès -->
+            <div *ngIf="submitSuccess()"
+              class="flex items-center gap-2.5 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 text-sm font-bold">
+              <lucide-icon [img]="Check" class="w-4 h-4 flex-shrink-0"></lucide-icon>
+              Avis publié avec succès !
+            </div>
+
+            <div [formGroup]="reviewForm" class="space-y-4">
+
+              <!-- Votre nom -->
+              <div class="space-y-1.5">
+                <label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">Votre nom</label>
+                <input
+                  type="text"
+                  formControlName="nomUser"
+                  placeholder="Alex D."
+                  class="w-full h-10 px-3.5 rounded-xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all bg-muted/20"
+                  [class.border-border]="!hasError('nomUser')"
+                  [class.border-destructive]="hasError('nomUser')"
+                />
+                <p *ngIf="hasError('nomUser', 'required')" class="text-xs text-destructive font-medium">Requis.</p>
+              </div>
+
+              <!-- Étoiles interactives -->
+              <div class="space-y-1.5">
+                <label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">Votre note</label>
+                <div class="flex gap-1">
+                  <button
+                    *ngFor="let i of [1,2,3,4,5]"
+                    type="button"
+                    (click)="setRating(i)"
+                    (mouseenter)="hoverRating.set(i)"
+                    (mouseleave)="hoverRating.set(0)"
+                    class="transition-transform hover:scale-125 active:scale-110"
+                  >
+                    <lucide-icon [img]="Star" class="w-7 h-7 transition-colors"
+                      [class.fill-amber-400]="i <= (hoverRating() || selectedRating())"
+                      [class.text-amber-400]="i <= (hoverRating() || selectedRating())"
+                      [class.text-muted-foreground]="i > (hoverRating() || selectedRating())"
+                      [class.fill-transparent]="i > (hoverRating() || selectedRating())">
+                    </lucide-icon>
+                  </button>
+                </div>
+                <p *ngIf="reviewForm.get('note')?.touched && reviewForm.get('note')?.value === 0"
+                  class="text-xs text-destructive font-medium">Sélectionnez une note.</p>
+              </div>
+
+              <!-- Commentaire -->
+              <div class="space-y-1.5">
+                <label class="text-xs font-bold uppercase tracking-widest text-muted-foreground">Commentaire</label>
+                <div class="relative">
+                  <textarea
+                    formControlName="commentaire"
+                    placeholder="Partagez votre expérience avec ce produit..."
+                    rows="4"
+                    class="w-full px-3.5 py-3 rounded-xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary transition-all bg-muted/20 resize-none leading-relaxed"
+                    [class.border-border]="!hasError('commentaire')"
+                    [class.border-destructive]="hasError('commentaire')"
+                  ></textarea>
+                  <span class="absolute bottom-2.5 right-3 text-[10px] font-bold text-muted-foreground/60 tabular-nums">
+                    {{ charCount() }}/500
+                  </span>
+                </div>
+                <p *ngIf="hasError('commentaire', 'required')" class="text-xs text-destructive font-medium">Le commentaire est requis.</p>
+                <p *ngIf="hasError('commentaire', 'minlength')" class="text-xs text-destructive font-medium">Minimum 10 caractères.</p>
+              </div>
+
+              <!-- Bouton submit -->
+              <button
+                type="button"
+                (click)="submitReview()"
+                [disabled]="isSubmitting()"
+                app-button
+                class="w-full h-11 rounded-2xl font-bold text-sm gap-2 disabled:opacity-60"
+              >
+                <span *ngIf="!isSubmitting()" class="flex items-center gap-2">
+                  <lucide-icon [img]="Send" class="w-4 h-4"></lucide-icon>
+                  Publier l'avis
+                </span>
+                <span *ngIf="isSubmitting()" class="flex items-center gap-2">
+                  <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                  </svg>
+                  Publication...
+                </span>
+              </button>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Colonne droite : liste des avis ── -->
+        <div class="lg:col-span-2 space-y-4">
+
+          <!-- Empty state -->
+          <div *ngIf="avis().length === 0" class="flex flex-col items-center justify-center py-16 text-center">
+            <div class="w-16 h-16 rounded-3xl bg-muted flex items-center justify-center mb-4">
+              <lucide-icon [img]="MessageSquare" class="w-7 h-7 text-muted-foreground/40"></lucide-icon>
+            </div>
+            <p class="font-bold text-base mb-1">Aucun avis pour le moment</p>
+            <p class="text-sm text-muted-foreground">Soyez le premier à donner votre avis !</p>
+          </div>
+
+          <!-- Cartes avis -->
+          <div
+            *ngFor="let avisItem of avis()"
+            class="group p-5 rounded-3xl border border-border/60 bg-background hover:border-primary/20 hover:shadow-sm transition-all duration-200 space-y-4"
+          >
+            <!-- Header avis -->
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <img
+                  [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=' + avisItem.avatarSeed"
+                  class="w-10 h-10 rounded-full border-2 border-border/50 flex-shrink-0"
+                  [alt]="avisItem.nomUser"
+                />
+                <div>
+                  <p class="text-sm font-black">{{ avisItem.nomUser }}</p>
+                  <p class="text-[11px] text-muted-foreground font-medium">{{ formatDate(avisItem.date) }}</p>
+                </div>
+              </div>
+
+              <!-- Note -->
+              <div class="flex items-center gap-1 flex-shrink-0">
+                <div class="flex gap-0.5">
+                  <ng-container *ngFor="let s of getStars(avisItem.note, 'sm')">
+                    <lucide-icon [img]="Star" class="w-3.5 h-3.5"
+                      [class.fill-amber-400]="s.filled"
+                      [class.text-amber-400]="s.filled"
+                      [class.text-muted-foreground]="!s.filled"
+                      [class.fill-transparent]="!s.filled">
+                    </lucide-icon>
+                  </ng-container>
+                </div>
+                <span class="text-xs font-black text-muted-foreground ml-1">{{ avisItem.note }}/5</span>
+              </div>
+            </div>
+
+            <!-- Commentaire -->
+            <p class="text-sm leading-relaxed text-muted-foreground">{{ avisItem.commentaire }}</p>
+
+            <!-- Actions -->
+            <!-- <div class="flex items-center gap-4 pt-1">
+              <button
+                (click)="toggleLike(avisItem._id)"
+                class="flex items-center gap-1.5 text-xs font-bold transition-colors group/like"
+                [class.text-primary]="avisItem.userLiked"
+                [class.text-muted-foreground]="!avisItem.userLiked"
+              >
+                <lucide-icon [img]="ThumbsUp" class="w-3.5 h-3.5 transition-transform group-hover/like:scale-110"
+                  [class.fill-primary]="avisItem.userLiked">
+                </lucide-icon>
+                Utile ({{ avisItem.likes }})
+              </button>
+            </div> -->
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- État vide si pas de produit -->
+<div *ngIf="!produit()" class="min-h-screen flex items-center justify-center">
+  <div class="text-center space-y-3">
+    <div class="w-16 h-16 rounded-3xl bg-muted flex items-center justify-center mx-auto">
+      <lucide-icon [img]="Package" class="w-7 h-7 text-muted-foreground/40"></lucide-icon>
+    </div>
+    <p class="font-bold text-base">Produit introuvable</p>
+  </div>
+</div>
