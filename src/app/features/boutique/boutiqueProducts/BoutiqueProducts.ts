@@ -11,6 +11,7 @@ import {
   Edit3,
   Trash2,
   AlertCircle,
+  Tag,
 } from 'lucide-angular';
 import { CardComponent } from '../../../components/ui/card';
 import { ButtonComponent } from '../../../components/ui/button';
@@ -26,6 +27,7 @@ import { ProductDetailDialogComponent } from '../../../components/ui/produitDial
 import { CreationDialogueComponent } from '../../../components/ui/produitDialogue/creationProduit';
 import { MatDialog } from '@angular/material/dialog';
 import { Environments } from '../../../environements/environments';
+import { AjoutPromotionDialogComponent } from '../ajoutPromotion/AjoutPromotion';
 
 @Component({
   selector: 'app-boutique-products',
@@ -57,6 +59,7 @@ export class BoutiqueProductsComponent {
   readonly Edit3 = Edit3;
   readonly Trash2 = Trash2;
   readonly AlertCircle = AlertCircle;
+  readonly Tag = Tag;
 
   backendLink = Environments.BACKEND;
 
@@ -258,4 +261,19 @@ export class BoutiqueProductsComponent {
     this.produitService.produitSelectionne.set(product);
     this.dialog.show();
   }
+
+  ajouterPromotion(produit: Produit) {
+  const dialogRef = this.dialogueCreation.open(AjoutPromotionDialogComponent, {
+    width: '540px',
+    maxHeight: '90vh',
+    data: produit,
+    panelClass: 'promo-dialog-panel',
+  });
+
+  dialogRef.afterClosed().subscribe((result) => {
+    if (!result) return;
+    console.log('Promotion payload :', result);
+    // TODO: this.promotionService.ajouterPromotion(result).then(...)
+  });
+}
 }

@@ -101,13 +101,26 @@
     <!-- Top bar : badge boutique + wishlist -->
     <div class="absolute top-3 left-3 right-3 flex items-center justify-between">
 
-      <!-- Boutique badge -->
+      <div class="space-x-3">
+        <!-- Boutique badge -->
       <span
         class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md bg-background/80 text-foreground border border-border/30 shadow-sm
                opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
       >
         {{ product.boutique }}
       </span>
+      @if (product.reduction && product.reduction > 0) {
+        <span
+          class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest backdrop-blur-md bg-amber-500/90 text-white border border-border/30 shadow-sm
+                 opacity-0 -translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" 
+        >
+          {{ product.reduction > 0 ? '-' + product.reduction + '%' : '' }}
+        </span>
+
+      }
+      </div>
+
+      
 
       <!-- Wishlist button -->
       <button
@@ -126,6 +139,8 @@
           [class.fill-rose-500]="isWishlisted(product.id)"
           [class.stroke-rose-500]="isWishlisted(product.id)"
         ></lucide-icon>
+
+        <p class=""></p>
       </button>
     </div>
 
@@ -169,7 +184,14 @@
 
   <!-- Product Info -->
   <div class="px-1 space-y-1">
-
+    <div
+      *ngIf="product.reduction > 0"
+      class="absolute top-3 right-3"
+    >
+      <span class="px-2.5 py-1 rounded-full text-[11px] font-black bg-red-500 text-white shadow-md">
+        -{{ product.reduction }}%
+      </span>
+    </div>
     <!-- Name + price row -->
     <div class="flex items-start justify-between gap-2">
       <h5 class="font-bold text-base leading-snug line-clamp-2 flex-1">{{ product.name }}</h5>

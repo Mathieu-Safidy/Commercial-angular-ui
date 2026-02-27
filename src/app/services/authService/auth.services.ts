@@ -19,8 +19,11 @@ export class AuthServices {
     const userJson = localStorage.getItem('currentUser');
     const token = localStorage.getItem('accessToken');
 
-    if (userJson && token) {
-      this.currentUserSubject.next(JSON.parse(userJson));
+    if (userJson && userJson !== "undefined" && token) {
+      console.log(userJson);
+      
+      const parsed = userJson ? JSON.parse(userJson) : null;
+      this.currentUserSubject.next(parsed);
       this.accessTokenSubject.next(token);
     }
   }
@@ -75,9 +78,11 @@ export class AuthServices {
     }
   }
 
-  refreshToken() {
+  async refreshToken() {
     try {
-      const result: any = this.http.PPost('/auth/refresh-token', {});
+      const result: any = await this.http.PPost('/auth/refresh-token', {});
+      console.log('result', result);
+      
       let user = result.user;
       if (user && user.idProfil) {
         user.role = user.idProfil.nom; // mappe idProfil.nom à user.role

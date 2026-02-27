@@ -9,7 +9,7 @@
             class="inline-block h-auto w-9/12 rounded-full border-4 border-primary bg-card relative"
           >
             <img
-              [src]="form.value.image || detailBoutique?.image || 'https://api.dicebear.com/7.x/avataaars/svg?seed=115'"
+              [src]="form.value.image || detailBoutique()?.image || 'https://api.dicebear.com/7.x/avataaars/svg?seed=115'"
               alt="Avatar"
               class="rounded-full"
             />
@@ -42,7 +42,7 @@
         <app-card-content class="p-3 pt-0!">
 
           <!-- FORMULAIRE CREATE / UPDATE -->
-          <form *ngIf="isEditMode" [formGroup]="form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <form *ngIf="isEditMode()" [formGroup]="form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <!-- Nom boutique -->
             <div class="space-y-1">
@@ -130,44 +130,46 @@
             <!-- Bouton Save -->
             <div class="md:col-span-2 flex justify-end">
               <button app-button  className="rounded-full px-8 shadow-glow" (click)="saveBoutique()">
-                {{ detailBoutique ? 'Mettre à jour' : 'Créer la boutique' }}
+                {{ detailBoutique() ? 'Mettre à jour' : 'Créer la boutique' }}
               </button>
 
             </div>
 
           </form>
 
+          @if (!isEditMode()) {
+
           <!-- AFFICHAGE DETAIL BOUTIQUE -->
-          <div  class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div   class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
             <div class="space-y-1">
               <p app-card-description>Nom de la boutique</p>
-             <p class="font-semibold text-base">{{ detailBoutique?.idBoutique?.nom }}</p>
+             <p class="font-semibold text-base">{{ detailBoutique()?.idBoutique?.nom }}</p>
             </div>
 
             <div class="space-y-1 md:col-span-2">
               <p app-card-description>Description</p>
-              <p class="font-semibold text-base">{{ detailBoutique?.description }}</p>
+              <p class="font-semibold text-base">{{ detailBoutique()?.description }}</p>
             </div>
 
             <div class="space-y-1">
               <p app-card-description>Email</p>
-              <p class="font-semibold text-base">{{ detailBoutique?.email }}</p>
+              <p class="font-semibold text-base">{{ detailBoutique()?.email }}</p>
             </div>
 
             <div class="space-y-1">
               <p app-card-description>Adresse</p>
-              <p class="font-semibold text-base">{{ detailBoutique?.adresse }}</p>
+              <p class="font-semibold text-base">{{ detailBoutique()?.adresse }}</p>
             </div>
 
             <div class="space-y-1">
               <p app-card-description>Téléphone</p>
-              <p class="font-semibold text-base">{{ detailBoutique?.telephone }}</p>
+              <p class="font-semibold text-base">{{ detailBoutique()?.telephone }}</p>
             </div>
 
             <div class="space-y-1">
               <p app-card-description>Horaires</p>
-              <p class="font-semibold text-base">{{ detailBoutique?.descriptionHoraire }}</p>
+              <p class="font-semibold text-base">{{ detailBoutique()?.descriptionHoraire }}</p>
             </div>
 
             <div class="space-y-1 md:col-span-2">
@@ -178,8 +180,10 @@
             </div>
 
           </div>
+        }
 
         </app-card-content>
+   
 
       </app-card>
     </div>

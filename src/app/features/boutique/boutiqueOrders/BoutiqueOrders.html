@@ -53,7 +53,7 @@
 
   <!-- Orders list -->
   <div class="grid grid-cols-1 gap-4">
-    <app-card *ngFor="let order of orders" class="border-none shadow-elegant hover:scale-[1.01] transition-all cursor-pointer group overflow-hidden">
+    <app-card *ngFor="let order of orders()" class="border-none shadow-elegant hover:scale-[1.01] transition-all cursor-pointer group overflow-hidden">
       <app-card-content class="p-0!">
 
         <!-- Infos commande -->
@@ -104,19 +104,27 @@
         </div>
 
         <!-- Détails dépliables -->
-        <div *ngIf="isExpanded(order) && order.details?.length" class="mt-4 p-4 bg-muted rounded-lg">
+        <div *ngIf="isExpanded(order) && order.details?.length" class="mt-4 p-4 bg-muted rounded-lg space-y-4">
           <h4 class="font-bold mb-2">Détails de la commande</h4>
 
-          <app-card *ngFor="let item of order.details" class="border-none shadow-elegant overflow-hidden">
-            <app-card-content class="p-0">
-              <div class="flex items-center gap-6 p-6 group">
+          <app-card *ngFor="let item of order.details" class="border-none shadow-elegant overflow-hidden ">
+            <app-card-content class="p-0 space-y-3">
+              <div class="flex items-center gap-6 p-6 group ">
 <!--                <div class="w-24 h-24 rounded-xl overflow-hidden bg-muted flex-shrink-0">-->
 <!--                  <img [src]="item.idProduit.image" [alt]="item.idProduit.nom" class="w-full h-full object-cover" />-->
 <!--                </div>-->
                 <div class="flex-1 space-y-1">
                   <p class="text-xs font-bold text-primary uppercase">{{ item.idProduit.boutique }}</p>
                   <h4 class="font-bold text-lg">{{ item.idProduit.nom }}</h4>
-                  <p class="text-primary font-bold">{{ item.idProduit.prixInitial }} Ar</p>
+                      <p [class]="'font-bold text-primary' + (item.reduction ? 'line-through text-gray-400' : '')" >
+                        {{ item.idProduit.prixInitial }} Ar
+                      </p>
+                      <p *ngIf="item.reduction" class=" font-bold text-primary">
+                        {{ item.prixPromotionnel }} Ar
+                      </p>
+                      <p *ngIf="item.reduction" class="font-bold text-primary">
+                        -{{ item.reduction }}%
+                      </p>
                 </div>
                 <div class="flex items-center gap-4">
                   <div class="flex items-center bg-muted rounded-full px-2">
@@ -132,6 +140,8 @@
 
             </app-card-content>
           </app-card>
+
+
           <app-separator />
 
 
