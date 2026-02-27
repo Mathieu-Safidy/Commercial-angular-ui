@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -19,6 +19,7 @@ import {Box} from "../../../services/box/box";
 import {DetailLocationInput, Location} from "../../../services/location/location";
 import { DetailLocation} from '../../../model/detailLocationModel';
 import { LocationDetail } from '../../../services/locationDetail/location-detail' ;
+import {AuthServices} from '../../../services/authService/auth.services';
 //import { BoxModel } from '../../../model/boxModel';
 @Component({
   selector: 'app-client-rentals',
@@ -48,15 +49,19 @@ export class ClientRentalsComponent {
   readonly ArrowRight = ArrowRight;
   protected rentalSpaces: any;
   detailLocations: DetailLocation[] = [];
+
+  authService = inject(AuthServices);
+  user: User | any = this.authService.currentUserSubject.value || { } ;
+  userId = this.user._id;
+
   constructor(private boxService: Box , private locationService: Location, private detailLocationService: LocationDetail) {}
 
   async onRequestLocation(idBox: string, numero: string , prixFinal:string) {
     try {
       let note = `Location demandée ${numero}`;
       let details = this.transformBoxToDetail(idBox , prixFinal);
-      let idUser = "698dfddc709de29d54628ca1";
 
-      const result = await this.locationService.createLocationWithDetails(note, idUser, details);
+      const result = await this.locationService.createLocationWithDetails(note, this.userId, details);
       console.log('Location créée avec succès', result);
 
     } catch (err) {

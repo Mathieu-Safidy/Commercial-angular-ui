@@ -21,6 +21,7 @@ import { Environments } from '../../../environements/environments';
 import { TabsTriggerComponent } from '../../../components/ui/tabs';
 import {DetailBoutique} from '../../../model/detailBoutiqueModel';
 import {DetailBoutiqueService} from '../../../services/detailBoutiqueService/detail-boutique-service';
+import {AuthServices} from '../../../services/authService/auth.services';
 
 @Component({
   selector: 'app-client-shop',
@@ -46,6 +47,9 @@ export class ClientShopComponent {
   readonly Sparkles = Sparkles;
   readonly Check = Check;
   detailBoutiques: DetailBoutique[] = [];
+  authService = inject(AuthServices);
+  user: User | any = this.authService.currentUserSubject.value || { } ;
+  userId = this.user._id;
 
 
   produitService = inject(ProduitService);
@@ -162,7 +166,7 @@ export class ClientShopComponent {
   }
 
   async addToCart(idProduit: string) {
-    let idUser = "698dfddc709de29d54628ca1";
+    let idUser = this.userId;
     let quantite = 1;
     // Appel à ton service pour ajouter le produit au panier
     await this.panierService.addToPanier(idUser, idProduit, quantite);

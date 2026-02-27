@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {
   Building2, Users, Calendar, Plus, Settings,
   Bell, Search, LayoutDashboard, ShieldCheck, Zap, LucideAngularModule,
-  ChartColumn
+  ChartColumn, LogOut
 } from 'lucide-angular';
 import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {AdminOverviewComponent} from '../adminOverview/AdminOverview';
@@ -29,7 +29,7 @@ type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 's
 export class AdminDashboardComponent {
   activeSection: Section = 'dashboard';
 
-  readonly icons = { Building2, Users, Calendar, ChartColumn, Plus, Settings, Bell, Search, LayoutDashboard, ShieldCheck, Zap };
+  readonly icons = { Building2, Users, Calendar, ChartColumn, Plus, Settings, Bell, Search, LayoutDashboard, ShieldCheck, Zap, LogOut };
   // readonly BarChart3 = BarChart3;
   sidebarItems: { id: Section; label: string; icon: any }[] = [
     { id: 'dashboard', label: 'Dashboard Global', icon: LayoutDashboard },

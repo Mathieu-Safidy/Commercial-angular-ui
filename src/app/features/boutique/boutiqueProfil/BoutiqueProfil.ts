@@ -1,7 +1,7 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, inject, OnInit} from "@angular/core";
 import { CardComponent, CardContentComponent, CardHeaderComponent } from "../../../components/ui/card";
 import { CommonModule } from "@angular/common";
-import {ArrowRight, Camera, LucideAngularModule, MessageSquare, SquarePenIcon, User} from "lucide-angular";
+import {ArrowRight, Camera, LucideAngularModule, MessageSquare, SquarePenIcon} from "lucide-angular";
 import { BadgeComponent } from "../../../components/ui/badge";
 import { ClientReviewsComponent } from "../../client/clientReviews/ClientReviews";
 import { InputComponent } from "../../../components/ui/input";
@@ -9,6 +9,7 @@ import { ButtonComponent } from "../../../components/ui/button";
 import {DetailBoutiqueService} from '../../../services/detailBoutiqueService/detail-boutique-service';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {DetailBoutique} from '../../../model/detailBoutiqueModel';
+import {AuthServices} from '../../../services/authService/auth.services';
 
 
 @Component({
@@ -27,15 +28,16 @@ import {DetailBoutique} from '../../../model/detailBoutiqueModel';
   ],
   templateUrl: './BoutiqueProfil.html',
 })
-export class BoutiqueProfilComponent implements OnInit {
+export class BoutiqueProfilComponent  {
 
   form!: FormGroup;
   detailBoutique: DetailBoutique | null = null;
   isEditMode = false;
   showToast: boolean = false;
   toastMessage: string = '';
-
-  userId = "698dfddc709de29d54628ca5";
+  authService = inject(AuthServices);
+  user: User | any = this.authService.currentUserSubject.value || { } ;
+  userId = this.user._id;
   boutiqueExistante: boolean = false;
 
   constructor(
@@ -161,5 +163,5 @@ export class BoutiqueProfilComponent implements OnInit {
     await this.detailBoutiqueService.updateDetail(this.userId, payload);
   }
 
-  readonly icons = { User, MessageSquare, Camera, SquarePenIcon };
+  readonly icons = { MessageSquare, Camera, SquarePenIcon };
 }
