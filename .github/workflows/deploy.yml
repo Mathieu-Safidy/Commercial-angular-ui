@@ -1,0 +1,46 @@
+name: Deploy Angular Frontend to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Setup SSH
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.DO_SSH_KEY }}
+
+      # 3️⃣ Deploy via SSH
+      - name: Deploy on Droplet
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} "
+
+          # Si le dossier n'existe pas → clone
+          if [ ! -d '${{ secrets.FRONT_DIR }}/.git' ]; then
+            git clone ${{ secrets.REPO_URL }} ${{ secrets.FRONT_DIR }};
+          else
+            cd ${{ secrets.FRONT_DIR }};
+            git pull origin ${{ secrets.BRANCH }};
+          fi
+
+          cd ${{ secrets.FRONT_DIR }};
+          git checkout ${{ secrets.BRANCH }};
+
+          # Rebuild uniquement le service angular
+          docker compose down angular;
+          docker compose up -d --build angular;
+
+          "
+

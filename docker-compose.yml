@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  angular:
+    build: .
+    container_name: angular-commercial
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - commercial-network
+
+networks:
+  commercial-network:
+    external: true
