@@ -1,78 +1,214 @@
 <div class="animate-fade-in">
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <app-card class="border-none! shadow-none! p-3 rounded-xl bg-muted/20!">
-      <div class="flex justify-center p-5">
-        <div
-          class="inline-block h-auto w-9/12 rounded-full border-4 border-primary bg-card relative"
-        >
-          <img
-            [src]="'https://api.dicebear.com/7.x/avataaars/svg?seed=115'"
-            alt="Avatar"
-            class="rounded-full"
-          />
+  <div class="animate-fade-in">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- AVATAR / IMAGE -->
+      <app-card class="border-none! shadow-none! p-3 rounded-xl bg-muted/20!">
+        <div class="flex justify-center p-5">
           <div
-            class="w-15 h-15 flex justify-center items-center absolute bottom-0 right-3 bg-primary hover:bg-primary/90 transition-colors cursor-pointer rounded-full border-2 border-primary"
+            class="inline-block h-auto w-9/12 rounded-full border-4 border-primary bg-card relative"
           >
-            <lucide-angular [img]="icons.Camera" class="w-9 h-9 text-white"></lucide-angular>
-          </div>
-        </div>
-      </div>
-    </app-card>
-    <app-card class="border-none shadow-elegant bg-card lg:col-span-2 p-3 rounded-xl space-y-4">
-      <!-- HEADER -->
-      <app-card-header class="flex flex-row items-center justify-between pb-2 p-3!">
-        <h3 app-card-title class="text-xl font-bold flex items-center gap-2 text-primary">
-          <!-- <lucide-icon [img]="icons.User" class="w-5 h-5 text-primary"></lucide-icon> -->
-          Information de la boutique
-        </h3>
-        <button app-button variant="outline" size="icon" class="h-9 w-9 rounded-full cursor-pointer hover:text-primary-foreground">
-          <lucide-angular [img]="icons.SquarePenIcon" class="w-4 h-4"></lucide-angular>
-        </button>
-      </app-card-header>
-
-      <!-- CONTENT -->
-      <app-card-content class="p-3 pt-0!">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Nom -->
-          <div class="space-y-1">
-            <p app-card-description>Nom de la boutique</p>
-            <p class="font-semibold text-base">Tech Store Mada</p>
-          </div>
-
-          <!-- Email -->
-          <div class="space-y-1">
-            <p app-card-description>Email</p>
-            <p class="font-semibold text-base">contact@techstore.mg</p>
-          </div>
-
-          <!-- Téléphone -->
-          <div class="space-y-1">
-            <p app-card-description>Téléphone</p>
-            <p class="font-semibold text-base">+261 34 00 000 00</p>
-          </div>
-
-          <!-- Adresse -->
-          <div class="space-y-1">
-            <p app-card-description>Adresse</p>
-            <p class="font-semibold text-base">Antananarivo, Madagascar</p>
-          </div>
-
-          <!-- Statut -->
-          <div class="space-y-1 md:col-span-2">
-            <p app-card-description>Statut</p>
-            <span
-              class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700"
+            <img
+              [src]="form.value.image || detailBoutique?.image || 'https://api.dicebear.com/7.x/avataaars/svg?seed=115'"
+              alt="Avatar"
+              class="rounded-full"
+            />
+            <div
+              class="w-15 h-15 flex justify-center items-center absolute bottom-0 right-3 bg-primary hover:bg-primary/90 transition-colors cursor-pointer rounded-full border-2 border-primary"
             >
-              Actif
-            </span>
+              <lucide-angular [img]="icons.Camera" class="w-9 h-9 text-white"></lucide-angular>
+            </div>
           </div>
         </div>
-      </app-card-content>
-    </app-card>
+      </app-card>
+      <!-- FORMULAIRE OU AFFICHAGE BOUTIQUE -->
+      <app-card class="border-none shadow-elegant bg-card lg:col-span-2 p-3 rounded-xl space-y-4">
+
+        <!-- HEADER -->
+        <app-card-header class="flex flex-row items-center justify-between pb-2 p-3!">
+          <h3 app-card-title class="text-xl font-bold flex items-center gap-2 text-primary">
+            Information de la boutique
+          </h3>
+          <button
+            app-button variant="outline" size="icon"
+            class="h-9 w-9 rounded-full cursor-pointer hover:text-primary-foreground"
+            (click)="enableEdit()"
+          >
+            <lucide-angular [img]="icons.SquarePenIcon" class="w-4 h-4"></lucide-angular>
+          </button>
+        </app-card-header>
+
+        <!-- CONTENT -->
+        <app-card-content class="p-3 pt-0!">
+
+          <!-- FORMULAIRE CREATE / UPDATE -->
+          <form *ngIf="isEditMode" [formGroup]="form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <!-- Nom boutique -->
+            <div class="space-y-1">
+              <label app-card-description for="nom">Nom de la boutique</label>
+              <input
+                id="nom"
+                type="text"
+                formControlName="nom"
+                placeholder="Nom de la boutique"
+                class="w-full h-11 pl-4 pr-4 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
+              />
+            </div>
+
+            <!-- Description du détail -->
+            <div class="space-y-1 md:col-span-2">
+              <label app-card-description for="descriptionDetail">Description</label>
+              <textarea
+                id="descriptionDetail"
+                formControlName="descriptionDetail"
+                placeholder="Description du détail"
+                class="w-full h-28 p-3 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all resize-none"
+              ></textarea>
+            </div>
+
+            <!-- Email -->
+            <div class="space-y-1">
+              <label app-card-description for="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                placeholder="contact@exemple.com"
+                class="w-full h-11 pl-4 pr-4 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
+              />
+            </div>
+
+            <!-- Adresse -->
+            <div class="space-y-1">
+              <label app-card-description for="adresse">Adresse</label>
+              <input
+                id="adresse"
+                type="text"
+                formControlName="adresse"
+                placeholder="Adresse complète"
+                class="w-full h-11 pl-4 pr-4 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
+              />
+            </div>
+
+            <!-- Téléphone -->
+            <div class="space-y-1">
+              <label app-card-description for="telephone">Téléphone</label>
+              <input
+                id="telephone"
+                type="text"
+                formControlName="telephone"
+                placeholder="+261 34 00 000 00"
+                class="w-full h-11 pl-4 pr-4 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
+              />
+            </div>
+
+            <!-- Horaires -->
+            <div class="space-y-1">
+              <label app-card-description for="descriptionHoraire">Horaires</label>
+              <input
+                id="descriptionHoraire"
+                type="text"
+                formControlName="descriptionHoraire"
+                placeholder="Ex: 9h00 - 18h00"
+                class="w-full h-11 pl-4 pr-4 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
+              />
+            </div>
+
+            <!-- Image -->
+            <div class="space-y-1 md:col-span-2">
+              <label app-card-description for="image">Image URL</label>
+              <input
+                id="image"
+                type="text"
+                formControlName="image"
+                placeholder="Lien vers l'image"
+                class="w-full h-11 pl-4 pr-4 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
+              />
+            </div>
+
+            <!-- Bouton Save -->
+            <div class="md:col-span-2 flex justify-end">
+              <button app-button  className="rounded-full px-8 shadow-glow" (click)="saveBoutique()">
+                {{ detailBoutique ? 'Mettre à jour' : 'Créer la boutique' }}
+              </button>
+
+            </div>
+
+          </form>
+
+          <!-- AFFICHAGE DETAIL BOUTIQUE -->
+          <div  class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div class="space-y-1">
+              <p app-card-description>Nom de la boutique</p>
+             <p class="font-semibold text-base">{{ detailBoutique?.idBoutique?.nom }}</p>
+            </div>
+
+            <div class="space-y-1 md:col-span-2">
+              <p app-card-description>Description</p>
+              <p class="font-semibold text-base">{{ detailBoutique?.description }}</p>
+            </div>
+
+            <div class="space-y-1">
+              <p app-card-description>Email</p>
+              <p class="font-semibold text-base">{{ detailBoutique?.email }}</p>
+            </div>
+
+            <div class="space-y-1">
+              <p app-card-description>Adresse</p>
+              <p class="font-semibold text-base">{{ detailBoutique?.adresse }}</p>
+            </div>
+
+            <div class="space-y-1">
+              <p app-card-description>Téléphone</p>
+              <p class="font-semibold text-base">{{ detailBoutique?.telephone }}</p>
+            </div>
+
+            <div class="space-y-1">
+              <p app-card-description>Horaires</p>
+              <p class="font-semibold text-base">{{ detailBoutique?.descriptionHoraire }}</p>
+            </div>
+
+            <div class="space-y-1 md:col-span-2">
+              <p app-card-description>Statut</p>
+              <span class="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-700">
+          Actif
+        </span>
+            </div>
+
+          </div>
+
+        </app-card-content>
+
+      </app-card>
+    </div>
   </div>
+
   <div class="flex-1 overflow-y-auto">
     <div class="max-w-7xl space-y-10">
       <app-client-reviews [titleReviews]="false"></app-client-reviews>
     </div>
   </div>
+
+  <!-- TOAST -->
+  <div *ngIf="showToast"
+       class="fixed top-6 right-6 z-50 animate-fade-in">
+
+    <div
+      class="min-w-[280px] px-6 py-4 rounded-2xl shadow-xl text-sm font-medium
+           bg-primary text-primary-foreground
+           flex items-center justify-between gap-4">
+
+      <span>{{ toastMessage }}</span>
+
+      <button
+        class="text-white/70 hover:text-white transition-colors"
+        (click)="showToast = false">
+        ✕
+      </button>
+
+    </div>
+  </div>
+
 </div>

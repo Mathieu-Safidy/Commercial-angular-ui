@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Utils } from '../utils/utils';
 import { Environments } from '../../environements/environments';
+import {AuthServices} from '../authService/auth.services';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,11 @@ export class PanierService {
   private http = inject(Utils);
   public panier = signal<any>(null);
   public backendLink = Environments.BACKEND || "http://localhost:3000";
+
+  authService = inject(AuthServices);
+  user: User | any = this.authService.currentUserSubject.value || { } ;
+  userId = this.user._id;
+
   public async getPanier(idUSer: string) {
     return await this.http.PGet(`/paniers/actif/${idUSer}`);
   }
@@ -34,7 +40,7 @@ export class PanierService {
     if (this.panier()) {
       panier = this.panier() as Panier;
     } else {
-      panier = (await this.getPanier('698dfddc709de29d54628ca1')) as Panier;
+      panier = (await this.getPanier(this.userId)) as Panier;
       this.panier.set(panier);
     }
     return this.panier();

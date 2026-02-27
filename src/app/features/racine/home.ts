@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule, User, Store, ShieldCheck,
-  Search, Bell, Menu, Moon, Sun
+  Search, Bell, Menu, Moon, Sun, LogOut
 } from 'lucide-angular';
 import { ButtonComponent } from '../../components/ui/button';
 import { BadgeComponent } from '../../components/ui/badge';
@@ -11,6 +11,7 @@ import { ClientDashboardComponent } from '../client/clientDashboard/ClientDashbo
 import { BoutiqueDashboardComponent } from '../boutique/boutiqueDashboard/BoutiqueDashBoard';
 import { AdminDashboardComponent } from '../admin/adminDashboard/AdminDashBoard';
 import { RouterModule } from "@angular/router";
+import {AuthServices} from '../../services/authService/auth.services';
 
 // --- N'oublie pas d'importer tes composants ici ---
 // import { ClientDashboardComponent } from './features/client/clientDashboard/ClientDashboard';
@@ -47,6 +48,7 @@ type Profile = 'client' | 'boutique' | 'admin';
 export class Home {
   activeProfile: Profile = 'client';
   isDarkMode: boolean = false;
+  authService = inject(AuthServices);
 
   // Icônes pour le template
   readonly User = User;
@@ -57,10 +59,15 @@ export class Home {
   readonly Menu = Menu;
   readonly Moon = Moon;
   readonly Sun = Sun;
+  readonly LogOut = LogOut;
 
   // ✅ MÉTHODE POUR CHANGER LE PROFIL
   setActiveProfile(profile: Profile) {
     this.activeProfile = profile;
+  }
+
+  logout = () => {
+    this.authService.logout();
   }
 
   toggleDarkMode() {

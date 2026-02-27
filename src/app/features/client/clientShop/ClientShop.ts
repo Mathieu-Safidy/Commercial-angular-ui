@@ -19,6 +19,9 @@ import { ProduitService } from '../../../services/produitService/produit-service
 import { PanierService } from '../../../services/panierService/panier-service';
 import { Environments } from '../../../environements/environments';
 import { TabsTriggerComponent } from '../../../components/ui/tabs';
+import {DetailBoutique} from '../../../model/detailBoutiqueModel';
+import {DetailBoutiqueService} from '../../../services/detailBoutiqueService/detail-boutique-service';
+import {AuthServices} from '../../../services/authService/auth.services';
 
 @Component({
   selector: 'app-client-shop',
@@ -43,6 +46,10 @@ export class ClientShopComponent {
   readonly TrendingUp = TrendingUp;
   readonly Sparkles = Sparkles;
   readonly Check = Check;
+  detailBoutiques: DetailBoutique[] = [];
+  authService = inject(AuthServices);
+  user: User | any = this.authService.currentUserSubject.value || { } ;
+  userId = this.user._id;
 
 
   produitService = inject(ProduitService);
@@ -50,7 +57,7 @@ export class ClientShopComponent {
   hovered = false;
   toggleWishlist(id: string) { /* votre logique */ }
   isWishlisted(id: string): boolean { /* votre logique */ return false; }
-  constructor() {
+  constructor( private detailBoutiqueService: DetailBoutiqueService ) {
     effect(() => {
       const panier = this.panierService.panier();
       if (!panier) return;
@@ -58,6 +65,7 @@ export class ClientShopComponent {
     })
   }
   navigateTo = output<string>(); // émet la valeur du tab cible
+
 
   goToAllProducts() {
     this.navigateTo.emit('all-products');
@@ -128,6 +136,7 @@ export class ClientShopComponent {
   subscriberIds = [1, 2, 3];
 
   ngAfterViewInit() {
+    this.initBoutique() ;
     this.initProducts();
   }
 
@@ -135,7 +144,9 @@ export class ClientShopComponent {
     if (!this.panier()) return false;
     return this.panier().details.some((detail: PanierDetail) => detail.idProduit === idProduit);
   }
-
+ async initBoutique() {
+   this.detailBoutiques = await this.detailBoutiqueService.getAll() as DetailBoutique[];
+ }
   async initProducts() {
     // this.panier.set(await this.panierService.getPanier('698dfddc709de29d54628ca1') as Panier)
     // let panierInit = await this.panierService.initializePanier();
@@ -155,7 +166,7 @@ export class ClientShopComponent {
   }
 
   async addToCart(idProduit: string) {
-    let idUser = "698dfddc709de29d54628ca1";
+    let idUser = this.userId;
     let quantite = 1;
     // Appel à ton service pour ajouter le produit au panier
     await this.panierService.addToPanier(idUser, idProduit, quantite);

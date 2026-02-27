@@ -46,7 +46,7 @@ export class AuthServices {
 
   public async register(payload: { email: string; password: string; username: string }) {
     try {
-      const result: any = await this.http.PPost('/auth/register', payload, false);
+      const result: any = await this.http.PPost('/auth/register', payload, undefined ,false);
       let user = result.user;
       if (user && user.idProfil) {
         user.role = user.idProfil.nom; // mappe idProfil.nom à user.role
@@ -59,6 +59,19 @@ export class AuthServices {
       return user;
     } catch (error) {
       throw new Error('Registration failed');
+    }
+  }
+
+  public async logout() {
+    try {
+      this.currentUserSubject.next(null);
+      this.accessTokenSubject.next(null);
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('accessToken');
+
+      window.location.reload();
+    } catch (error) {
+      throw new Error('Logout failed');
     }
   }
 

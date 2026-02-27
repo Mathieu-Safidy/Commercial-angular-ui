@@ -17,6 +17,7 @@ import {
 import {BadgeComponent} from '../../../components/ui/badge';
 import { ButtonComponent } from '../../../components/ui/button';
 import {Location} from "../../../services/location/location";
+import {DetailBoutique} from '../../../model/detailBoutiqueModel';
 
 @Component({
   selector: 'app-boutique-management',
@@ -51,7 +52,11 @@ export class BoutiqueManagementComponent {
   }
 
   async valideLocation(idUser : string , idBox: string) {
-    await this.locationService.validateLocationBox(idUser , idBox) ;
+    try {
+      await this.locationService.validateLocationBox(idUser , idBox) ;
+    } catch (err) {
+      console.error('Erreur lors de la récupération des détails location', err);
+    }
   }
 
   avatars = [1, 2];

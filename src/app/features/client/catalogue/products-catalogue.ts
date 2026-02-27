@@ -17,6 +17,7 @@ import { Environments } from '../../../environements/environments';
 import { PanierService } from '../../../services/panierService/panier-service';
 import { AlertDialogService } from '../../../components/ui/alert-dialog/alert-dialog.service';
 import { ProductDetailDialogComponent } from '../../../components/ui/produitDialogue/produitDalogue';
+import {AuthServices} from '../../../services/authService/auth.services';
 
 export interface Product {
   id: string;
@@ -67,6 +68,11 @@ export class ProductsCatalogueComponent implements OnInit {
   readonly Sparkles = Sparkles;
   readonly ArrowUpDown = ArrowUpDown;
   readonly Package = Package;
+
+  authService = inject(AuthServices);
+  user: User | any = this.authService.currentUserSubject.value || { } ;
+  userId = this.user._id;
+
 
   // State
   searchQuery = signal('');
@@ -129,7 +135,7 @@ export class ProductsCatalogueComponent implements OnInit {
     })
   }
 
-  
+
   openDetails(product: Produit) {
     this.produitService.produitSelectionne.set(product);
     this.dialog.show();
@@ -155,7 +161,7 @@ export class ProductsCatalogueComponent implements OnInit {
       image: produit.image ? this.backendLink + '/' + produit.image : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400', // Placeholder, à remplacer par produit.image si disponible,
     })));
 
-    const prices = this.allProducts().map(p => p.prixInitial);  
+    const prices = this.allProducts().map(p => p.prixInitial);
     this.maxPriceValue.set(Math.max(...prices));
     this.priceRange.set({ min: 0, max: Math.max(...prices) });
       // produits.map((produit) => ({
@@ -175,7 +181,7 @@ export class ProductsCatalogueComponent implements OnInit {
 
     // );
     console.log('All product ',this.allProducts());
-    
+
   }
 
   categories = computed(() => [...new Set(this.allProducts().map(p => p.idCategorie.nom))].sort());
@@ -315,13 +321,13 @@ export class ProductsCatalogueComponent implements OnInit {
     // return this.panier().includes(id);
     if (!this.panier()) return false;
     // console.log(this.panier());
-    
+
     return this.panier().details.some((detail: PanierDetail) => detail.idProduit === id);
   }
 
   async addToCart(id: string) {
     // this.panier.update(p => p.includes(id) ? p : [...p, id]);
-    let idUser = "698dfddc709de29d54628ca1";
+    let idUser = this.userId;
     let quantite = 1;
     // Appel à ton service pour ajouter le produit au panier
     await this.panierService.addToPanier(idUser, id, quantite);
