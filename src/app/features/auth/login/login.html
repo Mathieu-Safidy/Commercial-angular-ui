@@ -34,7 +34,7 @@
         <div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
           <lucide-icon [img]="Store" class="w-5 h-5 text-primary-foreground"></lucide-icon>
         </div>
-        <span class="text-background font-black text-xl tracking-tight">MarketPlace</span>
+        <span class="text-background font-black text-xl tracking-tight">M1p13mean-Safidy-Mirindra</span>
       </div>
 
       <!-- Texte central -->
@@ -99,14 +99,14 @@
       <div class="w-10 h-10 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
         <lucide-icon [img]="Store" class="w-5 h-5 text-primary-foreground"></lucide-icon>
       </div>
-      <span class="font-black text-xl tracking-tight">MarketPlace</span>
+      <span class="font-black text-xl tracking-tight">m1p13mean-Safidy-Mirindra</span>
     </div>
 
     <div class="w-full max-w-md space-y-8">
 
       <!-- Titre -->
       <div class="space-y-2">
-        <h2 class="text-3xl font-black tracking-tight">Bon retour 👋</h2>
+        <h2 class="text-3xl font-black tracking-tight">Bon retour</h2>
         <p class="text-muted-foreground font-medium">
           Connectez-vous à votre espace boutique.
         </p>
@@ -151,9 +151,9 @@
               <lucide-icon [img]="Lock" class="w-3.5 h-3.5"></lucide-icon>
               Mot de passe
             </label>
-            <a href="/forgot-password" class="text-xs font-bold text-primary hover:text-primary/70 transition-colors underline underline-offset-2">
+            <!-- <a href="/forgot-password" class="text-xs font-bold text-primary hover:text-primary/70 transition-colors underline underline-offset-2">
               Mot de passe oublié ?
-            </a>
+            </a> -->
           </div>
           <div class="relative">
             <input
@@ -186,7 +186,7 @@
         </div>
 
         <!-- Se souvenir de moi -->
-        <label class="flex items-center gap-3 cursor-pointer group">
+        <!-- <label class="flex items-center gap-3 cursor-pointer group">
           <div
             class="w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all"
             [class.border-primary]="form.get('rememberMe')?.value"
@@ -201,7 +201,7 @@
           <span class="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
             Se souvenir de moi
           </span>
-        </label>
+        </label> -->
 
         <!-- Message d'erreur global -->
         <div
@@ -252,27 +252,52 @@
       </p>
 
       <!-- Accès boutique vs client -->
-      <!-- <div class="grid grid-cols-2 gap-3">
-        <a
+      <div class="grid grid-cols-3 gap-3">
+        @for (type of typeActive(); track type.value) {
+          <div
+            class="{{type.active ? active.conteneur : inactive.conteneur}}"
+            (click)="activeLogin(type.value)"
+          >
+            <lucide-icon [img]="type.icon" class="{{type.active ? active.icone : inactive.icone}}"></lucide-icon>
+            <span class="{{type.active ? active.text : inactive.text}}">{{type.label}}</span>
+          </div>
+        }
+        <!-- <a
           href="/login/client"
           class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-border bg-muted/20 hover:bg-muted/40 hover:border-primary/30 transition-all cursor-pointer group text-center"
         >
           <lucide-icon [img]="ShoppingBag" class="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors"></lucide-icon>
-          <span class="text-xs font-bold text-muted-foreground group-hover:text-foreground transition-colors">Espace Client</span>
-        </a>
-        <a
+          <span class="text-xs font-bold text-muted-foreground group-hover:text-primary transition-colors">Espace Client</span>
+        </a> -->
+
+        <!-- <a
           href="/login/boutique"
           class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-primary/30 bg-primary/5 hover:bg-primary/10 transition-all cursor-pointer group text-center"
         >
           <lucide-icon [img]="Store" class="w-5 h-5 text-primary transition-colors"></lucide-icon>
           <span class="text-xs font-bold text-primary">Espace Boutique</span>
         </a>
-      </div> -->
+
+        <a
+          href="/login/admin"
+          class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-border bg-muted/20 hover:bg-muted/40 hover:border-primary/30 transition-all cursor-pointer group text-center"
+        >
+          <lucide-icon [img]="User" class="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors"></lucide-icon>
+          <span class="text-xs font-bold text-muted-foreground group-hover:text-primary transition-colors">Espace Admin</span>
+        </a> -->
+
+      </div>
 
     </div>
 
     <!-- Footer -->
     <p class="mt-12 text-xs text-muted-foreground/50 text-center">
+      RAKOTOARISOA Safidiniaina Mathieu
+    </p>
+    <p class="mt-2 text-xs text-muted-foreground/50 text-center">
+      ANDRIAMPANANA Mirindra Allan
+    </p>
+    <p class="mt-2 text-xs text-muted-foreground/50 text-center">
       © 2026 MarketPlace · Tous droits réservés ·
       <a href="/privacy" class="hover:text-muted-foreground transition-colors">Confidentialité</a>
     </p>

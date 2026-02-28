@@ -12,6 +12,7 @@ import {
   Lock,
   Mail,
   Store,
+  User,
 } from 'lucide-angular';
 import { ButtonComponent } from '../../../components/ui/button';
 import { AuthServices } from '../../../services/authService/auth.services';
@@ -40,16 +41,45 @@ export class Login {
   readonly Lock = Lock;
   readonly Mail = Mail;
   readonly Store = Store;
+  readonly User = User;
 
   showPassword = signal(false);
   isLoading = signal(false);
   errorMessage = signal('');
+  typeActive = signal([
+    { label: 'Client', value: 'User', icon: User, active: true },
+    { label: 'Boutique', value: 'Boutique', icon: Store, active: false },
+    { label: 'Admin', value: 'Admin', icon: User, active: false }
+  ]);
+  activeLoginType = signal('User');
+
+  active = {
+    conteneur: 'flex flex-col items-center gap-2 p-4 rounded-2xl border border-primary/30 bg-primary/5 hover:bg-primary/10 transition-all cursor-pointer group text-center',
+    icone: 'w-5 h-5 text-primary transition-colors',
+    text: 'text-xs font-bold text-primary'
+  }
+
+  inactive = {
+    conteneur: 'flex flex-col items-center gap-2 p-4 rounded-2xl border border-border bg-muted/20 hover:bg-muted/40 hover:border-primary/30 transition-all cursor-pointer group text-center',
+    icone: 'w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors',
+    text: 'text-xs font-bold text-muted-foreground group-hover:text-primary transition-colors'
+  }
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     rememberMe: [false],
   });
+
+  activeLogin(type: string) {
+    this.activeLoginType.set(type);
+    this.typeActive.update((types) => {
+      return types.map(t => ({
+        ...t,
+        active: t.value === type ? true : false
+      }));
+    });
+  }
 
   // Données visuelles du panneau gauche
   stats = [
@@ -82,7 +112,7 @@ export class Login {
         email: this.form.value.email!,
         password: this.form.value.password!
       }
-      await this.authService.login(payload.email, payload.password);
+      await this.authService.login(payload.email, payload.password, this.activeLoginType());
       const user = this.authService.currentUserSubject.value;
       // await new Promise(r => setTimeout(r, 1000)); // simulation
       const roleRedirectMap: Record<string, string> = {
