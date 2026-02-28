@@ -56,7 +56,7 @@
           </thead>
 
           <tbody class="divide-y divide-muted/30">
-          <tr *ngFor="let detail of detailLocations" class="hover:bg-muted/10 transition-colors group">
+          <tr *ngFor="let detail of detailLocations()" class="hover:bg-muted/10 transition-colors group">
             <!-- Box ID -->
             <td class="px-6 py-5 flex items-center gap-3">
               <lucide-icon [name]="icons.Box" class="w-5 h-5 text-primary"></lucide-icon>

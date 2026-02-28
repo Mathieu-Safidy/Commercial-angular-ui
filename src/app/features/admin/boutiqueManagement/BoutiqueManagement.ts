@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { DetailLocation} from '../../../model/detailLocationModel';
@@ -42,18 +42,21 @@ export class BoutiqueManagementComponent {
     Clock,
     Wrench
   };
-  detailLocations: DetailLocation[] = [];
+  detailLocations = signal<DetailLocation[]>([]) ;
 
   constructor(private detailLocationService: LocationDetail , private locationService: Location) {}
 
 
   async ngOnInit() {
-    this.detailLocations = await this.detailLocationService.getAll() as any[];
+    this.reloadData() ;
   }
-
+  async reloadData() { 
+    this.detailLocations.set( await this.detailLocationService.getAll() as any[] ) ;
+  }
   async valideLocation(idUser : string , idBox: string) {
     try {
       await this.locationService.validateLocationBox(idUser , idBox) ;
+      this.reloadData() ; 
     } catch (err) {
       console.error('Erreur lors de la récupération des détails location', err);
     }
