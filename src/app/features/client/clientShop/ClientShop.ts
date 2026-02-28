@@ -24,6 +24,7 @@ import {DetailBoutiqueService} from '../../../services/detailBoutiqueService/det
 import {AuthServices} from '../../../services/authService/auth.services';
 import {PromotionService} from '../../../services/promotionService/promotion-service';
 import {Promotion} from '../../../model/promotionModel';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-client-shop',
   standalone: true,
@@ -55,6 +56,8 @@ export class ClientShopComponent {
 
   produitService = inject(ProduitService);
   panierService = inject(PanierService);
+  private router = inject(Router);
+  
   hovered = false;
   toggleWishlist(id: string) { /* votre logique */ }
   isWishlisted(id: string): boolean { /* votre logique */ return false; }
@@ -67,6 +70,18 @@ export class ClientShopComponent {
   }
   navigateTo = output<string>(); // émet la valeur du tab cible
 
+   openDetails(product: any & { id: string }) {
+    // this.produitService.produitSelectionne.set(product);
+    // this.dialog.show();
+    console.log('Navigate to:', product);
+    console.log('Mandeha');
+    
+    this.router.navigate(['/acceuil/client/produit', product.id]);
+  }
+
+  stringify(obj: any): string {
+    return JSON.stringify(obj);
+  }
 
   goToAllProducts() {
     this.navigateTo.emit('all-products');
@@ -162,6 +177,7 @@ export class ClientShopComponent {
         boutique: produit.boutique.nom,
         price: produit.prixInitial + '€',
         reduction: produit.reduction || 0,
+        quantiteDisponible: produit.quantiteDisponible,
         image: produit.image ?this.backendLink + '/' + produit.image : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800', // Placeholder, à remplacer par produit.image si disponible,
       })),
     );

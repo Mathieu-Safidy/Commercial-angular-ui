@@ -28,9 +28,9 @@ export class AuthServices {
     }
   }
 
-  public async login(email: string, password: string) {
+  public async login(email: string, password: string, role: string) {
     try {
-      const result: any = await this.http.PPost('/auth/login', { email, password });
+      const result: any = await this.http.PPost('/auth/login', { email, password, role });
 
       let user = result.user;
       if (user && user.idProfil) {
