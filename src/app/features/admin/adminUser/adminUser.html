@@ -1,0 +1,119 @@
+<div class="form-card">
+
+  <div class="form-card-header">
+    <div class="form-icon">
+      <mat-icon>person_add</mat-icon>
+    </div>
+    <div>
+      <h2>Nouvel utilisateur</h2>
+      <p>Remplissez les informations ci-dessous</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+
+    <!-- Username -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Nom d'utilisateur</mat-label>
+      <mat-icon matPrefix>account_circle</mat-icon>
+      <input matInput formControlName="username" placeholder="jean.dupont">
+      <mat-error *ngIf="f['username'].hasError('required')">Requis</mat-error>
+      <mat-error *ngIf="f['username'].hasError('minlength')">Min. 3 caractères</mat-error>
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Adresse email</mat-label>
+      <mat-icon matPrefix>alternate_email</mat-icon>
+      <input matInput formControlName="email" type="email" placeholder="jean@exemple.com">
+      <mat-error *ngIf="f['email'].hasError('required')">Requis</mat-error>
+      <mat-error *ngIf="f['email'].hasError('email')">Email invalide</mat-error>
+    </mat-form-field>
+
+    <!-- Password -->
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Mot de passe</mat-label>
+      <mat-icon matPrefix>lock_outline</mat-icon>
+      <input matInput formControlName="password"
+             [type]="showPwd ? 'text' : 'password'"
+             placeholder="••••••••">
+      <button mat-icon-button matSuffix type="button" (click)="showPwd = !showPwd">
+        <mat-icon>{{ showPwd ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="f['password'].hasError('required')">Requis</mat-error>
+      <mat-error *ngIf="f['password'].hasError('minlength')">Min. 6 caractères</mat-error>
+    </mat-form-field>
+
+    <!-- Profil selector (Admin / Boutique) -->
+    <div class="profil-selector">
+      <label class="selector-label">Type de profil</label>
+      <div class="selector-grid">
+        <div
+          *ngFor="let p of profils"
+          class="profil-card"
+          [class.selected]="f['idProfil'].value === p._id"
+          (click)="selectProfil(p._id)">
+          <mat-icon>{{ p.name.toLowerCase() === 'admin' ? 'admin_panel_settings' : 'storefront' }}</mat-icon>
+          <span class="profil-name">{{ p.name }}</span>
+          <div class="check-dot" *ngIf="f['idProfil'].value === p._id">
+            <mat-icon>check</mat-icon>
+          </div>
+        </div>
+      </div>
+      <mat-error class="selector-error" *ngIf="form.get('idProfil')?.invalid && form.get('idProfil')?.touched">
+        Veuillez sélectionner un profil
+      </mat-error>
+    </div>
+
+    <!-- Submit -->
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      class="submit-btn"
+      [disabled]="form.invalid || loading">
+      <mat-spinner *ngIf="loading" diameter="18" class="btn-spinner"></mat-spinner>
+      <mat-icon *ngIf="!loading">add_circle_outline</mat-icon>
+      {{ loading ? 'Création en cours...' : 'Créer l\'utilisateur' }}
+    </button>
+
+
+        <!-- Table -->
+      <div class="border-none shadow-elegant rounded-xl overflow-hidden bg-card">
+        <table class="w-full text-left">
+          <thead class="bg-muted/50 text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b">
+          <tr>
+            <th class="px-6 py-5">User ID</th>
+            <th class="px-6 py-5">Username</th>
+            <th class="px-6 py-5">Email</th>
+            <th class="px-6 py-5">Profil</th>
+          </tr>
+          </thead>
+
+          <tbody class="divide-y divide-muted/30">
+            <tr *ngFor="let user of allUser()" class="hover:bg-muted/10 transition-colors group">
+                <!-- User ID -->
+                <td class="px-6 py-5 flex items-center gap-3">
+                <mat-icon class="w-5 h-5 text-primary">person</mat-icon>
+                <span class="font-black text-sm">{{ user._id }}</span>
+                </td>
+                <!-- Username -->
+                <td class="px-6 py-5">
+                <p class="font-bold text-sm">{{ user.username }}</p>
+                </td>
+                <!-- Email -->
+                <td class="px-6 py-5">
+                <span class="font-bold text-sm">{{ user.email }}</span>
+                </td>
+                <!-- Profil -->
+                <td class="px-6 py-5">
+                <span class="font-bold text-sm">{{ user.idProfil.nom }}</span>
+                </td>
+            </tr>
+   
+          </tbody>
+        </table>
+      </div>
+
+  </form>
+</div>
