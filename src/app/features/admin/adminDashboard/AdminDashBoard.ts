@@ -9,6 +9,7 @@ import {AdminOverviewComponent} from '../adminOverview/AdminOverview';
 import {AdminPerformanceComponent} from '../adminPerformance/AdminPerformance';
 import {BoutiqueManagementComponent} from '../boutiqueManagement/BoutiqueManagement';
 import {AdminEventsComponent} from '../adminEvents/AdminEvents';
+import { AdminUserComponent } from '../adminUser/adminUser';
 
 type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 'settings';
 
@@ -23,6 +24,7 @@ type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 's
     AdminPerformanceComponent,
     BoutiqueManagementComponent,
     AdminEventsComponent,
+    AdminUserComponent , 
     NgIf
   ]
 })
