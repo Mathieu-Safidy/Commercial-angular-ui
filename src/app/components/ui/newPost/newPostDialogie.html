@@ -13,7 +13,7 @@
       />
     </div>
     <div>
-      <p class="font-bold text-base text-foreground leading-tight">Nouvelle actualité</p>
+      <p class="font-bold text-base text-foreground leading-tight">{{ dialogTitle }}</p>
       <p app-card-description class="text-xs">Visible par tous les membres</p>
     </div>
   </div>
@@ -36,7 +36,7 @@
       </label>
       <textarea
         id="postText"
-        [(ngModel)]="form.text"
+        [(ngModel)]="form().text"
         rows="6"
         maxlength="1000"
         placeholder="Partagez une information, une annonce, un événement..."
@@ -44,10 +44,11 @@
                placeholder:text-muted-foreground/50 resize-none
                focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
       ></textarea>
-      <p class="text-right text-xs text-muted-foreground">{{ form.text.length }} / 1000</p>
+      <p class="text-right text-xs text-muted-foreground">{{ form().text.length }} / 1000</p>
     </div>
 
     <!-- Photos -->
+    @if (!isEditMode) {
     <div class="space-y-2">
       <label app-card-description>Photos (optionnel)</label>
 
@@ -61,16 +62,16 @@
       </label>
 
       <!-- Aperçu des images sélectionnées -->
-      @if (form.imagePreviews.length) {
+      @if (form().imagePreviews.length) {
         <div
           class="grid gap-2 mt-2"
           [ngClass]="{
-            'grid-cols-1': form.imagePreviews.length === 1,
-            'grid-cols-2': form.imagePreviews.length === 2,
-            'grid-cols-3': form.imagePreviews.length >= 3,
+            'grid-cols-1': form().imagePreviews.length === 1,
+            'grid-cols-2': form().imagePreviews.length === 2,
+            'grid-cols-3': form().imagePreviews.length >= 3,
           }"
         >
-          @for (preview of form.imagePreviews; track preview; let i = $index) {
+          @for (preview of form().imagePreviews; track preview; let i = $index) {
             <div class="relative overflow-hidden rounded-2xl border border-border bg-muted/30 group">
               <img [src]="preview" class="w-full h-28 object-cover" />
               <button
@@ -88,6 +89,7 @@
         </div>
       }
     </div>
+    }
 
   </mat-dialog-content>
 
@@ -103,11 +105,11 @@
     </button>
     <button
       app-button
-      [disabled]="!form.text.trim() && !form.imagePreviews.length"
+      [disabled]="!form().text.trim() && !form().imagePreviews.length"
       (click)="publish()"
       class="rounded-full px-8 shadow-glow disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
     >
-      Publier
+      {{ submitLabel }}
     </button>
   </mat-dialog-actions>
 

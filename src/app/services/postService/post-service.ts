@@ -49,4 +49,23 @@ export class PostService {
       throw error;
     }
   }
+
+  async deletePost(postId: string) {
+    try {
+     return await this.http.PDelete(`/posts/${postId}`);
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      throw error;
+    }
+  }
+
+  async updatePost(postId: string, text: string) {
+    try {
+      const response = await this.http.PPatch(`/posts/${postId}`, { description: text }) as PostModel;
+      return response;
+    } catch (error) {
+      console.error('Error updating post:', error);
+      throw error;
+    }
+  }
 }

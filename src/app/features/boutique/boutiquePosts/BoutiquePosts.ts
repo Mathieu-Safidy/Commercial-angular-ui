@@ -6,12 +6,15 @@ import {
   Calendar,
   CircleCheck,
   Clock,
+  EllipsisVertical,
   Forward,
   LucideAngularModule,
   MessageSquareMore,
   Package,
+  Pencil,
   ShoppingBag,
   ThumbsUp,
+  Trash2,
 } from 'lucide-angular';
 import { ButtonComponent } from '../../../components/ui/button';
 import { InputComponent } from '../../../components/ui/input';
@@ -31,12 +34,16 @@ import { CommentDialogComponent } from '../../../components/ui/commentaireDialog
 import { CommentaireService } from '../../../services/commentaireService/commentaire-service';
 import { CommentModel } from '../../../model/commentModel';
 import { filter, switchMap } from 'rxjs';
+import { LikeModel } from '../../../model/likeMode';
+import { LikeService } from '../../../services/likeService/like-service';
+import { MatMenuModule } from '@angular/material/menu';
 
 type OrderStatus = 'Nouveau' | 'En préparation' | 'Prêt à envoyer' | 'Expédié';
 
 interface Order {
   id: string;
   customer: string;
+  idUser?: string;
   items: number;
   total: string;
   status: OrderStatus;
@@ -44,6 +51,7 @@ interface Order {
   text?: string;
   image?: string[];
   comment?: CommentModel[];
+  likes?: LikeModel[];
 }
 @Component({
   selector: 'app-boutique-posts',
@@ -59,6 +67,7 @@ interface Order {
     ButtonComponent,
     LucideAngularModule,
     RoleDirective,
+    MatMenuModule,
   ],
 })
 export class BoutiquePostsComponent {
@@ -75,9 +84,11 @@ export class BoutiquePostsComponent {
   postService = inject(PostService);
   authService = inject(AuthServices);
   commentaireService = inject(CommentaireService);
+  likeService = inject(LikeService);
   user = this.authService.currentUserSubject.value;
   userId = this.user?._id || '';
   boutiqueService = inject(BoutiqueService);
+  isLiking = signal(false);
 
   orders = signal<Order[]>([
     {
@@ -122,6 +133,51 @@ export class BoutiquePostsComponent {
   ngOnInit() {
     this.initPost();
   }
+  async toggleLike(order: Order) {
+    if (!order.likes) order.likes = [];
+    this.isLiking.set(true);
+    try {
+      if (this.userInLikes(order.likes)) {
+        let unliked = await this.likeService.unlikePost(order.id, this.userId);
+        if (unliked) {
+          this.orders.update((orders) =>
+            orders.map((o) =>
+              o.id === order.id
+                ? {
+                    ...o,
+                    likes: o.likes?.filter((like) => (like.idUser as User)._id !== this.userId),
+                  }
+                : o,
+            ),
+          );
+        }
+      } else {
+        let liked = await this.likeService.likePost(order.id, this.userId);
+        if (liked) {
+          // order.likes.push({ idUser: this.userId, idPost: order.id, createdAt: new Date() });
+          this.orders.update((orders) =>
+            orders.map((o) =>
+              o.id === order.id
+                ? {
+                    ...o,
+                    likes: [
+                      ...(o.likes || []),
+                      { idUser: this.user!, idPost: order.id, createdAt: new Date() },
+                    ],
+                  }
+                : o,
+            ),
+          );
+        }
+      }
+    } finally {
+      this.isLiking.set(false);
+    }
+  }
+  userInLikes(likes: LikeModel[] | undefined): boolean {
+    if (!likes) return false;
+    return likes.some((like) => (like.idUser as User)._id === this.userId);
+  }
 
   async initPost() {
     let user = this.userId;
@@ -138,6 +194,7 @@ export class BoutiquePostsComponent {
           return {
             id: post._id,
             customer: post.nom,
+            idUser: (post.idUser as User)._id,
             items: post.images.length,
             total: ``,
             status: 'Nouveau',
@@ -150,7 +207,8 @@ export class BoutiquePostsComponent {
                   }),
             text: post.description,
             image: post.images.map((img: any) => this.backenUrl + '/' + img.link),
-            comment: post.comment
+            comment: post.comment,
+            likes: post.likes,
           };
         }),
       ),
@@ -192,6 +250,7 @@ export class BoutiquePostsComponent {
       let postWithModel: Order = {
         id: postcreated._id,
         customer: postername as string,
+        idUser: (postcreated.idUser as User)?._id || '',
         items: postcreated.images.length,
         total: ``,
         status: 'Nouveau' as OrderStatus,
@@ -204,6 +263,7 @@ export class BoutiquePostsComponent {
               }),
         text: postcreated.description,
         image: postcreated.images.map((img: any) => this.backenUrl + '/' + img.link),
+        likes: postcreated.likes,
       };
 
       this.orders.update((orders) => [postWithModel, ...orders]);
@@ -225,11 +285,7 @@ export class BoutiquePostsComponent {
 
     dialogueComment
       .afterClosed()
-      .pipe(
-        switchMap(() =>
-          this.commentaireService.getCommentsByPostId(order.id)
-        ),
-      )
+      .pipe(switchMap(() => this.commentaireService.getCommentsByPostId(order.id)))
       .subscribe((comments) => {
         if (comments) {
           this.orders.update((orders) =>
@@ -262,6 +318,45 @@ export class BoutiquePostsComponent {
       maxHeight: '95vh',
       panelClass: 'image-preview-dialog',
     });
+  }
+
+  readonly EllipsisVertical = EllipsisVertical;
+  readonly PencilIcon = Pencil;
+  readonly TrashIcon = Trash2;
+
+  editPost(order: Order): void {
+    // Ouvrez votre dialog de création en mode édition
+    const dialogRef = this.dialog.open(NewPostDialogComponent, {
+      width: '580px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      panelClass: 'rounded-dialog',
+      data: { post: order }, // passez le post existant
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (!result) return;
+      // appelez votre service
+      // await this.postService.updatePost(order.id, result);
+      let updatedComment = await this.postService.updatePost(order.id, result.text);
+      if (updatedComment) {
+        this.orders.update((orders) =>
+          orders.map((o) =>
+            o.id === order.id ? { ...o, text: result.text, image: result.imagePreviews } : o,
+          ),
+        );
+      }
+    });
+  }
+
+  async deletePost(order: Order) {
+    // Confirmation avant suppression
+    const confirm = window.confirm('Supprimer cette publication ?');
+    if (!confirm) return;
+    let deleted = await this.postService.deletePost(order.id)
+    if (deleted) {
+      this.orders.update((orders) => orders.filter((o) => o.id !== order.id));
+    }
   }
 
   getStatusBarClass(status: OrderStatus): string {

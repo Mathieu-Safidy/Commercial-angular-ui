@@ -68,14 +68,45 @@
           <div
             class="flex items-center justify-between lg:justify-end gap-12 border-t lg:border-t-0 pt-4 lg:pt-0"
           >
-            <button app-button variant="ghost" size="icon" className="rounded-xl h-10 w-10">
-              ⋮
+          @if (this.user?.role !== 'User') {
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="postMenu"
+              class="!rounded-full !h-9 !w-9 hover:bg-muted transition-colors flex items-center justify-center"
+            >
+              <lucide-icon [img]="EllipsisVertical" class="w-4 h-4"></lucide-icon>
             </button>
+          }
+            <mat-menu #postMenu="matMenu">
+              @if (this.user?._id === order.idUser) {
+                <button mat-menu-item (click)="editPost(order)">
+                  <div class="flex items-center gap-3">
+                    <lucide-angular
+                      [img]="PencilIcon"
+                      class="w-4 h-4 text-muted-foreground flex-shrink-0"
+                    ></lucide-angular>
+                    <span class="text-sm font-medium">Modifier</span>
+                  </div>
+                </button>
+              }
+                @if (this.user?._id === order.idUser || this.user?.role === 'Admin') {
+                  <button mat-menu-item (click)="deletePost(order)">
+                    <div class="flex items-center gap-3">
+                      <lucide-angular
+                        [img]="TrashIcon"
+                        class="w-4 h-4 text-destructive flex-shrink-0"
+                      ></lucide-angular>
+                      <span class="text-sm font-medium text-destructive">Supprimer</span>
+                    </div>
+                  </button>
+                }
+              
+            </mat-menu>
           </div>
         </div>
 
         <div class="p-6 pb-0">
-          <p class="text-gray-800 mb-4">{{ order.text }}</p>
+          <p class=" mb-4 ">{{ order.text }}</p>
         </div>
 
         @if (order.image && order.image.length) {
@@ -100,11 +131,22 @@
         }
 
         <div class="flex justify-around text-sm text-gray-500 border-t border-border/50 py-4 mt-2">
-          <button class="flex gap-2 hover:text-blue-600 items-center cursor-pointer">
+          <button
+            class="flex gap-2 hover:text-blue-600 items-center cursor-pointer"
+            (click)="toggleLike(order)"
+            [ngClass]="{
+              'text-blue-600': userInLikes(order.likes),
+            }"
+          >
             <lucide-icon [img]="ThumbsUp" class="w-4 h-4"></lucide-icon> J'aime
+            {{ order.likes ? order.likes.length : 0 }}
           </button>
-          <button class="flex gap-2 hover:text-blue-600 items-center cursor-pointer" (click)="openCommentDialog(order)">
+          <button
+            class="flex gap-2 hover:text-blue-600 items-center cursor-pointer"
+            (click)="openCommentDialog(order)"
+          >
             <lucide-icon [img]="MessageSquareMore" class="w-4 h-4"></lucide-icon> Commenter
+            {{ order.comment ? order.comment.length : 0 }}
           </button>
           <button class="flex gap-2 hover:text-blue-600 items-center cursor-pointer">
             <lucide-icon [img]="Forward" class="w-4 h-4"></lucide-icon> Partager

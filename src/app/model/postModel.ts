@@ -1,3 +1,4 @@
+import { LikeModel } from "./likeMode";
 import { PostImageModel } from "./postImageModel";
 
 export interface PostModel {
@@ -8,4 +9,5 @@ export interface PostModel {
     deletedAt: Date | null;
     modifiedAt: Date | null;
     images: string[] | PostImageModel[];
+    likes?: LikeModel[];
 }
