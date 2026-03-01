@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Utils } from '../utils/utils';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ export class AuthServices {
   isLoggedIn$: Observable<boolean> = this.accessToken$.pipe(map((token) => !!token));
 
   private http = inject(Utils);
+  private router = inject(Router);
 
   constructor() {
     const userJson = localStorage.getItem('currentUser');
@@ -72,7 +74,8 @@ export class AuthServices {
       localStorage.removeItem('currentUser');
       localStorage.removeItem('accessToken');
 
-      window.location.reload();
+      // window.location.reload();
+      this.router.navigate(['/login']);
     } catch (error) {
       throw new Error('Logout failed');
     }

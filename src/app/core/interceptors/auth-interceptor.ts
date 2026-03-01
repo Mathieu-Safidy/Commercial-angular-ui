@@ -26,8 +26,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next): Observable<HttpEv
   return next(authReq).pipe(
     
     catchError((error  ): Observable<HttpEvent<any>> => {
-
-      if (error.status === 401 && !req.url.includes('/auth/refresh')) {
+      if (req.url.includes('/auth/refresh')) {
+        authService.logout();
+      }
+      if (error.status === 401) {
         return from(authService.refreshToken()).pipe(
           switchMap((newToken) => {
             const retryReq = req.clone({

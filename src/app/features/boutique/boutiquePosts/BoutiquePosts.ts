@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CardComponent, CardContentComponent } from '../../../components/ui/card';
 import { NgClass, NgForOf } from '@angular/common';
 import { BadgeComponent } from '../../../components/ui/badge';
@@ -15,6 +15,15 @@ import {
 } from 'lucide-angular';
 import { ButtonComponent } from '../../../components/ui/button';
 import { InputComponent } from '../../../components/ui/input';
+import { NewPostDialogComponent, NewPostResult } from '../../../components/ui/newPost/newPostDialogue';
+import { MatDialog } from '@angular/material/dialog';
+import { PostService } from '../../../services/postService/post-service';
+import { Utils } from '../../../services/utils/utils';
+import { Environments } from '../../../environements/environments';
+import { ImagePreviewDialogComponent } from '../../../components/ui/imagePreview/imagePreview';
+import { BoutiqueService } from '../../../services/boutiqueService/boutique-service';
+import { AuthServices } from '../../../services/authService/auth.services';
+import { RoleDirective } from '../../../directives/roleDirective/role-directive';
 
 type OrderStatus = 'Nouveau' | 'En préparation' | 'Prêt à envoyer' | 'Expédié';
 
@@ -37,10 +46,11 @@ interface Order {
     CardContentComponent,
     NgClass,
     //BadgeComponent,
-   // NgForOf,
-   // InputComponent,
+    // NgForOf,
+    // InputComponent,
     ButtonComponent,
     LucideAngularModule,
+    RoleDirective,
   ],
 })
 export class BoutiquePostsComponent {
@@ -52,7 +62,14 @@ export class BoutiquePostsComponent {
   readonly ThumbsUp = ThumbsUp;
   readonly MessageSquareMore = MessageSquareMore;
   readonly Forward = Forward;
-  orders: Order[] = [
+  backenUrl = Environments.BACKEND;
+  dialog = inject(MatDialog);
+  postService = inject(PostService);
+  authService = inject(AuthServices);
+
+  boutiqueService = inject(BoutiqueService);
+
+  orders = signal<Order[]>([
     {
       id: 'Jean Peaul',
       customer: 'Sophie Martin',
@@ -90,7 +107,114 @@ export class BoutiquePostsComponent {
       status: 'Expédié',
       time: '5 hours ago',
     },
-  ];
+  ]);
+
+  ngOnInit() {
+    this.initPost();
+  }
+
+  async initPost() {
+    let user = this.authService.currentUserSubject.value;
+
+    let posts = await this.postService.getPostByRole(user?._id || '');
+
+    
+  this.orders.set(
+    await Promise.all(posts.map(async (post: any) => {
+    const created = new Date(post.createdAt);
+    const diff = Date.now() - created.getTime();
+    // const customerName = (await this.definirNomPost(post.idUser._id, post.idUser.idProfil.nom))?.nom || post.idUser;
+
+        return {
+          id: post._id,
+          customer: post.nom,
+          items: post.images.length,
+          total: ``,
+          status: 'Nouveau',
+          time:
+            diff < 60000
+              ? "À l'instant"
+              : created.toLocaleString('fr-FR', {
+                  dateStyle: 'medium',
+                  timeStyle: 'short'
+                }),
+          text: post.description,
+          image: post.images.map((img: any) => this.backenUrl + '/' + img.link),
+        };
+      }))
+    );
+  }
+
+  openNewPostDialog() {
+    const dialogRef = this.dialog.open(NewPostDialogComponent, {
+      width: '600px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      panelClass: 'rounded-dialog', // voir styles globaux ci-dessous
+      disableClose: false,
+    });
+
+    dialogRef.afterClosed().subscribe( async (result: NewPostResult | undefined) => {
+      if (!result) return;
+
+      const newPost = {
+        id: Date.now(),
+        customer: 'Moi', // remplacer par l'utilisateur connecté
+        time: new Date().toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }),
+        text: result.text,
+        image: result.imagePreviews,
+        images: result.images
+        // Appelez ici votre service pour persister le post si besoin
+      };
+
+      let postcreated = await this.postService.createPost({ text: result.text, imageFiles: result.images })
+      const created = new Date(postcreated.createdAt);
+      const diff = Date.now() - created.getTime();
+      let user = this.authService.currentUserSubject.value;
+      const postername = (await this.definirNomPost(user?._id || '', user?.role || ''))?.nom || postcreated.idUser;
+
+
+      let postWithModel: Order = {
+        id: postcreated._id,
+        customer: postername as string,
+        items: postcreated.images.length,
+        total: ``,
+        status: 'Nouveau' as OrderStatus,
+        time: diff < 60000
+              ? "À l'instant"
+              : created.toLocaleString('fr-FR', {
+                  dateStyle: 'medium',
+                  timeStyle: 'short'
+                }),
+        text: postcreated.description,
+        image: postcreated.images.map((img: any) => this.backenUrl + '/' + img.link),
+      }
+      
+      this.orders.update((orders) => [postWithModel, ...orders]);
+      // this.orders.unshift(newPost as any);
+    });
+  }
+
+async definirNomPost(userId: string, profil: string) {
+  if (profil === 'Boutique') {
+    return await this.boutiqueService.getBoutiqueByUserId(userId) 
+  } else {
+    return { nom: userId };
+  }
+  // if (profil === 'Admin') return 'Admin';
+  // if (profil === 'Boutique') return 'Boutique';
+}
+
+openPreview(imageUrl: string): void {
+  this.dialog.open(ImagePreviewDialogComponent, {
+     data: { imageUrl },
+  width: 'auto',
+  height: 'auto',
+  maxWidth: '95vw',
+  maxHeight: '95vh',
+  panelClass: 'image-preview-dialog',
+  });
+}
 
   getStatusBarClass(status: OrderStatus): string {
     switch (status) {

@@ -64,7 +64,7 @@ export class BoutiqueDashboardComponent {
 
   sidebarItems: { id: Section; label: string; badge?: string; icon?: LucideIconData }[] = [
     { id: 'overview', label: "Vue d'ensemble" , icon: LayoutDashboard },
-    { id: 'products', label: 'Catalogue', badge: 'New' , icon: Package },
+    { id: 'products', label: 'Catalogue' , icon: Package },
     // { id: 'stock', label: 'Approvisionnement' , icon: Download },
     { id: 'orders', label: 'Commandes' , icon: ShoppingCart },
     { id: 'promos', label: 'Promotions' , icon: Tag },

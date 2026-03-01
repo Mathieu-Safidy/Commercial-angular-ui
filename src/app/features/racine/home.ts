@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, effect, inject, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule, User, Store, ShieldCheck,
@@ -10,7 +10,7 @@ import { SeparatorComponent } from '../../components/ui/separator';
 import { ClientDashboardComponent } from '../client/clientDashboard/ClientDashboard';
 import { BoutiqueDashboardComponent } from '../boutique/boutiqueDashboard/BoutiqueDashBoard';
 import { AdminDashboardComponent } from '../admin/adminDashboard/AdminDashBoard';
-import { RouterModule } from "@angular/router";
+import { Router, RouterModule } from "@angular/router";
 import {AuthServices} from '../../services/authService/auth.services';
 
 // --- N'oublie pas d'importer tes composants ici ---
@@ -27,7 +27,7 @@ import {AuthServices} from '../../services/authService/auth.services';
 // import {AdminDashboardComponent} from './features/admin/adminDashboard/AdminDashBoard';
 
 // Définition du type (en dehors ou dans la classe)
-type Profile = 'client' | 'boutique' | 'admin';
+type Profile = 'Client' | 'Boutique' | 'Admin';
 
 @Component({
   selector: 'app-home',
@@ -46,9 +46,11 @@ type Profile = 'client' | 'boutique' | 'admin';
   templateUrl: './home.html'
 })
 export class Home {
-  activeProfile: Profile = 'client';
+  activeProfile = signal('Client');
   isDarkMode: boolean = false;
   authService = inject(AuthServices);
+  router = inject(Router);
+  userName = signal(''); // Tu peux aussi signaliser le nom d'utilisateur si tu veux l'afficher
 
   // Icônes pour le template
   readonly User = User;
@@ -61,9 +63,24 @@ export class Home {
   readonly Sun = Sun;
   readonly LogOut = LogOut;
 
+  constructor() {
+    effect(() => {
+      let user = this.authService.currentUserSubject.value;
+      if (user && user.role) {
+        this.activeProfile.set(user.role);
+        this.userName.set(user.username || ''); // Assure-toi que ton modèle utilisateur a un champ "name"
+      }
+    })
+  }
+
   // ✅ MÉTHODE POUR CHANGER LE PROFIL
   setActiveProfile(profile: Profile) {
-    this.activeProfile = profile;
+    this.activeProfile.set(profile);
+  }
+
+  navigateToHome() {
+    // this.router.navigate(['/']);
+    window.location.reload();
   }
 
   logout = () => {
