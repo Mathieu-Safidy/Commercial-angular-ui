@@ -15,7 +15,10 @@ import {
 } from 'lucide-angular';
 import { ButtonComponent } from '../../../components/ui/button';
 import { InputComponent } from '../../../components/ui/input';
-import { NewPostDialogComponent, NewPostResult } from '../../../components/ui/newPost/newPostDialogue';
+import {
+  NewPostDialogComponent,
+  NewPostResult,
+} from '../../../components/ui/newPost/newPostDialogue';
 import { MatDialog } from '@angular/material/dialog';
 import { PostService } from '../../../services/postService/post-service';
 import { Utils } from '../../../services/utils/utils';
@@ -24,6 +27,10 @@ import { ImagePreviewDialogComponent } from '../../../components/ui/imagePreview
 import { BoutiqueService } from '../../../services/boutiqueService/boutique-service';
 import { AuthServices } from '../../../services/authService/auth.services';
 import { RoleDirective } from '../../../directives/roleDirective/role-directive';
+import { CommentDialogComponent } from '../../../components/ui/commentaireDialogue/commentaireDialogue';
+import { CommentaireService } from '../../../services/commentaireService/commentaire-service';
+import { CommentModel } from '../../../model/commentModel';
+import { filter, switchMap } from 'rxjs';
 
 type OrderStatus = 'Nouveau' | 'En préparation' | 'Prêt à envoyer' | 'Expédié';
 
@@ -36,6 +43,7 @@ interface Order {
   time: string;
   text?: string;
   image?: string[];
+  comment?: CommentModel[];
 }
 @Component({
   selector: 'app-boutique-posts',
@@ -66,7 +74,9 @@ export class BoutiquePostsComponent {
   dialog = inject(MatDialog);
   postService = inject(PostService);
   authService = inject(AuthServices);
-
+  commentaireService = inject(CommentaireService);
+  user = this.authService.currentUserSubject.value;
+  userId = this.user?._id || '';
   boutiqueService = inject(BoutiqueService);
 
   orders = signal<Order[]>([
@@ -114,34 +124,36 @@ export class BoutiquePostsComponent {
   }
 
   async initPost() {
-    let user = this.authService.currentUserSubject.value;
+    let user = this.userId;
 
-    let posts = await this.postService.getPostByRole(user?._id || '');
+    let posts = await this.postService.getPostByRole(user || '');
 
-    
-  this.orders.set(
-    await Promise.all(posts.map(async (post: any) => {
-    const created = new Date(post.createdAt);
-    const diff = Date.now() - created.getTime();
-    // const customerName = (await this.definirNomPost(post.idUser._id, post.idUser.idProfil.nom))?.nom || post.idUser;
+    this.orders.set(
+      await Promise.all(
+        posts.map(async (post: any) => {
+          const created = new Date(post.createdAt);
+          const diff = Date.now() - created.getTime();
+          // const customerName = (await this.definirNomPost(post.idUser._id, post.idUser.idProfil.nom))?.nom || post.idUser;
 
-        return {
-          id: post._id,
-          customer: post.nom,
-          items: post.images.length,
-          total: ``,
-          status: 'Nouveau',
-          time:
-            diff < 60000
-              ? "À l'instant"
-              : created.toLocaleString('fr-FR', {
-                  dateStyle: 'medium',
-                  timeStyle: 'short'
-                }),
-          text: post.description,
-          image: post.images.map((img: any) => this.backenUrl + '/' + img.link),
-        };
-      }))
+          return {
+            id: post._id,
+            customer: post.nom,
+            items: post.images.length,
+            total: ``,
+            status: 'Nouveau',
+            time:
+              diff < 60000
+                ? "À l'instant"
+                : created.toLocaleString('fr-FR', {
+                    dateStyle: 'medium',
+                    timeStyle: 'short',
+                  }),
+            text: post.description,
+            image: post.images.map((img: any) => this.backenUrl + '/' + img.link),
+            comment: post.comment
+          };
+        }),
+      ),
     );
   }
 
@@ -154,7 +166,7 @@ export class BoutiquePostsComponent {
       disableClose: false,
     });
 
-    dialogRef.afterClosed().subscribe( async (result: NewPostResult | undefined) => {
+    dialogRef.afterClosed().subscribe(async (result: NewPostResult | undefined) => {
       if (!result) return;
 
       const newPost = {
@@ -163,16 +175,19 @@ export class BoutiquePostsComponent {
         time: new Date().toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }),
         text: result.text,
         image: result.imagePreviews,
-        images: result.images
+        images: result.images,
         // Appelez ici votre service pour persister le post si besoin
       };
 
-      let postcreated = await this.postService.createPost({ text: result.text, imageFiles: result.images })
+      let postcreated = await this.postService.createPost({
+        text: result.text,
+        imageFiles: result.images,
+      });
       const created = new Date(postcreated.createdAt);
       const diff = Date.now() - created.getTime();
       let user = this.authService.currentUserSubject.value;
-      const postername = (await this.definirNomPost(user?._id || '', user?.role || ''))?.nom || postcreated.idUser;
-
+      const postername =
+        (await this.definirNomPost(user?._id || '', user?.role || ''))?.nom || postcreated.idUser;
 
       let postWithModel: Order = {
         id: postcreated._id,
@@ -180,41 +195,74 @@ export class BoutiquePostsComponent {
         items: postcreated.images.length,
         total: ``,
         status: 'Nouveau' as OrderStatus,
-        time: diff < 60000
-              ? "À l'instant"
-              : created.toLocaleString('fr-FR', {
-                  dateStyle: 'medium',
-                  timeStyle: 'short'
-                }),
+        time:
+          diff < 60000
+            ? "À l'instant"
+            : created.toLocaleString('fr-FR', {
+                dateStyle: 'medium',
+                timeStyle: 'short',
+              }),
         text: postcreated.description,
         image: postcreated.images.map((img: any) => this.backenUrl + '/' + img.link),
-      }
-      
+      };
+
       this.orders.update((orders) => [postWithModel, ...orders]);
       // this.orders.unshift(newPost as any);
     });
   }
 
-async definirNomPost(userId: string, profil: string) {
-  if (profil === 'Boutique') {
-    return await this.boutiqueService.getBoutiqueByUserId(userId) 
-  } else {
-    return { nom: userId };
-  }
-  // if (profil === 'Admin') return 'Admin';
-  // if (profil === 'Boutique') return 'Boutique';
-}
+  openCommentDialog(order: Order): void {
+    let dialogueComment = this.dialog.open(CommentDialogComponent, {
+      width: '560px',
+      maxWidth: '95vw',
+      maxHeight: '90vh',
+      panelClass: 'rounded-dialog',
+      data: {
+        idPublication: order.id,
+        comments: order.comment ?? [],
+      },
+    });
 
-openPreview(imageUrl: string): void {
-  this.dialog.open(ImagePreviewDialogComponent, {
-     data: { imageUrl },
-  width: 'auto',
-  height: 'auto',
-  maxWidth: '95vw',
-  maxHeight: '95vh',
-  panelClass: 'image-preview-dialog',
-  });
-}
+    dialogueComment
+      .afterClosed()
+      .pipe(
+        switchMap(() =>
+          this.commentaireService.getCommentsByPostId(order.id)
+        ),
+      )
+      .subscribe((comments) => {
+        if (comments) {
+          this.orders.update((orders) =>
+            orders.map((order) =>
+              order.id === comments[0].idPost ? { ...order, comments: comments } : order,
+            ),
+          );
+        }
+      });
+  }
+
+  async definirNomPost(userId: string, profil: string) {
+    if (profil === 'Boutique') {
+      return await this.boutiqueService.getBoutiqueByUserId(userId);
+    } else if (profil === 'Admin') {
+      return { nom: 'Admin' };
+    } else {
+      return { nom: userId };
+    }
+    // if (profil === 'Admin') return 'Admin';
+    // if (profil === 'Boutique') return 'Boutique';
+  }
+
+  openPreview(imageUrl: string): void {
+    this.dialog.open(ImagePreviewDialogComponent, {
+      data: { imageUrl },
+      width: 'auto',
+      height: 'auto',
+      maxWidth: '95vw',
+      maxHeight: '95vh',
+      panelClass: 'image-preview-dialog',
+    });
+  }
 
   getStatusBarClass(status: OrderStatus): string {
     switch (status) {

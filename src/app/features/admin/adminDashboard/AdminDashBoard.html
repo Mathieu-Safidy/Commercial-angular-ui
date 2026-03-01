@@ -49,14 +49,12 @@
           </div>
         </div>
 
-        <div class="flex items-center gap-3">
-          <!-- Search -->
+        <!-- <div class="flex items-center gap-3">
           <div class="hidden sm:flex items-center bg-background rounded-full border border-border/80 px-4 h-11">
             <lucide-icon [name]="icons.Search" class="w-4 h-4 text-muted-foreground mr-3"></lucide-icon>
             <input placeholder="Global Search..." class="bg-transparent border-none text-sm outline-none w-48 font-medium" />
           </div>
 
-          <!-- Notification -->
           <button app-button class="inline-flex h-11 w-11 rounded-full relative border border-border/80 bg-background text-muted-foreground hover:bg-muted hover:text-foreground justify-center items-center">
             <lucide-icon [name]="icons.Bell" class="w-4 h-4"></lucide-icon>
             <span class="absolute top-2 right-2 w-2 h-2 bg-destructive rounded-full"></span>
@@ -65,7 +63,7 @@
           <button app-button class="inline-flex h-11 w-11 rounded-full relative border border-border/80 bg-background text-muted-foreground hover:bg-muted hover:text-foreground justify-center items-center">
             <lucide-icon [name]="icons.LogOut" class="w-4 h-4"></lucide-icon>
           </button>
-        </div>
+        </div> -->
       </header>
 
       <!-- Sections dynamiques -->
@@ -78,9 +76,10 @@
           <app-admin-performance *ngIf="activeSection === 'performance'"></app-admin-performance>
           <app-admin-events *ngIf="activeSection === 'events'"></app-admin-events>
           <app-admin-user *ngIf="activeSection === 'settings'"></app-admin-user>
+          <app-boutique-posts *ngIf="activeSection === 'ads'"></app-boutique-posts>
 
           <!-- Section en construction -->
-          <div *ngIf="!['dashboard','boutiques','performance','events'].includes(activeSection)"
+          <div *ngIf="!['dashboard','boutiques','performance','events', 'ads'].includes(activeSection)"
                class="flex flex-col items-center justify-center py-20 text-center space-y-6 opacity-30">
             <div class="w-24 h-24 rounded-3xl bg-muted flex items-center justify-center rotate-3 border-4 border-dashed">
               <lucide-icon [name]="icons.Settings" class="w-10 h-10 animate-spin-slow"></lucide-icon>

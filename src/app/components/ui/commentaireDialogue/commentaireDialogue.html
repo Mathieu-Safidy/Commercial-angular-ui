@@ -1,0 +1,156 @@
+<!-- comment-dialog.component.html -->
+
+<div class="flex flex-col animate-fade-in h-full">
+  <!-- ─── En-tête ─── -->
+  <div class="flex flex-row items-center justify-between px-6 py-4 border-b border-border">
+    <div class="flex items-center gap-3 min-w-0">
+      <p class="font-bold text-base text-foreground leading-tight truncate">Commentaires</p>
+      <span class="text-xs text-muted-foreground font-medium bg-muted/50 px-2 py-0.5 rounded-full">
+        {{ data.comments.length }}
+      </span>
+    </div>
+    <button
+      mat-icon-button
+      mat-dialog-close
+      class="!rounded-full flex-shrink-0 hover:bg-muted !h-9 !w-9 transition-colors ml-4"
+    >
+      <mat-icon class="text-muted-foreground">close</mat-icon>
+    </button>
+  </div>
+
+  <!-- ─── Liste des commentaires ─── -->
+  <mat-dialog-content class="flex-1 px-6 py-4 space-y-4 overflow-y-auto !max-h-[50vh]">
+    @if (data.comments.length === 0) {
+      <div class="flex flex-col items-center justify-center py-12 gap-3 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-muted/50 flex items-center justify-center">
+          <lucide-angular
+            [img]="MessageSquareMore"
+            class="w-6 h-6 text-muted-foreground"
+          ></lucide-angular>
+        </div>
+        <p class="font-semibold text-foreground">Aucun commentaire</p>
+        <p app-card-description class="text-sm">Soyez le premier à commenter</p>
+      </div>
+    }
+
+    @for (comment of data.comments; track comment._id) {
+      <div class="flex items-start gap-3">
+        <!-- Avatar -->
+        <div class="w-9 h-9 rounded-full border-2 border-primary overflow-hidden flex-shrink-0">
+          <img
+            [src]="
+              'https://api.dicebear.com/7.x/avataaars/svg?seed=' +
+              (typeof comment.idUser === 'string' ? comment.idUser : comment.idUser._id)
+            "
+            class="w-full h-full object-cover"
+            alt="Avatar"
+          />
+        </div>
+
+        <!-- Bulle commentaire -->
+        <div class="flex-1 min-w-0 group/comment">
+          <div
+            class="bg-muted/30 border border-border rounded-2xl rounded-tl-sm px-4 py-3 space-y-1 relative"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-sm font-bold text-foreground truncate">
+                {{ typeof comment.idUser === 'string' ? comment.idUser : comment.idUser.username }}
+              </p>
+              <div class="flex items-center gap-1">
+                <p class="text-xs text-muted-foreground flex-shrink-0">
+                  {{ comment.createdAt | date: 'dd/MM/yy HH:mm' }}
+                </p>
+
+                <!-- Actions discrètes — visibles uniquement au hover -->
+                @if ((typeof comment.idUser !== 'string' && comment.idUser._id === userId) || user?.role === 'Admin') {
+                  <div
+                    class="flex items-center gap-0.5 opacity-0 group-hover/comment:opacity-100 transition-opacity ml-1"
+                  >
+                    <!-- Modifier -->
+                    <button
+                      (click)="editComment(comment)"
+                      class="w-6 h-6 rounded-lg flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                    >
+                      <lucide-angular [img]="PencilIcon" class="w-3 h-3"></lucide-angular>
+                    </button>
+
+                    <!-- Supprimer -->
+                    <button
+                      (click)="deleteComment(comment)"
+                      class="w-6 h-6 rounded-lg flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                    >
+                      <lucide-angular [img]="TrashIcon" class="w-3 h-3"></lucide-angular>
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- Texte normal ou input d'édition -->
+            @if (editingId() === comment._id) {
+              <div class="flex items-center gap-2 mt-1">
+                <input
+                  type="text"
+                  [(ngModel)]="editingText"
+                  (keydown.enter)="confirmEdit(comment)"
+                  (keydown.escape)="cancelEdit()"
+                  class="flex-1 h-8 px-3 rounded-xl border border-border bg-muted/30 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
+                />
+                <button
+                  (click)="confirmEdit(comment)"
+                  class="w-7 h-7 rounded-xl flex items-center justify-center bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                >
+                  <lucide-angular [img]="CheckIcon" class="w-3 h-3"></lucide-angular>
+                </button>
+                <button
+                  (click)="cancelEdit()"
+                  class="w-7 h-7 rounded-xl flex items-center justify-center hover:bg-muted transition-colors text-muted-foreground"
+                >
+                  <lucide-angular [img]="XIcon" class="w-3 h-3"></lucide-angular>
+                </button>
+              </div>
+            } @else {
+              <p class="text-sm font-medium text-foreground leading-relaxed">
+                {{ comment.contenu }}
+              </p>
+            }
+          </div>
+        </div>
+        <!--  -->
+      </div>
+    }
+  </mat-dialog-content>
+
+  <!-- ─── Saisie nouveau commentaire ─── -->
+  <mat-dialog-actions class="px-6 py-4 border-t border-border !min-h-0">
+    <div class="flex items-center gap-3 w-full">
+      <!-- Avatar utilisateur connecté -->
+      <div class="w-9 h-9 rounded-full border-2 border-primary overflow-hidden flex-shrink-0">
+        <img
+          src="https://api.dicebear.com/7.x/avataaars/svg?seed=currentUser"
+          class="w-full h-full object-cover"
+          alt="Votre avatar"
+        />
+      </div>
+
+      <!-- Input commentaire -->
+      <input
+        type="text"
+        [(ngModel)]="newComment"
+        (keydown.enter)="submitComment()"
+        placeholder="Écrire un commentaire..."
+        class="flex-1 h-11 px-4 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
+      />
+
+      <!-- Bouton envoyer -->
+      <button
+        app-button
+        [disabled]="!newComment.trim()"
+        (click)="submitComment()"
+        class="rounded-full !h-11 !w-11 flex-shrink-0 shadow-glow disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none"
+      >
+        <lucide-angular [img]="SendIcon" class="w-4 h-4"></lucide-angular>
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>

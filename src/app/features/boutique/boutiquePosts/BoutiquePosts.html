@@ -103,7 +103,7 @@
           <button class="flex gap-2 hover:text-blue-600 items-center cursor-pointer">
             <lucide-icon [img]="ThumbsUp" class="w-4 h-4"></lucide-icon> J'aime
           </button>
-          <button class="flex gap-2 hover:text-blue-600 items-center cursor-pointer">
+          <button class="flex gap-2 hover:text-blue-600 items-center cursor-pointer" (click)="openCommentDialog(order)">
             <lucide-icon [img]="MessageSquareMore" class="w-4 h-4"></lucide-icon> Commenter
           </button>
           <button class="flex gap-2 hover:text-blue-600 items-center cursor-pointer">
