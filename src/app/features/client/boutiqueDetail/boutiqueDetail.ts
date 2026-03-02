@@ -289,9 +289,9 @@ export class BoutiqueDetailComponent implements OnInit {
   // ── Helpers ──
   getBoutiqueImage(): string {
     const b = this.boutique();
-    if (!b?.image)
+    if (!b?.idBoutique.image)
       return 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400&q=80';
-    return b.image.startsWith('http') ? b.image : this.backendLink + '/' + b.image;
+    return b.idBoutique.image.startsWith('http') ? b.idBoutique.image : this.backendLink + '/' + b.idBoutique.image;
   }
 
   getStars(note: number): boolean[] {
