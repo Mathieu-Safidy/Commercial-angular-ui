@@ -80,7 +80,7 @@ export class BoutiqueOrdersComponent {
       id: cmd._id || cmd.id,
       customer: cmd.customer || 'Client inconnu',
       items: cmd.items || 0,
-      total: cmd.total ? cmd.total.toLocaleString('fr-FR') + ' Ar' : '0 Ar',
+      total: cmd.total ? cmd.total.toLocaleString('fr-FR') + ' MGA' : '0 MGA',
       status: cmd.status || 'en_cours',
       time: cmd.time,
       details: [] as OrderDetail[]

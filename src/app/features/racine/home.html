@@ -2,7 +2,7 @@
   <nav class="sticky top-0 z-50 w-full border-b bg-background/80 border-border/80 backdrop-blur-md">
     <div class="container mx-auto px-4 h-16 flex items-center justify-between">
       <div class="flex items-center gap-6">
-        <div class="flex items-center gap-2 cursor-pointer" (click)="setActiveProfile('client')">
+        <div class="flex items-center gap-2 cursor-pointer" (click)="navigateToHome()">
           <div
             class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-elegant"
           >
@@ -50,7 +50,7 @@
       </div>
 
       <div class="flex items-center gap-4">
-        <div class="hidden md:flex relative max-w-sm rounded-2xl">
+        <!-- <div class="hidden md:flex relative max-w-sm rounded-2xl">
           <div class="absolute left-3 top-1/2 -translate-y-1/2">
             <lucide-icon [img]="Search" class="w-4 h-4 text-muted-foreground"> </lucide-icon>
           </div>
@@ -59,7 +59,7 @@
             placeholder="Rechercher..."
             class="pl-9 h-9 w-[200px] lg:w-[300px] bg-muted/50 border-none focus-visible:ring-primary/20 rounded-xl"
           />
-        </div>
+        </div> -->
 
         <button
           app-button
@@ -84,9 +84,9 @@
 
         <div class="hidden md:flex items-center gap-3 pl-2">
           <div class="flex flex-col items-end">
-            <span class="text-sm font-semibold leading-none">Alex Dupont</span>
+            <span class="text-sm font-semibold leading-none">{{ userName() }}</span>
             <span class="text-[10px] font-bold text-primary uppercase tracking-wider mt-1">{{
-              activeProfile
+              activeProfile()
             }}</span>
           </div>
           <div
@@ -106,6 +106,7 @@
       <app-admin-dashboard></app-admin-dashboard>
     } -->
     <router-outlet></router-outlet>
+    <app-confirm-modal></app-confirm-modal>
   </main>
 
   <footer class="py-20 border-t bg-muted/20 border-border/50 relative overflow-hidden">
@@ -115,20 +116,22 @@
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
         <div class="col-span-1 md:col-span-2">
-          <div class="flex items-center gap-2 mb-6">
-            <div class="w-8 h-8 bg-[hsl(var(--base))]  rounded-lg flex items-center justify-center">
-              <span class="text-primary-foreground font-bold text-sm italic">T</span>
-            </div>
-            <span class="font-bold text-xl tracking-tight"
-              >TROIS <span class="text-primary">UI</span></span
-            >
-          </div>
-          <p class="text-muted-foreground max-w-sm leading-relaxed">
+              <div class="flex items-center gap-2 cursor-pointer mb-6" (click)="navigateToHome()">
+                <div
+                  class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-elegant"
+                >
+                  <span class="text-primary-foreground font-bold text-xl italic">SM</span>
+                </div>
+                <span class="font-bold text-xl tracking-tight hidden sm:block"
+                  >M1p13mean-Safidy-Mirindra <span class="text-primary"></span></span
+                >
+              </div>
+          <!-- <p class="text-muted-foreground max-w-sm leading-relaxed">
             Le kit UI de référence pour les places de marché dynamiques. Une interface fluide,
-            moderne et modulaire pour vos projets Angular & React.
-          </p>
+            moderne et modulaire pour vos projets 
+          </p> -->
         </div>
-        <div>shadow-inner
+        <div>
           <h4 class="font-bold mb-6">Plateforme</h4>
           <ul class="space-y-4 text-sm text-muted-foreground">
             <li class="hover:text-primary cursor-pointer transition-colors">Boutiques</li>
@@ -152,7 +155,7 @@
 
       <div class="flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="space-y-3">
-          <p class="text-muted-foreground text-xs font-medium">© 2026 TROIS UI Kit. Tous droits réservés.</p>
+          <p class="text-muted-foreground text-xs font-medium">© 2026 . Tous droits réservés.</p>
           <p class="text-muted-foreground text-xs font-medium">ANDRIAMPANANA Mirindra Allan  </p>
           <p class="text-muted-foreground text-xs font-medium">RAKOTOARISOA Safidiniaina Mathieu  </p>
         </div>

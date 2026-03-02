@@ -30,10 +30,10 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-      @for (detail of detailBoutiques; track detail?.idBoutique?.nom) {
-        <app-card className="overflow-hidden group cursor-pointer border-none shadow-elegant hover:scale-[1.02] transition-transform block">
+      @for (detail of detailBoutiques(); track detail?.idBoutique?.nom) {
+        <app-card (click)="ouvrirBoutique(detail)" className="overflow-hidden group cursor-pointer border-none shadow-elegant hover:scale-[1.02] transition-transform block">
           <div class="relative aspect-16/10 overflow-hidden">
-            <img [src]="detail.image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" [alt]="detail?.idBoutique?.nom" />
+            <img [src]="getImage(detail)" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" [alt]="detail?.idBoutique?.nom" />
 <!--            <app-badge className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-black border-none font-bold">-->
 <!--              {{ detail.idBoutique.categorie }}-->
 <!--            </app-badge>-->

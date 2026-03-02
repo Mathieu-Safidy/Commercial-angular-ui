@@ -30,11 +30,11 @@
       <p class="text-[10px] font-bold text-amber-600 uppercase tracking-widest">Réduction appliquée</p>
       <div class="flex items-center gap-2" *ngIf="data?.prixInitial">
         <span class="text-sm text-muted-foreground line-through">
-          {{ data.prixInitial | currency:'EUR':'symbol':'1.2-2' }}
+          {{ data.prixInitial | currency:'MGA':'symbol':'1.2-2' }}
         </span>
         <span class="text-muted-foreground">→</span>
         <span class="text-xl font-black text-amber-500">
-          {{ getPrixFinal() | currency:'EUR':'symbol':'1.2-2' }}
+          {{ getPrixFinal() | currency:'MGA':'symbol':'1.2-2' }}
         </span>
       </div>
       <p class="text-xs text-muted-foreground" *ngIf="!data?.prixInitial">

@@ -1,0 +1,24 @@
+<!-- image-preview-dialog.component.html -->
+
+<div class="relative animate-fade-in">
+
+  <!-- Bouton fermer flottant -->
+  <button
+    mat-icon-button
+    mat-dialog-close
+    class="!absolute top-3 right-3 z-10 !rounded-full !h-9 !w-9
+           bg-black/40 hover:bg-black/60 transition-colors backdrop-blur-sm"
+  >
+    <mat-icon class="text-white">close</mat-icon>
+  </button>
+
+  <!-- Image -->
+  <!-- <mat-dialog-content class="!p-0 flex items-center justify-center !m-0"> -->
+    <img
+      [src]="data.imageUrl"
+      class="w-auto h-auto object-contain"
+      alt="Aperçu"
+    />
+  <!-- </mat-dialog-content> -->
+
+</div>

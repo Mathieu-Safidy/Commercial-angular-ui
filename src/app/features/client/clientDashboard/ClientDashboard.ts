@@ -20,6 +20,7 @@ import { TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComp
 import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePosts';
 import { PanierService } from '../../../services/panierService/panier-service';
 import { ProductsCatalogueComponent } from "../catalogue/products-catalogue";
+import { BoutiquesCatalogueComponent } from '../boutiqueCatalogue/BoutiqueCatalogue';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -36,7 +37,8 @@ import { ProductsCatalogueComponent } from "../catalogue/products-catalogue";
     TabsTriggerComponent,
     TabsContentComponent,
     BoutiquePostsComponent,
-    ProductsCatalogueComponent
+    ProductsCatalogueComponent,
+    BoutiquesCatalogueComponent
 ],
   templateUrl: './ClientDashboard.html'
 })
@@ -57,6 +59,7 @@ export class ClientDashboardComponent {
   
   async ngOnInit() {
     await this.panierService.initializePanier();
+    await this.panierService.initializePaniertermine();
   }
   avatars = [1, 2, 3, 4];
 }

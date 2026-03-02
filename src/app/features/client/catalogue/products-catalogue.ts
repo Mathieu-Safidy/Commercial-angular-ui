@@ -18,6 +18,9 @@ import { PanierService } from '../../../services/panierService/panier-service';
 import { AlertDialogService } from '../../../components/ui/alert-dialog/alert-dialog.service';
 import {AuthServices} from '../../../services/authService/auth.services';
 import { Router } from '@angular/router';
+import { Avis } from '../detailProduit/DetailProduit';
+import { NoteService } from '../../../services/noteService/note-service';
+import { Note } from '../../../model/noteModel';
 
 export interface Product {
   id: string;
@@ -92,6 +95,7 @@ export class ProductsCatalogueComponent implements OnInit {
   priceExpanded = signal(true);
   stockExpanded = signal(false);
   inStockOnly = signal(false);
+  avisProduits = signal<Record<string, Avis[]>>({});
 
   sortOptions: { value: SortOption; label: string }[] = [
     { value: 'featured', label: 'En vedette' },
@@ -150,17 +154,19 @@ export class ProductsCatalogueComponent implements OnInit {
   dialog = inject(AlertDialogService);
   produitService = inject(ProduitService);
   panierService = inject(PanierService);
+  noteService = inject(NoteService);
   backendLink = Environments.BACKEND || 'http://localhost:3000';
   async initProducts() {
-    // this.panier.set(await this.panierService.getPanier('698dfddc709de29d54628ca1') as Panier)
+    // this.panier.set(await this.panierService.€r('698dfddc709de29d54628ca1') as Panier)
     // let panierInit = await this.panierService.initializePanier();
     // this.panier.set(panierInit);
     let produits: Produit[] = (await this.produitService.getProduits()) as Produit[];
     console.log(produits);
+    let avisMap = await this.initAvis(produits);
 
     this.allProducts.set(produits.map((produit) => ({
       ...produit,
-      rating: 0,
+      rating: this.calculeMoyenne(avisMap[produit._id] || []),
       image: produit.image ? this.backendLink + '/' + produit.image : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400', // Placeholder, à remplacer par produit.image si disponible,
     })));
 
@@ -186,6 +192,33 @@ export class ProductsCatalogueComponent implements OnInit {
     console.log('All product ',this.allProducts());
 
   }
+  calculeMoyenne(notes: Avis[]): number {
+    if (notes.length === 0) return 0;
+    const total = notes.reduce((sum, n) => sum + n.note, 0);
+    return total / notes.length;
+  }
+
+   async initAvis(produits: Produit[] = []) {
+      // const produits = this.allProduits();
+      const avisMap: Record<string, Avis[]> = {};
+      for (const p of produits) {
+        let avis = await this.noteService.getNotesByProduitId(p._id);
+        avisMap[p._id] = avis.map((n: Note) => ({
+                  _id: n._id,
+                  idProduit: n.idProduit,
+                  idUser: n.idUser._id,
+                  nomUser: n.idUser.username, // À remplacer par le nom réel de l'utilisateur (nécessite une requête supplémentaire)
+                  avatarSeed: n.idUser.username,
+                  note: n.nombreEtoiles,
+                  commentaire: n.commentaire,
+                  date: n.createdAt,
+                  likes: 0, // À remplacer par le nombre réel de likes (nécessite une requête supplémentaire)
+                  userLiked: false, // À déterminer si l'utilisateur actuel a aimé cette note (nécessite une requête supplémentaire) 
+              }));
+      }
+      this.avisProduits.set(avisMap);
+      return avisMap;
+    }
 
   categories = computed(() => [...new Set(this.allProducts().map(p => p.idCategorie.nom))].sort());
   boutiques = computed(() => [...new Set(this.allProducts().map(p => p.boutique.nom))].sort());
@@ -345,7 +378,7 @@ export class ProductsCatalogueComponent implements OnInit {
   // }
 
   formatPrice(p: number): string {
-    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(p);
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'MGA' }).format(p);
   }
 
   getStars(rating: number): boolean[] {
