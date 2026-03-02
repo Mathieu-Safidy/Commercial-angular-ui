@@ -1,12 +1,12 @@
 .image-preview-dialog .mat-mdc-dialog-surface {
-    border-radius: 0 !important;
-    overflow: hidden !important;
-    padding: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-    .image-preview-dialog .mat-mdc-dialog-content {
-      padding: 0 !important;
-      margin: 0 !important;
-      max-height: none !important;
-    }
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.image-preview-dialog .mat-mdc-dialog-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: none !important;
+}

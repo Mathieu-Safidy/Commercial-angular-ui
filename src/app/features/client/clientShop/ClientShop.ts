@@ -68,6 +68,11 @@ export class ClientShopComponent {
       this.panier.set(panier);
     })
   }
+
+  ouvrirBoutique(b: DetailBoutique) {
+      this.router.navigate(['/acceuil/client/boutique', b.idBoutique?._id ?? b._id]);
+  }
+  
   navigateTo = output<string>(); // émet la valeur du tab cible
 
    openDetails(product: any & { id: string }) {

@@ -28,6 +28,8 @@ import { CreationDialogueComponent } from '../../../components/ui/produitDialogu
 import { MatDialog } from '@angular/material/dialog';
 import { Environments } from '../../../environements/environments';
 import { AjoutPromotionDialogComponent } from '../ajoutPromotion/AjoutPromotion';
+import { BoutiqueService } from '../../../services/boutiqueService/boutique-service';
+import { AuthServices } from '../../../services/authService/auth.services';
 
 @Component({
   selector: 'app-boutique-products',
@@ -147,13 +149,15 @@ export class BoutiqueProductsComponent {
     },
   ]);
   dialog = inject(AlertDialogService);
+  boutiqueService = inject(BoutiqueService);
+  authService = inject(AuthServices);
   dialogueCreation = inject(MatDialog);
   totalStock = signal(0);
   stockFaibleCount = signal(0);
   ruptureCount = signal(0);
   constructor() {
-    effect(() => {
-      const prods = this.produitService.produits();
+    effect(async () => {
+      const prods = await this.produitService.getProduitsByBoutiqueId((await this.getBoutiqueByIdUser())._id);
       this.totalStock.set(this.calculeStockTotal());
       this.stockFaibleCount.set(this.calculerStockFaible(1, 5));
       this.ruptureCount.set(this.calculerStockFaible(0, 0));
@@ -168,7 +172,10 @@ export class BoutiqueProductsComponent {
       }
     });
   }
-
+  async getBoutiqueByIdUser() {
+    const idUser = this.authService.currentUserSubject?.value?._id;
+    return await this.boutiqueService.getBoutiqueByUserId(idUser!);
+  }
   calculeStockTotal() {
     return this.products().reduce((total, produit) => total + produit.quantiteDisponible, 0);
   }

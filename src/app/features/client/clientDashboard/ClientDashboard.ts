@@ -20,6 +20,7 @@ import { TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComp
 import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePosts';
 import { PanierService } from '../../../services/panierService/panier-service';
 import { ProductsCatalogueComponent } from "../catalogue/products-catalogue";
+import { BoutiquesCatalogueComponent } from '../boutiqueCatalogue/BoutiqueCatalogue';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -36,7 +37,8 @@ import { ProductsCatalogueComponent } from "../catalogue/products-catalogue";
     TabsTriggerComponent,
     TabsContentComponent,
     BoutiquePostsComponent,
-    ProductsCatalogueComponent
+    ProductsCatalogueComponent,
+    BoutiquesCatalogueComponent
 ],
   templateUrl: './ClientDashboard.html'
 })
