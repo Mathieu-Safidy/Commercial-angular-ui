@@ -16,7 +16,7 @@
               <div class="flex-1 space-y-1">
                 <p class="text-xs font-bold text-primary uppercase">{{ item.boutique }}</p>
                 <h4 class="font-bold text-lg">{{ item.nom }}</h4>
-                <p class="text-primary font-bold">{{ item.price }}€</p>
+                <p class="text-primary font-bold">{{ item.price }}MGA</p>
               </div>
 
               <div class="flex items-center gap-4">
@@ -39,21 +39,21 @@
         <div class="p-6 bg-muted/30 space-y-4">
           <div class="flex justify-between font-medium">
             <span class="text-muted-foreground">Sous-total</span>
-            <span>{{ priceFinal() }}€</span>
+            <span>{{ priceFinal() }}MGA</span>
           </div>
           <!-- <div class="flex justify-between font-medium text-destructive">
             <span class="text-muted-foreground">Remise boutique</span>
-            <span>-15€</span>
+            <span>-15Ar</span>
           </div> -->
           <app-separator />
           <div class="flex justify-between items-end">
             <span class="font-bold text-lg">Total</span>
-            <span class="text-3xl font-black text-primary">{{ priceFinal() }}€</span>
+            <span class="text-3xl font-black text-primary">{{ priceFinal() }}MGA</span>
           </div>
 
           <div class="pt-4">
             <button (click)="confirmeAchatClient()" app-button className="w-full h-14 rounded-2xl font-bold text-lg shadow-glow">
-              Confirmer l'achat ({{ priceFinal() }}€)
+              Confirmer l'achat ({{ priceFinal() }}MGA)
             </button>
           </div>
         </div>
@@ -61,7 +61,7 @@
     </app-card>
   </div>
 
-  <!-- <div class="space-y-6">
+  <div class="space-y-6">
     <h3 class="text-2xl font-bold flex items-center gap-2">
       <span class="text-primary"><lucide-icon [img]="clock" class="w-5 h-5"></lucide-icon></span>
       Historique
@@ -81,14 +81,14 @@
               </div>
             </div>
             <div class="text-right">
-              <p class="font-bold text-primary">{{ order.total }}</p>
-              <app-badge [variant]="order.status === 'Livré' ? 'secondary' : 'default'" className="text-[10px] h-5">
+              <p class="font-bold text-primary">{{ order.total }} MGA</p>
+              <!-- <app-badge [variant]="order.status === 'Livré' ? 'secondary' : 'default'" className="text-[10px] h-5">
                 {{ order.status }}
-              </app-badge>
+              </app-badge> -->
             </div>
           </app-card-content>
         </app-card>
       }
     </div>
-  </div> -->
+  </div>
 </div>

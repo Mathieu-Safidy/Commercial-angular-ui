@@ -1,4 +1,13 @@
-import { Component, input, HostBinding, signal, contentChildren, effect, inject, HostListener } from '@angular/core';
+import {
+  Component,
+  input,
+  HostBinding,
+  signal,
+  contentChildren,
+  effect,
+  inject,
+  HostListener,
+} from '@angular/core';
 import { cn } from '../../lib/utils';
 
 // --- 1. TABS ROOT ---
@@ -13,11 +22,21 @@ export class TabsComponent {
 
   constructor() {
     // Initialise la valeur par défaut
+    effect(
+      () => {
+        if (this.defaultValue() && !this.value()) {
+          this.value.set(this.defaultValue());
+        }
+      },
+      { allowSignalWrites: true },
+    );
+
     effect(() => {
-      if (this.defaultValue() && !this.value()) {
-        this.value.set(this.defaultValue());
+      const current = this.value();
+      if (current) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    }, { allowSignalWrites: true });
+    });
   }
 }
 
@@ -32,8 +51,8 @@ export class TabsListComponent {
 
   @HostBinding('class') get hostClasses() {
     return cn(
-      "inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground cursor-pointer",
-      this.className()
+      'inline-flex h-9 items-center justify-center rounded-lg bg-muted p-1 text-muted-foreground cursor-pointer',
+      this.className(),
     );
   }
 }
@@ -43,8 +62,8 @@ export class TabsListComponent {
   standalone: true,
   template: `<ng-content />`,
   host: {
-    '(click)': 'onClick()'
-  }
+    '(click)': 'onClick()',
+  },
 })
 export class TabsTriggerComponent {
   value = input.required<string>(); // La valeur liée à ce bouton
@@ -56,11 +75,11 @@ export class TabsTriggerComponent {
 
   @HostBinding('class') get hostClasses() {
     return cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-xl px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+      'inline-flex items-center justify-center whitespace-nowrap rounded-xl px-3 py-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
       this.parent.value() === this.value()
-        ? "bg-[hsl(var(--background))] text-foreground shadow-md"
-        : "",
-      this.className()
+        ? 'bg-[hsl(var(--background))] text-foreground shadow-md'
+        : '',
+      this.className(),
     );
   }
 
@@ -91,8 +110,8 @@ export class TabsContentComponent {
 
   @HostBinding('class') get hostClasses() {
     return cn(
-      "mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-      this.className()
+      'mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+      this.className(),
     );
   }
 }

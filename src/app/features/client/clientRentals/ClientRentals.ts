@@ -97,7 +97,7 @@ export class ClientRentalsComponent {
         name: `Box N°${box.numero}`,
         location: `Étage ${box.position}`,
         size: `${box.dimension}m²`,
-        price: `${box.prixInitial}€ / mois`,
+        price: `${box.prixInitial}MGA / mois`,
         priceFinal: box.prixInitial,
         status: status , //pas encore d'annulement
         features: ["Accès sécurisé", "Électricité incluse"],

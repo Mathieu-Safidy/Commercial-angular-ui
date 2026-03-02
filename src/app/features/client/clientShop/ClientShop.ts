@@ -48,7 +48,7 @@ export class ClientShopComponent {
   readonly TrendingUp = TrendingUp;
   readonly Sparkles = Sparkles;
   readonly Check = Check;
-  detailBoutiques: DetailBoutique[] = [];
+  detailBoutiques = signal<DetailBoutique[]>([]);
   authService = inject(AuthServices);
   user: User | any = this.authService.currentUserSubject.value || { } ;
   userId = this.user._id;
@@ -122,7 +122,7 @@ export class ClientShopComponent {
       id: 1,
       name: 'Montre Minimaliste',
       boutique: 'Eco Luxe',
-      price: '129€',
+      price: '129Ar',
       image:
         'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800',
     },
@@ -130,7 +130,7 @@ export class ClientShopComponent {
       id: 2,
       name: 'Vase Céramique',
       boutique: 'Artisans du Bois',
-      price: '45€',
+      price: '45Ar',
       image:
         'https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=800',
     },
@@ -138,7 +138,7 @@ export class ClientShopComponent {
       id: 3,
       name: 'Casque ANC',
       boutique: 'Urban Tech',
-      price: '299€',
+      price: '299Ar',
       image:
         'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800',
     },
@@ -146,7 +146,7 @@ export class ClientShopComponent {
       id: 4,
       name: 'Sac à dos Urbain',
       boutique: 'Eco Luxe',
-      price: '85€',
+      price: '85Ar',
       image:
         'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=800',
     },
@@ -165,9 +165,15 @@ export class ClientShopComponent {
     if (!this.panier()) return false;
     return this.panier().details.some((detail: PanierDetail) => detail.idProduit === idProduit);
   }
- async initBoutique() {
-   this.detailBoutiques = await this.detailBoutiqueService.getAll() as DetailBoutique[];
- }
+
+  getImage(detailBoutiqe: DetailBoutique): string {
+    if (!detailBoutiqe.image) return 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80';
+    return detailBoutiqe.image.startsWith('http') ? detailBoutiqe.image : this.backendLink + '/' + detailBoutiqe.image;
+  }
+
+  async initBoutique() {
+   this.detailBoutiques.set(await this.detailBoutiqueService.getAll() as DetailBoutique[]);
+  }
   async initProducts() {
     // this.panier.set(await this.panierService.getPanier('698dfddc709de29d54628ca1') as Panier)
     // let panierInit = await this.panierService.initializePanier();
@@ -180,7 +186,7 @@ export class ClientShopComponent {
         id: produit._id,
         name: produit.nom,
         boutique: produit.boutique.nom,
-        price: produit.prixInitial + '€',
+        price: produit.prixInitial + 'MGA',
         reduction: produit.reduction || 0,
         quantiteDisponible: produit.quantiteDisponible,
         image: produit.image ?this.backendLink + '/' + produit.image : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800', // Placeholder, à remplacer par produit.image si disponible,

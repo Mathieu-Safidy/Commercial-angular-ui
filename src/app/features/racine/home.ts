@@ -12,6 +12,8 @@ import { BoutiqueDashboardComponent } from '../boutique/boutiqueDashboard/Boutiq
 import { AdminDashboardComponent } from '../admin/adminDashboard/AdminDashBoard';
 import { Router, RouterModule } from "@angular/router";
 import {AuthServices} from '../../services/authService/auth.services';
+import { ConfirmModalComponent } from "../../components/comfirmation/confirm-modal.component";
+import { ConfirmModalService } from '../../components/comfirmation/confirm-modal.service';
 
 // --- N'oublie pas d'importer tes composants ici ---
 // import { ClientDashboardComponent } from './features/client/clientDashboard/ClientDashboard';
@@ -41,7 +43,8 @@ type Profile = 'Client' | 'Boutique' | 'Admin';
     ClientDashboardComponent,
     BoutiqueDashboardComponent,
     AdminDashboardComponent,
-    RouterModule
+    RouterModule,
+    ConfirmModalComponent
 ],
   templateUrl: './home.html'
 })
@@ -51,6 +54,7 @@ export class Home {
   authService = inject(AuthServices);
   router = inject(Router);
   userName = signal(''); // Tu peux aussi signaliser le nom d'utilisateur si tu veux l'afficher
+  private confirmModal = inject(ConfirmModalService);
 
   // Icônes pour le template
   readonly User = User;
@@ -84,8 +88,17 @@ export class Home {
   }
 
   logout = () => {
-    this.authService.logout();
+    // this.authService.logout();
+    this.confirmModal.open({
+      theme: 'logout',
+      title: 'Se déconnecter ?',
+      message: 'Vous serez redirigé vers la page de connexion.',
+      confirmLabel: 'Se déconnecter',
+      onConfirm: () => this.authService.logout(),
+    });
   }
+
+
 
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;

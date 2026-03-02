@@ -117,10 +117,10 @@
                   <p class="text-xs font-bold text-primary uppercase">{{ item.idProduit.boutique }}</p>
                   <h4 class="font-bold text-lg">{{ item.idProduit.nom }}</h4>
                       <p [class]="'font-bold text-primary' + (item.reduction ? 'line-through text-gray-400' : '')" >
-                        {{ item.idProduit.prixInitial }} Ar
+                        {{ item.idProduit.prixInitial }} MGA
                       </p>
                       <p *ngIf="item.reduction" class=" font-bold text-primary">
-                        {{ item.prixPromotionnel }} Ar
+                        {{ item.prixPromotionnel }} MGA
                       </p>
                       <p *ngIf="item.reduction" class="font-bold text-primary">
                         -{{ item.reduction }}%

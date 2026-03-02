@@ -106,6 +106,7 @@
       <app-admin-dashboard></app-admin-dashboard>
     } -->
     <router-outlet></router-outlet>
+    <app-confirm-modal></app-confirm-modal>
   </main>
 
   <footer class="py-20 border-t bg-muted/20 border-border/50 relative overflow-hidden">
@@ -115,20 +116,22 @@
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
         <div class="col-span-1 md:col-span-2">
-          <div class="flex items-center gap-2 mb-6">
-            <div class="w-8 h-8 bg-[hsl(var(--base))]  rounded-lg flex items-center justify-center">
-              <span class="text-primary-foreground font-bold text-sm italic">T</span>
-            </div>
-            <span class="font-bold text-xl tracking-tight"
-              >TROIS <span class="text-primary">UI</span></span
-            >
-          </div>
-          <p class="text-muted-foreground max-w-sm leading-relaxed">
+              <div class="flex items-center gap-2 cursor-pointer mb-6" (click)="navigateToHome()">
+                <div
+                  class="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center shadow-elegant"
+                >
+                  <span class="text-primary-foreground font-bold text-xl italic">SM</span>
+                </div>
+                <span class="font-bold text-xl tracking-tight hidden sm:block"
+                  >M1p13mean-Safidy-Mirindra <span class="text-primary"></span></span
+                >
+              </div>
+          <!-- <p class="text-muted-foreground max-w-sm leading-relaxed">
             Le kit UI de référence pour les places de marché dynamiques. Une interface fluide,
-            moderne et modulaire pour vos projets Angular & React.
-          </p>
+            moderne et modulaire pour vos projets 
+          </p> -->
         </div>
-        <div>shadow-inner
+        <div>
           <h4 class="font-bold mb-6">Plateforme</h4>
           <ul class="space-y-4 text-sm text-muted-foreground">
             <li class="hover:text-primary cursor-pointer transition-colors">Boutiques</li>

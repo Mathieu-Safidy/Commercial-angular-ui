@@ -122,7 +122,7 @@ import { StockService } from '../../../services/stockService/stock-service';
                       Prix TTC
                     </p>
                     <p class="text-2xl font-black text-primary mt-2">
-                      {{ product()?.prixInitial | currency: 'EUR' : 'symbol-narrow' : '1.2-2' }}
+                      {{ product()?.prixInitial | currency: 'MGA' : 'symbol-narrow' : '1.2-2' }}
                     </p>
                   </div>
 

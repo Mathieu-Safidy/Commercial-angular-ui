@@ -9,6 +9,7 @@ import {AuthServices} from '../authService/auth.services';
 export class PanierService {
   private http = inject(Utils);
   public panier = signal<any>(null);
+  public panierTermine = signal<any>(null);
   public backendLink = Environments.BACKEND || "http://localhost:3000";
 
   authService = inject(AuthServices);
@@ -16,7 +17,23 @@ export class PanierService {
   userId = this.user._id;
 
   public async getPanier(idUSer: string) {
-    return await this.http.PGet(`/paniers/actif/${idUSer}`);
+    try {
+      const result = await this.http.PGet(`/paniers/actif/${idUSer}`);
+      return result;
+    } catch (error) {
+      console.error("Erreur lors de la récupération du panier:", error);
+      throw error;
+    }
+  }
+
+  public async getPanierTermine(idUSer: string) {
+    try {
+      const result = await this.http.PGet(`/paniers/termine/${idUSer}`);
+      return result;
+    } catch (error) {
+      console.error("Erreur lors de la récupération du panier terminé:", error);
+      throw error;
+    }
   }
   // public async addToPanier(idDetail: number, idProduit: number, quantite: number) {
   //     return await this.http.PPost(`/paniers/add/details/${idDetail}`, { idProduit, quantite });
@@ -35,6 +52,12 @@ export class PanierService {
     await this.initializePanier();
     return this.panier();
   }
+  
+  public async reloadPanierTermine() {
+    this.panierTermine.set(null);
+    await this.initializePaniertermine();
+    return this.panierTermine();
+  }
   public async initializePanier() {
     let panier: Panier = null as any;
     if (this.panier()) {
@@ -45,6 +68,18 @@ export class PanierService {
     }
     return this.panier();
   }
+  public async initializePaniertermine() {
+    let panier: Panier = null as any;
+    if (this.panierTermine()) {
+      panier = this.panierTermine() as Panier;
+    } else {
+      panier = (await this.getPanierTermine(this.userId)) as Panier;
+      this.panierTermine.set(panier);
+    }
+    return this.panierTermine();
+  }
+
+
   public async deleteFromPanier(idDetail: number) {
     await this.removeFromPanier(idDetail);
     await this.reloadPanier();

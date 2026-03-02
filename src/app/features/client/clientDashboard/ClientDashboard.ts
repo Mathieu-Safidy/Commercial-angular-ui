@@ -59,6 +59,7 @@ export class ClientDashboardComponent {
   
   async ngOnInit() {
     await this.panierService.initializePanier();
+    await this.panierService.initializePaniertermine();
   }
   avatars = [1, 2, 3, 4];
 }

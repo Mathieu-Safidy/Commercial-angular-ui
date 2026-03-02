@@ -23,7 +23,7 @@ export class AdminOverviewComponent {
   kpis = [
     { label: 'Trafic Global', value: '1.2M', trend: '+24%', sub: 'visiteurs/mois' },
     { label: 'Boutiques Actives', value: '48', trend: '+2', sub: 'nouvelles ce mois' },
-    { label: 'CA Global', value: '854k €', trend: '+12%', sub: 'CA Annuel cumulé' },
+    { label: 'CA Global', value: '854k MGA', trend: '+12%', sub: 'CA Annuel cumulé' },
     { label: 'Événements', value: '12', trend: '+4', sub: 'prévus cette semaine' },
   ];
 
@@ -31,8 +31,8 @@ export class AdminOverviewComponent {
 
   // Top boutiques
   topBoutiques = [
-    { name: 'Eco Luxe', ca: '124k €', trend: '+15%' },
-    { name: 'Urban Tech', ca: '98k €', trend: '+8%' },
-    { name: 'Retro Style', ca: '76k €', trend: '+12%' },
+    { name: 'Eco Luxe', ca: '124k MGA', trend: '+15%' },
+    { name: 'Urban Tech', ca: '98k MGA', trend: '+8%' },
+    { name: 'Retro Style', ca: '76k MGA', trend: '+12%' },
   ];
 }

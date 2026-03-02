@@ -180,7 +180,7 @@ interface Categorie {
                 Prix <span class="text-destructive">*</span>
               </label>
               <div class="relative">
-                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-bold select-none">€</span>
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-bold select-none">MGA</span>
                 <input
                   type="number"
                   formControlName="prixInitial"
@@ -263,7 +263,7 @@ interface Categorie {
               <p class="text-xs text-muted-foreground">
                 {{ getCategoryName((form.get('idCategorie')?.value || '')) || 'Catégorie non définie' }} ·
                 <span class="font-bold text-primary">
-                  {{ (form.get('prixInitial')?.value || 0) | currency:'EUR':'symbol':'1.2-2' }}
+                  {{ (form.get('prixInitial')?.value || 0) | currency:'MGA':'symbol':'1.2-2' }}
                 </span>
               </p>
             </div>

@@ -44,8 +44,12 @@ export class AuthServices {
       localStorage.setItem('currentUser', JSON.stringify(user));
       localStorage.setItem('accessToken', result.accessToken);
       return user;
-    } catch (error) {
-      throw new Error('Login failed');
+    } catch (error: any) {
+      let message = 'Login failed';
+      if (error instanceof Object) {
+        message = error.error?.message || message;
+      }
+      throw new Error(message);
     }
   }
 
@@ -62,8 +66,12 @@ export class AuthServices {
       localStorage.setItem('currentUser', JSON.stringify(user));
       localStorage.setItem('accessToken', result.accessToken);
       return user;
-    } catch (error) {
-      throw new Error('Registration failed');
+    } catch (error: any) {
+      let message = 'Registration failed';
+      if (error instanceof Object) {
+        message = error.error?.message || message;
+      }
+      throw new Error(message);
     }
   }
 

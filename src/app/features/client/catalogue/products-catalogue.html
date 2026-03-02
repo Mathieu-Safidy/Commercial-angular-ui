@@ -217,7 +217,7 @@
                   class="w-full h-1.5 rounded-full appearance-none bg-muted cursor-pointer accent-primary"
                 />
                 <div class="flex justify-between text-[10px] text-muted-foreground/60 mt-1">
-                  <span>0 €</span>
+                  <span>0 MGA</span>
                   <span>{{ formatPrice(maxPriceValue()) }}</span>
                 </div>
               </div>
@@ -362,7 +362,7 @@
               </div>
 
               <!-- Wishlist btn top-right -->
-              <button
+              <!-- <button
                 (click)="$event.stopPropagation(); toggleWishlist(product._id)"
                 class="absolute top-2.5 right-2.5 w-9 h-9 rounded-full flex items-center justify-center shadow-md backdrop-blur-md bg-background/80 border border-border/20 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:scale-110 active:scale-95"
               >
@@ -372,7 +372,7 @@
                   [class.text-rose-500]="isWishlisted(product._id)"
                   [class.text-foreground]="!isWishlisted(product._id)"
                 ></lucide-icon>
-              </button>
+              </button> -->
 
               <!-- CTA bottom -->
               <div class="absolute bottom-2.5 left-2.5 right-2.5 translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out delay-75">
