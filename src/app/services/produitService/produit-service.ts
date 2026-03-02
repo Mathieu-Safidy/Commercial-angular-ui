@@ -23,9 +23,20 @@ export class ProduitService {
     }
     return this.produits;
   }
+  public async initializeProduitsBoutique(idBoutique : string ) {
+    if (this.produits().length === 0) {
+      const produits = await this.getProduitByIdBoutique(idBoutique);
+      this.produits.set(produits as Produit[]);
+    }
+    return this.produits;
+  }
 
   public async getProduitById(id: string) {
     return await this.http.PGet(`/produits/${id}`) as Produit;
+  }
+
+  public async getProduitByIdBoutique( idBoutique : string) { 
+    return await this.http.PGet(`/produits/boutique/${idBoutique}`) ; 
   }
 
   public async reloadProduits() {

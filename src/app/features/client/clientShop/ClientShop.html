@@ -30,10 +30,10 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-      @for (detail of detailBoutiques; track detail?.idBoutique?.nom) {
+      @for (detail of detailBoutiques(); track detail?.idBoutique?.nom) {
         <app-card className="overflow-hidden group cursor-pointer border-none shadow-elegant hover:scale-[1.02] transition-transform block">
           <div class="relative aspect-16/10 overflow-hidden">
-            <img [src]="detail.image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" [alt]="detail?.idBoutique?.nom" />
+            <img [src]=" detail.idBoutique.image ? backendLink + '/' + detail.idBoutique.image : 'https://api.dicebear.com/7.x/avataaars/svg?seed=115'" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" [alt]="detail?.idBoutique?.nom" />
 <!--            <app-badge className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-black border-none font-bold">-->
 <!--              {{ detail.idBoutique.categorie }}-->
 <!--            </app-badge>-->
@@ -41,23 +41,22 @@
           <app-card-content className="p-6">
             <div class="flex items-center justify-between mb-2">
               <h4 class="font-bold text-xl">{{ detail.idBoutique.nom }}</h4>
-              <div class="flex items-center gap-1 text-sm font-bold">
-                <lucide-icon [img]="Star" class="w-4 h-4 fill-primary text-primary"></lucide-icon>
-                {{ detail.noteMoyen }}
-              </div>
+            <div class="flex items-center gap-1 text-sm font-bold">
+              <lucide-icon [img]="Star" class="w-4 h-4 fill-primary text-primary"></lucide-icon>
+              {{ notesBoutiques[detail.idBoutique._id] ?? 0 }}
+            </div>
             </div>
             <p class="text-muted-foreground text-sm mb-4"> {{ detail.description}}</p>
             <div class="flex items-center justify-between">
-              <div class="flex -space-x-2">
-                @for (i of subscriberIds; track i) {
-                  <div class="w-8 h-8 rounded-full border-2 border-background bg-muted overflow-hidden">
-                    <img [src]="'https://api.dicebear.com/7.x/pixel-art/svg?seed=' + (i + detail.idBoutique.nom)" alt="User" />
-                  </div>
-                }
-                <span class="pl-4 text-xs font-medium text-muted-foreground">+50 abonnés</span>
-              </div>
-              <button app-button variant="ghost" size="sm" className="rounded-full text-primary hover:text-primary hover:bg-primary/10">Plus d'info</button>
-            </div>
+              <button app-button variant="ghost" 
+                      size="sm" 
+                      className="rounded-full text-primary hover:text-primary hover:bg-primary/10"
+                      (click)="openDetailsBoutique(detail)"
+                      class="group cursor-pointer select-none"
+                      (mouseenter)="hovered = true"
+                      (mouseleave)="hovered = false"
+                      >Plus d'info</button>
+                      </div>
           </app-card-content>
         </app-card>
       }

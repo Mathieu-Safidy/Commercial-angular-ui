@@ -12,7 +12,7 @@
 
   <!-- Stat cards -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <app-card *ngFor="let stat of stats" class="border-none shadow-elegant group overflow-hidden">
+    <app-card *ngFor="let stat of stats()" class="border-none shadow-elegant group overflow-hidden">
       <app-card-content class="p-6 pt-6">
         <div class="flex justify-between items-start mb-4">
           <div class="p-3 rounded-xl bg-muted/50 transition-colors group-hover:bg-primary/10">
@@ -34,7 +34,7 @@
 
   <!-- Sales chart -->
   <div class="grid grid-cols-3 gap-8">
-    <app-card class="lg:col-span-2 border-none shadow-elegant">
+    <!-- <app-card class="lg:col-span-2 border-none shadow-elegant">
       <app-card-header class="flex flex-row items-center justify-between pb-8">
         <app-card-title class="text-xl font-bold">Performance des ventes</app-card-title>
         <div class="flex gap-2">
@@ -61,10 +61,102 @@
           ></div>
         </div>
       </app-card-content>
+    </app-card> -->
+
+     <app-card class="border-none shadow-elegant overflow-hidden">
+    <app-card-header class="p-8 pb-4">
+      <h3 app-card-title [className]="'text-xl font-bold'">Produits les plus consultés</h3>
+            <app-card-header class="flex flex-row items-center justify-between pb-8">
+        <div class="flex gap-2">
+          <button app-button variant="ghost" size="sm" class="h-8 rounded-lg">Hebdomadaire</button>
+          <button
+            app-button
+            variant="secondary"
+            size="sm"
+            class="h-8 rounded-lg bg-primary/10 text-primary"
+          >
+            Mensuel
+          </button>
+        </div>
+      </app-card-header>
+    </app-card-header>
+    <app-card-content class="p-0">
+      <table class="w-full text-left">
+        <thead
+          class="bg-muted/30 text-[10px] font-black uppercase tracking-widest text-muted-foreground border-b"
+        >
+          <tr>
+            <th class="px-8 py-4">Nom du produit</th>
+            <th class="px-8 py-4">Vues uniques</th>
+            <th class="px-8 py-4"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-muted/50">
+          <!-- <tr
+            *ngFor="let p of topProducts; let i = index"
+            class="hover:bg-muted/20 transition-colors group"
+          > -->
+            <tr
+            class="hover:bg-muted/20 transition-colors group"
+          >
+            <!-- <td class="px-8 py-5 font-bold text-sm">{{ p.name }}</td> -->
+               <td class="px-8 py-5 font-bold text-sm">nike</td>
+            <!-- <td class="px-8 py-5 flex items-center gap-2">
+              <lucide-icon [img]="Eye" class="w-4 h-4 text-muted-foreground"></lucide-icon>
+              <span class="font-bold">{{ p.views }}</span>
+            </td> -->
+             <td class="px-8 py-5 flex items-center gap-2">
+              <lucide-icon [img]="Eye" class="w-4 h-4 text-muted-foreground"></lucide-icon>
+              <span class="font-bold">2</span>
+            </td>
+  
+            <td class="px-8 py-5 text-right">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </app-card-content>
+  </app-card>
+
+      <app-card class="border-none shadow-elegant .">
+      <app-card-header>
+        <h3 app-card-title [className]="'text-xl font-bold'">Réactions Sociales</h3>
+      </app-card-header>
+      <app-card-content class="space-y-6">
+        <!-- Likes -->
+        <div class="flex items-center justify-between p-4 rounded-xl bg-muted/50">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+            >
+              <lucide-icon [img]="Heart" class="w-5 h-5 fill-primary"></lucide-icon>
+            </div>
+            <span class="font-bold">Likes total reçus</span>
+          </div>
+          <span class="text-xl font-black">1,842</span>
+        </div>
+
+        <!-- Comments -->
+        <div class="flex items-center justify-between p-4 rounded-xl bg-muted/50">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500"
+            >
+              <lucide-icon [img]="MessageSquare" class="w-5 h-5"></lucide-icon>
+            </div>
+            <span class="font-bold">Commentaires</span>
+          </div>
+          <span class="text-xl font-black">452</span>
+        </div>
+
+        <div class="h-[1px] bg-border my-2"></div>
+
+  
+      </app-card-content>
     </app-card>
 
     <!-- Audience section -->
-      <app-card class="border-none shadow-elegant overflow-hidden">
+      <!-- <app-card class="border-none shadow-elegant overflow-hidden">
         <app-card-header class="pb-4">
           <app-card-title>Audience</app-card-title>
         </app-card-header>
@@ -82,6 +174,6 @@
             <lucide-icon [img]="ArrowUpRight" class="w-4 h-4"></lucide-icon>
           </button>
         </app-card-content>
-      </app-card>
+      </app-card> -->
   </div>
 </div>
