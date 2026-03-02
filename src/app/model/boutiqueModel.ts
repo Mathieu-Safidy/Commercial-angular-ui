@@ -15,4 +15,5 @@ interface Boutique {
     idCategorie: Categorie | string;
     createdAt: Date;
     deletedAt: Date | null;
+    image?: string;
 }

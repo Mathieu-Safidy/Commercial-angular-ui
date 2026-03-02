@@ -14,6 +14,7 @@ import { ClientShopComponent } from '../clientShop/ClientShop';
 import { ClientHistoryComponent } from '../clientHistory/ClientHistory';
 import { ClientRentalsComponent } from '../clientRentals/ClientRentals';
 import { ClientReviewsComponent } from '../clientReviews/ClientReviews';
+import { BoutiqueInfoModalComponent } from '../boutiqueInfo/boutiqueInfo';
 
 
 import { TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComponent } from '../../../components/ui/tabs';

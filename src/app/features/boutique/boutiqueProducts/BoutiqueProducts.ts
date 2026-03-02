@@ -12,6 +12,7 @@ import {
   Trash2,
   AlertCircle,
   Tag,
+  Loader,
 } from 'lucide-angular';
 import { CardComponent } from '../../../components/ui/card';
 import { ButtonComponent } from '../../../components/ui/button';
@@ -30,6 +31,8 @@ import { Environments } from '../../../environements/environments';
 import { AjoutPromotionDialogComponent } from '../ajoutPromotion/AjoutPromotion';
 import { BoutiqueService } from '../../../services/boutiqueService/boutique-service';
 import { AuthServices } from '../../../services/authService/auth.services';
+import { DetailBoutiqueService } from '../../../services/detailBoutiqueService/detail-boutique-service';
+import { DetailBoutique } from '../../../model/detailBoutiqueModel';
 
 @Component({
   selector: 'app-boutique-products',
@@ -79,82 +82,86 @@ export class BoutiqueProductsComponent {
   //   boutique: Boutique;
 
   products = signal<Produit[]>([
-    {
-      _id: '699075f6489c38b47f628ca1',
-      nom: 'Montre Minimaliste',
-      description: '',
-      idBoutique: '',
-      idCategorie: '',
-      prixInitial: 129,
-      consultationCount: 0,
-      modifiedAt: null,
-      createdAt: new Date(),
-      deletedAt: null,
-      quantiteDisponible: 12,
-      status: 'En stock',
-      image:
-        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400',
-      boutique: {} as any,
-    },
-    {
-      _id: '699075f6489c38b47f628ca2',
-      nom: 'Vase Céramique',
-      description: '',
-      idBoutique: '',
-      idCategorie: '',
-      prixInitial: 45,
-      consultationCount: 0,
-      modifiedAt: null,
-      createdAt: new Date(),
-      deletedAt: null,
-      quantiteDisponible: 5,
-      status: 'Stock faible',
-      image:
-        'https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=400',
-      boutique: {} as any,
-    },
-    {
-      _id: '699075f6489c38b47f628ca3',
-      nom: 'Casque ANC',
-      description: '',
-      idBoutique: '',
-      idCategorie: '',
-      prixInitial: 299,
-      consultationCount: 0,
-      modifiedAt: null,
-      createdAt: new Date(),
-      deletedAt: null,
-      quantiteDisponible: 0,
-      status: 'Rupture',
-      image:
-        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400',
-      boutique: {} as any,
-    },
-    {
-      _id: '699075f6489c38b47f628ca4',
-      nom: 'Sac à dos Urbain',
-      description: '',
-      idBoutique: '',
-      idCategorie: '',
-      prixInitial: 85,
-      consultationCount: 0,
-      modifiedAt: null,
-      createdAt: new Date(),
-      deletedAt: null,
-      quantiteDisponible: 24,
-      status: 'En stock',
-      image:
-        'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=400',
-      boutique: {} as any,
-    },
+    // {
+    //   _id: '699075f6489c38b47f628ca1',
+    //   nom: 'Montre Minimaliste',
+    //   description: '',
+    //   idBoutique: '',
+    //   idCategorie: '',
+    //   prixInitial: 129,
+    //   consultationCount: 0,
+    //   modifiedAt: null,
+    //   createdAt: new Date(),
+    //   deletedAt: null,
+    //   quantiteDisponible: 12,
+    //   status: 'En stock',
+    //   image:
+    //     'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400',
+    //   boutique: {} as any,
+    // },
+    // {
+    //   _id: '699075f6489c38b47f628ca2',
+    //   nom: 'Vase Céramique',
+    //   description: '',
+    //   idBoutique: '',
+    //   idCategorie: '',
+    //   prixInitial: 45,
+    //   consultationCount: 0,
+    //   modifiedAt: null,
+    //   createdAt: new Date(),
+    //   deletedAt: null,
+    //   quantiteDisponible: 5,
+    //   status: 'Stock faible',
+    //   image:
+    //     'https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=400',
+    //   boutique: {} as any,
+    // },
+    // {
+    //   _id: '699075f6489c38b47f628ca3',
+    //   nom: 'Casque ANC',
+    //   description: '',
+    //   idBoutique: '',
+    //   idCategorie: '',
+    //   prixInitial: 299,
+    //   consultationCount: 0,
+    //   modifiedAt: null,
+    //   createdAt: new Date(),
+    //   deletedAt: null,
+    //   quantiteDisponible: 0,
+    //   status: 'Rupture',
+    //   image:
+    //     'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400',
+    //   boutique: {} as any,
+    // },
+    // {
+    //   _id: '699075f6489c38b47f628ca4',
+    //   nom: 'Sac à dos Urbain',
+    //   description: '',
+    //   idBoutique: '',
+    //   idCategorie: '',
+    //   prixInitial: 85,
+    //   consultationCount: 0,
+    //   modifiedAt: null,
+    //   createdAt: new Date(),
+    //   deletedAt: null,
+    //   quantiteDisponible: 24,
+    //   status: 'En stock',
+    //   image:
+    //     'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=400',
+    //   boutique: {} as any,
+    // },
   ]);
   dialog = inject(AlertDialogService);
   boutiqueService = inject(BoutiqueService);
-  authService = inject(AuthServices);
   dialogueCreation = inject(MatDialog);
   totalStock = signal(0);
   stockFaibleCount = signal(0);
   ruptureCount = signal(0);
+  detailBoutiqueService = inject(DetailBoutiqueService) ; 
+  authService = inject(AuthServices);
+  user: User | any = this.authService.currentUserSubject.value || { } ;
+  userId = this.user._id;
+  idBoutique = signal<string | null>(null);
   constructor() {
     effect(async () => {
       const prods = await this.produitService.getProduitsByBoutiqueId((await this.getBoutiqueByIdUser())._id);
@@ -208,7 +215,7 @@ export class BoutiqueProductsComponent {
       formData.append('description', result.description);
       formData.append('prixInitial', result.prixInitial);
       formData.append('idCategorie', result.idCategorie);
-      formData.append('idBoutique', '698dff42709de29d54628ca3');
+      formData.append('idBoutique', this.idBoutique()!);
       if (result.imageFile) {
         formData.append('image', result.imageFile); // upload fichier
       }
@@ -218,7 +225,15 @@ export class BoutiqueProductsComponent {
       });
     });
   }
-
+  async ngOnInit() {
+    this.laodBoutique() ;
+  }
+  async laodBoutique() { 
+    const response = await this.detailBoutiqueService.getDetailBoutiqueByUserId(this.userId);
+    if (!response) { return; }
+    const detail = Array.isArray(response) ? response[0] : response as DetailBoutique;
+    this.idBoutique.set(detail.idBoutique._id );
+  }
   ajouterProduit() {
     const dialogRef = this.dialogueCreation.open(CreationDialogueComponent, {
       width: '800px',
@@ -233,11 +248,10 @@ export class BoutiqueProductsComponent {
       formData.append('description', result.description);
       formData.append('prixInitial', result.prixInitial);
       formData.append('idCategorie', result.idCategorie);
-      formData.append('idBoutique', '698dff42709de29d54628ca3');
+      formData.append('idBoutique', this.idBoutique()!);
       if (result.imageFile) {
         formData.append('image', result.imageFile); // upload fichier
       }
-
       this.produitService.ajouterProduit(formData).then(() => {
         this.produitService.reloadProduits();
       });
