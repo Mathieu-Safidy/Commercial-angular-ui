@@ -1,0 +1,437 @@
+<div class="min-h-screen bg-background p-6 space-y-6">
+
+  <!-- ═══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════ -->
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <div>
+      <h1 class="text-3xl font-black tracking-tight flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
+          <lucide-icon [img]="Package" class="w-5 h-5 text-primary"></lucide-icon>
+        </div>
+        Gestion des Boxes
+      </h1>
+      <p class="text-muted-foreground text-sm mt-1 font-medium">
+        {{ allBoxes().length }} box{{ allBoxes().length > 1 ? 'es' : '' }} au total
+      </p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button
+        (click)="loadBoxes()"
+        class="h-10 w-10 rounded-2xl border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+        [class.animate-spin]="isLoading()"
+      >
+        <lucide-icon [img]="RefreshCw" class="w-4 h-4"></lucide-icon>
+      </button>
+      <button
+        (click)="openCreateModal()"
+        app-button
+        class="h-10 px-5 rounded-2xl font-bold text-sm gap-2"
+      >
+        <lucide-icon [img]="Plus" class="w-4 h-4"></lucide-icon>
+        Ajouter une box
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       STATS
+  ═══════════════════════════════════════════ -->
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div class="p-4 rounded-2xl border border-border/60 bg-muted/20 space-y-1">
+      <p class="text-[11px] font-black text-muted-foreground uppercase tracking-widest">Total</p>
+      <p class="text-3xl font-black tabular-nums">{{ stats().total }}</p>
+    </div>
+    <div class="p-4 rounded-2xl border border-primary/20 bg-primary/5 space-y-1">
+      <p class="text-[11px] font-black text-primary uppercase tracking-widest">Disponible</p>
+      <p class="text-3xl font-black tabular-nums text-primary">{{ stats().disponible }}</p>
+    </div>
+    <div class="p-4 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 space-y-1">
+      <p class="text-[11px] font-black text-emerald-600 uppercase tracking-widest">Loués</p>
+      <p class="text-3xl font-black tabular-nums text-emerald-600">{{ stats().loue }}</p>
+    </div>
+    <div class="p-4 rounded-2xl border border-amber-500/20 bg-amber-500/5 space-y-1">
+      <p class="text-[11px] font-black text-amber-600 uppercase tracking-widest">En attente</p>
+      <p class="text-3xl font-black tabular-nums text-amber-600">{{ stats().attente }}</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TOOLBAR
+  ═══════════════════════════════════════════ -->
+  <div class="flex flex-wrap items-center justify-between gap-3">
+
+    <div class="flex items-center gap-3 flex-wrap">
+      <!-- Search -->
+      <div class="relative">
+        <lucide-icon [img]="Search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none"></lucide-icon>
+        <input
+          type="text"
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value)"
+          placeholder="Rechercher une box..."
+          class="h-10 pl-10 pr-9 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all w-60"
+        />
+        <button *ngIf="searchQuery()" (click)="searchQuery.set('')"
+          class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+          <lucide-icon [img]="X" class="w-3.5 h-3.5"></lucide-icon>
+        </button>
+      </div>
+
+      <!-- Status filter pills -->
+      <div class="flex items-center gap-1.5">
+        <button
+          *ngFor="let opt of statusOptions"
+          (click)="statusFilter.set(opt.value)"
+          class="h-8 px-3 rounded-xl text-xs font-bold transition-all border"
+          [class.bg-primary]="statusFilter() === opt.value"
+          [class.text-primary-foreground]="statusFilter() === opt.value"
+          [class.border-primary]="statusFilter() === opt.value"
+          [class.bg-muted/30]="statusFilter() !== opt.value"
+          [class.text-muted-foreground]="statusFilter() !== opt.value"
+          [class.border-border]="statusFilter() !== opt.value"
+          [class.hover:bg-muted]="statusFilter() !== opt.value"
+        >
+          {{ opt.label }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Sort -->
+    <div class="relative">
+      <button
+        (click)="sortDropdownOpen.set(!sortDropdownOpen())"
+        class="flex items-center gap-2 h-10 px-4 rounded-2xl border border-border bg-muted/30 text-sm font-bold hover:bg-muted transition-colors"
+      >
+        <lucide-icon [img]="ArrowUpDown" class="w-3.5 h-3.5 text-muted-foreground"></lucide-icon>
+        {{ getSortLabel() }}
+        <lucide-icon [img]="ChevronDown" class="w-3.5 h-3.5 text-muted-foreground"></lucide-icon>
+      </button>
+      <div *ngIf="sortDropdownOpen()"
+        class="absolute right-0 top-12 w-44 bg-background border border-border rounded-2xl shadow-lg overflow-hidden z-20 py-1">
+        <button *ngFor="let opt of sortOptions" (click)="setSort(opt.value)"
+          class="w-full text-left px-4 py-2.5 text-sm font-medium hover:bg-muted transition-colors flex items-center justify-between"
+          [class.text-primary]="sortBy() === opt.value" [class.font-bold]="sortBy() === opt.value">
+          {{ opt.label }}
+          <svg *ngIf="sortBy() === opt.value" class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       TABLEAU
+  ═══════════════════════════════════════════ -->
+
+  <!-- Loading -->
+  <div *ngIf="isLoading()" class="flex items-center justify-center py-20">
+    <div class="flex flex-col items-center gap-3">
+      <svg class="w-7 h-7 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+      </svg>
+      <p class="text-sm font-bold text-muted-foreground">Chargement...</p>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!isLoading()" class="rounded-2xl border border-border/60 overflow-hidden shadow-sm">
+
+    <!-- Header -->
+    <div class="grid grid-cols-12 gap-4 px-5 py-3.5 bg-muted/40 border-b border-border/60">
+      <div class="col-span-2 text-[11px] font-black text-muted-foreground uppercase tracking-widest">N° Box</div>
+      <div class="col-span-2 text-[11px] font-black text-muted-foreground uppercase tracking-widest">Position</div>
+      <div class="col-span-2 text-[11px] font-black text-muted-foreground uppercase tracking-widest">Surface</div>
+      <div class="col-span-2 text-[11px] font-black text-muted-foreground uppercase tracking-widest">Prix / mois</div>
+      <div class="col-span-2 text-[11px] font-black text-muted-foreground uppercase tracking-widest">Statut</div>
+      <div class="col-span-2 text-[11px] font-black text-muted-foreground uppercase tracking-widest text-right">Actions</div>
+    </div>
+
+    <!-- Rows -->
+    <div *ngIf="filteredBoxes().length > 0">
+      <div
+        *ngFor="let box of filteredBoxes(); trackBy: trackById; let last = last"
+        class="grid grid-cols-12 gap-4 px-5 py-4 hover:bg-muted/20 transition-colors group"
+        [class.border-b]="!last"
+        [class.border-border]="!last"
+        [class.border-opacity-40]="!last"
+      >
+        <!-- Numéro -->
+        <div class="col-span-2 flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-muted flex items-center justify-center flex-shrink-0">
+            <lucide-icon [img]="Package" class="w-3.5 h-3.5 text-muted-foreground"></lucide-icon>
+          </div>
+          <span class="font-black text-sm">N°{{ box.numero }}</span>
+        </div>
+
+        <!-- Position -->
+        <div class="col-span-2 flex items-center gap-1.5">
+          <lucide-icon [img]="MapPin" class="w-3.5 h-3.5 text-muted-foreground flex-shrink-0"></lucide-icon>
+          <span class="text-sm font-medium text-muted-foreground truncate">{{ box.position }}</span>
+        </div>
+
+        <!-- Dimension -->
+        <div class="col-span-2 flex items-center gap-1.5">
+          <lucide-icon [img]="Maximize2" class="w-3.5 h-3.5 text-muted-foreground flex-shrink-0"></lucide-icon>
+          <span class="text-sm font-bold">{{ box.dimension }} m²</span>
+        </div>
+
+        <!-- Prix -->
+        <div class="col-span-2 flex items-center">
+          <span class="text-sm font-black text-primary">{{ formatPrice(box.prixInitial) }}</span>
+        </div>
+
+        <!-- Status -->
+        <div class="col-span-2 flex items-center">
+          <span
+            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border"
+            [ngClass]="getStatusConfig(box.status).class"
+          >
+            <span class="w-1.5 h-1.5 rounded-full" [ngClass]="getStatusConfig(box.status).dot"></span>
+            {{ getStatusConfig(box.status).label }}
+          </span>
+        </div>
+
+        <!-- Actions -->
+        <div class="col-span-2 flex items-center justify-end gap-2">
+          <button
+            (click)="openEditModal(box)"
+            class="h-8 w-8 rounded-xl border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all opacity-0 group-hover:opacity-100"
+          >
+            <lucide-icon [img]="Edit2" class="w-3.5 h-3.5"></lucide-icon>
+          </button>
+          <button
+            (click)="deleteBox(box)"
+            class="h-8 w-8 rounded-xl border border-border flex items-center justify-center text-muted-foreground hover:text-destructive hover:border-destructive/30 hover:bg-destructive/5 transition-all opacity-0 group-hover:opacity-100"
+          >
+            <lucide-icon [img]="Trash2" class="w-3.5 h-3.5"></lucide-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="filteredBoxes().length === 0" class="flex flex-col items-center justify-center py-16 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-muted flex items-center justify-center mb-4">
+        <lucide-icon [img]="Package" class="w-6 h-6 text-muted-foreground/40"></lucide-icon>
+      </div>
+      <p class="font-black text-base mb-1">Aucune box trouvée</p>
+      <p class="text-sm text-muted-foreground mb-4">Modifiez votre recherche ou créez une nouvelle box.</p>
+      <button (click)="openCreateModal()" app-button class="rounded-2xl gap-2 h-10 px-5 text-sm font-bold">
+        <lucide-icon [img]="Plus" class="w-4 h-4"></lucide-icon>
+        Ajouter une box
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Résumé bas de tableau -->
+  <p *ngIf="!isLoading() && filteredBoxes().length > 0" class="text-xs text-muted-foreground">
+    {{ filteredBoxes().length }} box{{ filteredBoxes().length > 1 ? 'es' : '' }} affichée{{ filteredBoxes().length > 1 ? 's' : '' }}
+    <span *ngIf="searchQuery() || statusFilter() !== 'all'">
+      sur {{ allBoxes().length }} au total
+    </span>
+  </p>
+
+</div>
+
+<!-- ═══════════════════════════════════════════
+     MODAL CRÉER / MODIFIER
+═══════════════════════════════════════════ -->
+<div
+  *ngIf="modalOpen()"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+  style="animation: fadeIn 0.15s ease-out;"
+  (click)="$event.target === $event.currentTarget && closeModal()"
+>
+  <div
+    class="relative w-full max-w-lg bg-background rounded-3xl shadow-2xl border border-border/60 overflow-hidden"
+    style="animation: slideUp 0.2s ease-out;"
+  >
+    <!-- Bande top -->
+    <div class="h-1 w-full bg-primary"></div>
+
+    <!-- Header modal -->
+    <div class="flex items-center justify-between px-7 pt-6 pb-4 border-b border-border/60">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
+          <lucide-icon [img]="modalMode() === 'create' ? Plus : Edit2" class="w-5 h-5 text-primary"></lucide-icon>
+        </div>
+        <div>
+          <h2 class="font-black text-lg tracking-tight">
+            {{ modalMode() === 'create' ? 'Nouvelle box' : 'Modifier la box' }}
+          </h2>
+          <p class="text-xs text-muted-foreground font-medium">
+            {{ modalMode() === 'create' ? 'Remplissez les informations de la nouvelle box' : 'Modifiez les informations de la box N°' + editingBox()?.numero }}
+          </p>
+        </div>
+      </div>
+      <button (click)="closeModal()"
+        class="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-all">
+        <lucide-icon [img]="X" class="w-4 h-4"></lucide-icon>
+      </button>
+    </div>
+
+    <!-- Formulaire -->
+    <form [formGroup]="form" id="boxForm" class="px-7 py-6 space-y-5">
+
+      <!-- Numéro + Position -->
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+            <lucide-icon [img]="Package" class="w-3.5 h-3.5"></lucide-icon>
+            Numéro *
+          </label>
+          <input
+            type="text"
+            formControlName="numero"
+            placeholder="ex: A01"
+            class="w-full h-11 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+            [class.border-border]="!hasError('numero')"
+            [class.focus:ring-primary/25]="!hasError('numero')"
+            [class.focus:border-primary]="!hasError('numero')"
+            [class.border-destructive]="hasError('numero')"
+            [class.focus:ring-destructive/25]="hasError('numero')"
+            [class.bg-destructive/5]="hasError('numero')"
+          />
+          <p *ngIf="hasError('numero', 'required')" class="text-xs text-destructive font-medium">Requis.</p>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+            <lucide-icon [img]="MapPin" class="w-3.5 h-3.5"></lucide-icon>
+            Position *
+          </label>
+          <input
+            type="number"
+            formControlName="position"
+            placeholder="ex: Étage 1"
+            class="w-full h-11 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+            [class.border-border]="!hasError('position')"
+            [class.focus:ring-primary/25]="!hasError('position')"
+            [class.focus:border-primary]="!hasError('position')"
+            [class.border-destructive]="hasError('position')"
+            [class.focus:ring-destructive/25]="hasError('position')"
+            [class.bg-destructive/5]="hasError('position')"
+          />
+          <p *ngIf="hasError('position', 'required')" class="text-xs text-destructive font-medium">Requis.</p>
+        </div>
+      </div>
+
+      <!-- Dimension + Prix -->
+      <div class="grid grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+            <lucide-icon [img]="Maximize2" class="w-3.5 h-3.5"></lucide-icon>
+            Surface (m²) *
+          </label>
+          <input
+            type="number"
+            formControlName="dimension"
+            placeholder="ex: 12"
+            min="1"
+            class="w-full h-11 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+            [class.border-border]="!hasError('dimension')"
+            [class.focus:ring-primary/25]="!hasError('dimension')"
+            [class.focus:border-primary]="!hasError('dimension')"
+            [class.border-destructive]="hasError('dimension')"
+            [class.focus:ring-destructive/25]="hasError('dimension')"
+            [class.bg-destructive/5]="hasError('dimension')"
+          />
+          <p *ngIf="hasError('dimension', 'required')" class="text-xs text-destructive font-medium">Requis.</p>
+          <p *ngIf="hasError('dimension', 'min')" class="text-xs text-destructive font-medium">Minimum 1 m².</p>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+            <lucide-icon [img]="DollarSign" class="w-3.5 h-3.5"></lucide-icon>
+            Prix MGA/mois *
+          </label>
+          <input
+            type="number"
+            formControlName="prixInitial"
+            placeholder="ex: 50000"
+            min="0"
+            class="w-full h-11 px-4 rounded-2xl border text-sm font-medium placeholder:text-muted-foreground/40 focus:outline-none focus:ring-2 transition-all bg-muted/20"
+            [class.border-border]="!hasError('prixInitial')"
+            [class.focus:ring-primary/25]="!hasError('prixInitial')"
+            [class.focus:border-primary]="!hasError('prixInitial')"
+            [class.border-destructive]="hasError('prixInitial')"
+            [class.focus:ring-destructive/25]="hasError('prixInitial')"
+            [class.bg-destructive/5]="hasError('prixInitial')"
+          />
+          <p *ngIf="hasError('prixInitial', 'required')" class="text-xs text-destructive font-medium">Requis.</p>
+          <p *ngIf="hasError('prixInitial', 'min')" class="text-xs text-destructive font-medium">Prix invalide.</p>
+        </div>
+      </div>
+
+      <!-- Aperçu -->
+      <div *ngIf="form.valid" class="p-4 rounded-2xl bg-muted/30 border border-border/60 space-y-2">
+        <p class="text-[11px] font-black uppercase tracking-widest text-muted-foreground mb-3">Aperçu</p>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div class="flex items-center gap-2">
+            <lucide-icon [img]="Package" class="w-3.5 h-3.5 text-muted-foreground"></lucide-icon>
+            <span class="font-bold">Box N°{{ form.value.numero }}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <lucide-icon [img]="MapPin" class="w-3.5 h-3.5 text-muted-foreground"></lucide-icon>
+            <span>{{ form.value.position }}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <lucide-icon [img]="Maximize2" class="w-3.5 h-3.5 text-muted-foreground"></lucide-icon>
+            <span>{{ form.value.dimension }} m²</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <lucide-icon [img]="DollarSign" class="w-3.5 h-3.5 text-muted-foreground"></lucide-icon>
+            <span class="font-bold text-primary">{{ form.value.prixInitial | number }} MGA</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Boutons -->
+      <div class="flex gap-3 pt-2">
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="flex-1 h-11 rounded-2xl font-bold text-sm border border-border bg-muted/30 hover:bg-muted transition-all"
+        >
+          Annuler
+        </button>
+        <button
+          type="button"
+          [disabled]="isSubmitting()"
+          app-button
+          (click)="submitForm()"
+          class="flex-1 h-11 rounded-2xl font-bold text-sm gap-2 disabled:opacity-60"
+        >
+          <span *ngIf="!isSubmitting()" class="flex items-center gap-2">
+            <lucide-icon [img]="modalMode() === 'create' ? Plus : Save" class="w-4 h-4"></lucide-icon>
+            {{ modalMode() === 'create' ? 'Créer la box' : 'Sauvegarder' }}
+          </span>
+          <span *ngIf="isSubmitting()" class="flex items-center gap-2">
+            <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+            {{ modalMode() === 'create' ? 'Création...' : 'Sauvegarde...' }}
+          </span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+</style>
