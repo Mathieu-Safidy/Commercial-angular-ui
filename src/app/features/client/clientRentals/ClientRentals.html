@@ -17,7 +17,7 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-    @for (space of rentalSpaces; track space.id) {
+    @for (space of rentalSpaces(); track space.id) {
       <app-card className="border-none shadow-elegant overflow-hidden flex flex-col group">
         <div class="relative aspect-[16/10] overflow-hidden">
           <img

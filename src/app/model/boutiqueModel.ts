@@ -12,7 +12,8 @@ interface Boutique {
     nom: string;
     description: string;
     idUser: string;
-    idCategorie: string;
+    idCategorie: Categorie | string;
     createdAt: Date;
     deletedAt: Date | null;
+    image?: string;
 }

@@ -10,6 +10,7 @@ import {AdminPerformanceComponent} from '../adminPerformance/AdminPerformance';
 import {BoutiqueManagementComponent} from '../boutiqueManagement/BoutiqueManagement';
 import {AdminEventsComponent} from '../adminEvents/AdminEvents';
 import { AdminUserComponent } from '../adminUser/adminUser';
+import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePosts';
 
 type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 'settings';
 
@@ -25,6 +26,7 @@ type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 's
     BoutiqueManagementComponent,
     AdminEventsComponent,
     AdminUserComponent , 
+    BoutiquePostsComponent,
     NgIf
   ]
 })
@@ -38,7 +40,7 @@ export class AdminDashboardComponent {
     { id: 'boutiques', label: 'Gestion Boutiques', icon: Building2 },
     { id: 'performance', label: 'Performance & Trafic', icon: ChartColumn },
     { id: 'events', label: 'Événements & Jeux', icon: Calendar },
-    { id: 'ads', label: 'Publicités & Partenaires', icon: Zap },
+    { id: 'ads', label: 'Publicités', icon: Zap },
     { id: 'settings', label: 'Administration', icon: ShieldCheck },
   ];
 

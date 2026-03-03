@@ -122,7 +122,7 @@ import { StockService } from '../../../services/stockService/stock-service';
                       Prix TTC
                     </p>
                     <p class="text-2xl font-black text-primary mt-2">
-                      {{ product()?.prixInitial | currency: 'EUR' : 'symbol-narrow' : '1.2-2' }}
+                      {{ product()?.prixInitial | currency: 'MGA' : 'symbol-narrow' : '1.2-2' }}
                     </p>
                   </div>
 
@@ -346,7 +346,7 @@ export class ProductDetailDialogComponent {
     try {
       // Appel API (adapte selon ton service)
       await this.stockService.approvisionnerProduit(prod._id, qty);
-      await this.produitService.reloadProduits(); // pour rafraîchir la liste et le produit sélectionné
+      await this.produitService.reloadProduits( this.product()?.idBoutique!); // pour rafraîchir la liste et le produit sélectionné
       // await this.produitService
       //   .approvisionnerProduit(prod._id, {
       //     quantite: qty,

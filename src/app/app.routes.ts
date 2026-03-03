@@ -3,7 +3,7 @@ import { roleGuard } from './guard/roleGuard';
 import { defaultRedirectGuard } from './guard/defaultRedirectGuard';
 
 export const routes: Routes = [
-{ 
+{
         path: 'login',
         loadComponent: () => import('./features/auth/login/login').then(m => m.Login)
     },
@@ -32,6 +32,10 @@ export const routes: Routes = [
               {
                 path: 'produit/:id',
                 loadComponent: () => import('./features/client/detailProduit/DetailProduit').then(m => m.ProductDetailPageComponent),
+              },
+              {
+                path: 'boutique/:id',
+                loadComponent: () => import('./features/client/boutiqueDetail/boutiqueDetail').then(m => m.BoutiqueDetailComponent),
               }
             ]
           },

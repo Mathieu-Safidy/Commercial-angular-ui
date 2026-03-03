@@ -1,4 +1,4 @@
-import { Component, effect, inject, output, signal } from '@angular/core';
+import { Component, effect, inject, output, Signal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -25,6 +25,14 @@ import {AuthServices} from '../../../services/authService/auth.services';
 import {PromotionService} from '../../../services/promotionService/promotion-service';
 import {Promotion} from '../../../model/promotionModel';
 import { Router } from '@angular/router';
+
+interface Dashboard {
+  chiffreAffaire: number;
+  venteTotale: number;
+  avisNote: number;
+  totalConsultation: number;
+}
+
 @Component({
   selector: 'app-client-shop',
   standalone: true,
@@ -48,11 +56,12 @@ export class ClientShopComponent {
   readonly TrendingUp = TrendingUp;
   readonly Sparkles = Sparkles;
   readonly Check = Check;
-  detailBoutiques: DetailBoutique[] = [];
+  detailBoutiques = signal<DetailBoutique[]>([]);
   authService = inject(AuthServices);
   user: User | any = this.authService.currentUserSubject.value || { } ;
   userId = this.user._id;
-
+// les notes peuvent être undefined au début
+notesBoutiques: Record<string, number | undefined> = {};
 
   produitService = inject(ProduitService);
   panierService = inject(PanierService);
@@ -68,15 +77,23 @@ export class ClientShopComponent {
       this.panier.set(panier);
     })
   }
+
+  ouvrirBoutique(b: DetailBoutique) {
+      this.router.navigate(['/acceuil/client/boutique', b.idBoutique?._id ?? b._id]);
+  }
+  
   navigateTo = output<string>(); // émet la valeur du tab cible
 
    openDetails(product: any & { id: string }) {
     // this.produitService.produitSelectionne.set(product);
     // this.dialog.show();
-    console.log('Navigate to:', product);
-    console.log('Mandeha');
+    // console.log('Navigate to:', product);
+    // console.log('Mandeha');
     
     this.router.navigate(['/acceuil/client/produit', product.id]);
+  }
+  openDetailsBoutique(detail: any & { id: string }) {
+    this.router.navigate(['/acceuil/client/boutique', detail.idBoutique._id]);
   }
 
   stringify(obj: any): string {
@@ -113,38 +130,38 @@ export class ClientShopComponent {
   details = signal<any>([]);
 
   products = signal<any>([
-    {
-      id: 1,
-      name: 'Montre Minimaliste',
-      boutique: 'Eco Luxe',
-      price: '129€',
-      image:
-        'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800',
-    },
-    {
-      id: 2,
-      name: 'Vase Céramique',
-      boutique: 'Artisans du Bois',
-      price: '45€',
-      image:
-        'https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=800',
-    },
-    {
-      id: 3,
-      name: 'Casque ANC',
-      boutique: 'Urban Tech',
-      price: '299€',
-      image:
-        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800',
-    },
-    {
-      id: 4,
-      name: 'Sac à dos Urbain',
-      boutique: 'Eco Luxe',
-      price: '85€',
-      image:
-        'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=800',
-    },
+    // {
+    //   id: 1,
+    //   name: 'Montre Minimaliste',
+    //   boutique: 'Eco Luxe',
+    //   price: '129€',
+    //   image:
+    //     'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800',
+    // },
+    // {
+    //   id: 2,
+    //   name: 'Vase Céramique',
+    //   boutique: 'Artisans du Bois',
+    //   price: '45€',
+    //   image:
+    //     'https://images.unsplash.com/photo-1581557991964-125469da3b8a?auto=format&fit=crop&q=80&w=800',
+    // },
+    // {
+    //   id: 3,
+    //   name: 'Casque ANC',
+    //   boutique: 'Urban Tech',
+    //   price: '299€',
+    //   image:
+    //     'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800',
+    // },
+    // {
+    //   id: 4,
+    //   name: 'Sac à dos Urbain',
+    //   boutique: 'Eco Luxe',
+    //   price: '85€',
+    //   image:
+    //     'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&q=80&w=800',
+    // },
   ]);
   panier = signal<any>(null);
   backendLink = Environments.BACKEND || 'http://localhost:3000'; // Remplace par l'URL de ton backend
@@ -160,9 +177,15 @@ export class ClientShopComponent {
     if (!this.panier()) return false;
     return this.panier().details.some((detail: PanierDetail) => detail.idProduit === idProduit);
   }
- async initBoutique() {
-   this.detailBoutiques = await this.detailBoutiqueService.getAll() as DetailBoutique[];
- }
+
+  getImage(detailBoutiqe: DetailBoutique): string {
+    if (!detailBoutiqe.idBoutique.image) return 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80';
+    return detailBoutiqe.idBoutique.image.startsWith('http') ? detailBoutiqe.idBoutique.image : this.backendLink + '/' + detailBoutiqe.idBoutique.image;
+  }
+
+  async initBoutique() {
+   this.detailBoutiques.set(await this.detailBoutiqueService.getAll() as DetailBoutique[]);
+  }
   async initProducts() {
     // this.panier.set(await this.panierService.getPanier('698dfddc709de29d54628ca1') as Panier)
     // let panierInit = await this.panierService.initializePanier();
@@ -171,11 +194,13 @@ export class ClientShopComponent {
     console.log(produits);
 
     this.products.set(
-      produits.map((produit) => ({
+      produits
+              .filter(p => p.boutique && p.boutique.nom)
+              .map((produit) => ({
         id: produit._id,
         name: produit.nom,
         boutique: produit.boutique.nom,
-        price: produit.prixInitial + '€',
+        price: produit.prixInitial + 'MGA',
         reduction: produit.reduction || 0,
         quantiteDisponible: produit.quantiteDisponible,
         image: produit.image ?this.backendLink + '/' + produit.image : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800', // Placeholder, à remplacer par produit.image si disponible,
@@ -193,5 +218,12 @@ export class ClientShopComponent {
     // Logique pour ajouter le produit au panier
     console.log(`Produit ${idProduit} ajouté au panier`);
   }
+
+  async getDashboardNote(idBoutique: string) {
+    const data = await this.detailBoutiqueService.getDashboard(idBoutique) as Dashboard;
+    this.notesBoutiques[idBoutique] = data?.avisNote ?? 0; // 0 si null ou undefined
+  }
+
+
 
 } 

@@ -65,8 +65,8 @@ export class BoutiqueManagementComponent {
   avatars = [1, 2];
 
   factures = [
-    { label: 'Eco Luxe', sub: 'Location Janvier', price: '450€', status: 'Payé' },
-    { label: 'Maintenance', sub: 'Nettoyage Zone A', price: '120€', status: 'Payé' },
-    { label: 'Urban Tech', sub: 'Location Janvier', price: '320€', status: 'Retard' }
+    { label: 'Eco Luxe', sub: 'Location Janvier', price: '450Ar', status: 'Payé' },
+    { label: 'Maintenance', sub: 'Nettoyage Zone A', price: '120Ar', status: 'Payé' },
+    { label: 'Urban Tech', sub: 'Location Janvier', price: '320Ar', status: 'Retard' }
   ];
 }

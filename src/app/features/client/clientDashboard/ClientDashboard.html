@@ -38,6 +38,11 @@
             <lucide-icon [img]="LayoutGrid" class="w-4 h-4"></lucide-icon>
             <span>Tout les produis</span>
           </button>
+
+          <button appTabsTrigger  [value]="'all-boutiques'" class="gap-2 px-6 py-2.5 rounded-lg">
+            <lucide-icon [img]="LayoutGrid" class="w-4 h-4"></lucide-icon>
+            <span>Tout les boutique</span>
+          </button>
   
           <button appTabsTrigger [value]="'history'" class="gap-2 px-6 py-2.5 rounded-lg">
             <lucide-icon [img]="ShoppingCart" class="w-4 h-4"></lucide-icon>
@@ -75,6 +80,11 @@
     <div appTabsContent value="rentals" class="block animate-in fade-in slide-in-from-bottom-4 duration-500">
       <app-client-rentals></app-client-rentals>
     </div>
+    
+    <div appTabsContent value="all-boutiques" class="block animate-in fade-in slide-in-from-bottom-4 duration-500 pt-5">
+      <app-boutiques-catalogue></app-boutiques-catalogue>
+    </div>
+    
     <div appTabsContent value="all-products" class="block animate-in fade-in slide-in-from-bottom-4 duration-500 pt-5">
       <app-products-catalogue></app-products-catalogue>
     </div>
@@ -86,8 +96,7 @@
     <div appTabsContent value="posts" class="block animate-in fade-in slide-in-from-bottom-4 duration-500 pt-5">
       <app-boutique-posts></app-boutique-posts>
     </div>
-    
-    
+
 
   </app-tabs>
 </div>

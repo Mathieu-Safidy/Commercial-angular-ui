@@ -8,6 +8,5 @@ export interface DetailBoutique {
   telephone: string;
   descriptionHoraire?: string;
   noteMoyen?: number;
-  image: string;
   status?: number;
 }

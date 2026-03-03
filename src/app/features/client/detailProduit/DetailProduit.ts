@@ -286,6 +286,6 @@ nextImage() {
   }
 
   formatPrice(p: number): string {
-    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(p);
+    return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'MGA' }).format(p);
   }
 }

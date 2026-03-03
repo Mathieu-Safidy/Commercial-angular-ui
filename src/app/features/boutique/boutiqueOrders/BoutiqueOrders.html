@@ -28,35 +28,34 @@
     </button>
 
     <button app-button variant="ghost" className="rounded-full px-6 h-10 gap-2">
-      Nouveaux
+      En cours
       <app-badge class="h-5 min-w-5 p-0 flex items-center justify-center bg-primary text-white">
         2
       </app-badge>
     </button>
 
     <button app-button variant="ghost" className="rounded-full px-6 h-10">
-      En préparation
+      Valide
     </button>
 
-    <button app-button variant="ghost" className="rounded-full px-6 h-10">
+    <!-- <button app-button variant="ghost" className="rounded-full px-6 h-10">
       Expédiés
-    </button>
+    </button> -->
 
-    <div class="flex-1 min-w-[200px] relative lg:ml-8">
+    <!-- <div class="flex-1 min-w-[200px] relative lg:ml-8">
       <input
         appInput
         placeholder="Rechercher par n° commande ou client..."
         class="pl-9 h-11 bg-muted/50 border-none rounded-xl w-full"
       />
-    </div>
+    </div> -->
   </div>
 
   <!-- Orders list -->
   <div class="grid grid-cols-1 gap-4">
-    <app-card *ngFor="let order of orders()" class="border-none shadow-elegant hover:scale-[1.01] transition-all cursor-pointer group overflow-hidden">
+    <app-card *ngFor="let order of orders(); let i = index" class="border-none shadow-elegant hover:scale-[1.01] transition-all cursor-pointer group overflow-hidden">
       <app-card-content class="p-0!">
 
-        <!-- Infos commande -->
         <div class="relative flex flex-col lg:flex-row lg:items-center p-6 gap-6">
           <div class="absolute left-0 inset-y-0 w-1.5" [ngClass]="getStatusBarClass(order.status)"></div>
           <div class="flex-1 flex items-center gap-6">
@@ -65,12 +64,19 @@
             </div>
             <div class="space-y-1">
               <div class="flex items-center gap-3">
-                <h4 class="font-black text-lg">{{ order.id }}</h4>
+                <h4 class="font-black text-lg"> commande N°{{  i + 1 }}</h4>
                 <app-badge class="font-bold border-none h-6" [ngClass]="getStatusBadgeClass(order.status)">
                   {{ order.status }}
                 </app-badge>
               </div>
+
+               <p class="flex items-center gap-4">
+          
+                  <span class="">{{ order.id }}</span>
+                </p>
+
               <div class="flex text-sm font-medium gap-4">
+  
                 <p class="flex items-center gap-4">
                   <span><lucide-angular [img]="CircleCheck" class="w-4 h-4 text-primary"></lucide-angular></span>
                   <span>{{ order.customer }}</span>
@@ -99,6 +105,9 @@
               <button app-button variant="secondary" class="rounded-xl h-10 px-6 font-bold" (click)="showDetails(order)">
                 voir details
               </button>
+               <button app-button variant="outline" className="rounded-xl gap-2 h-11" (click)="valideOrder(order)">
+                valide
+              </button>
             </div>
           </div>
         </div>
@@ -117,10 +126,10 @@
                   <p class="text-xs font-bold text-primary uppercase">{{ item.idProduit.boutique }}</p>
                   <h4 class="font-bold text-lg">{{ item.idProduit.nom }}</h4>
                       <p [class]="'font-bold text-primary' + (item.reduction ? 'line-through text-gray-400' : '')" >
-                        {{ item.idProduit.prixInitial }} Ar
+                        {{ item.idProduit.prixInitial }} MGA
                       </p>
                       <p *ngIf="item.reduction" class=" font-bold text-primary">
-                        {{ item.prixPromotionnel }} Ar
+                        {{ item.prixPromotionnel }} MGA
                       </p>
                       <p *ngIf="item.reduction" class="font-bold text-primary">
                         -{{ item.reduction }}%
@@ -128,13 +137,13 @@
                 </div>
                 <div class="flex items-center gap-4">
                   <div class="flex items-center bg-muted rounded-full px-2">
-                    <button app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">-</button>
-                    <span class="font-bold">{{ item.quantite }}</span>
-                    <button app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">+</button>
+                    <!-- <button app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">-</button> -->
+                   {{ item.quantite }}
+                    <!-- <button app-button variant="ghost" size="icon" className="h-8 w-8 rounded-full text-lg">+</button> -->
                   </div>
-                  <button app-button variant="ghost" size="icon" className="text-muted-foreground hover:text-background cursor-pointer transition-colors">
+                  <!-- <button app-button variant="ghost" size="icon" className="text-muted-foreground hover:text-background cursor-pointer transition-colors">
                     <lucide-icon [img]="trash" class="w-4 h-4"></lucide-icon>
-                  </button>
+                  </button> -->
                 </div>
               </div>
 

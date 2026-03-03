@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   LucideAngularModule,
@@ -47,7 +47,7 @@ export class ClientRentalsComponent {
   readonly CheckCircle2 = CheckCircle2;
   readonly Info = Info;
   readonly ArrowRight = ArrowRight;
-  protected rentalSpaces: any;
+  protected rentalSpaces = signal<any[]>([]); // Remplace 'any' par le type approprié de tes espaces de location
   detailLocations: DetailLocation[] = [];
 
   authService = inject(AuthServices);
@@ -77,7 +77,8 @@ export class ClientRentalsComponent {
     console.log(boxes);
     this.detailLocations = await this.detailLocationService.getAll() as any[];
 
-    this.rentalSpaces = boxes.map((box: { _id: any; numero: any; position: any; dimension: any; prixInitial: any; }) => {
+    this.rentalSpaces.set(
+      boxes.map((box: { _id: any; numero: any; position: any; dimension: any; prixInitial: any; }) => {
       const detail = this.detailLocations.find(d =>
         d.idBox._id === box._id
       );
@@ -96,13 +97,15 @@ export class ClientRentalsComponent {
         name: `Box N°${box.numero}`,
         location: `Étage ${box.position}`,
         size: `${box.dimension}m²`,
-        price: `${box.prixInitial}€ / mois`,
+        price: `${box.prixInitial}MGA / mois`,
         priceFinal: box.prixInitial,
         status: status , //pas encore d'annulement
         features: ["Accès sécurisé", "Électricité incluse"],
         image: "https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?auto=format&fit=crop&q=80&w=800"
       };
-    });
+    }));
+
+
   }
 
 }

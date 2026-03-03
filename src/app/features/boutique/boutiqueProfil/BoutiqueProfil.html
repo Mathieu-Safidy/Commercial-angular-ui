@@ -9,7 +9,7 @@
             class="inline-block h-auto w-9/12 rounded-full border-4 border-primary bg-card relative"
           >
             <img
-              [src]="form.value.image || detailBoutique()?.image || 'https://api.dicebear.com/7.x/avataaars/svg?seed=115'"
+              [src]="form.value.image || detailBoutique()?.idBoutique?.image ? backendLink + '/' + detailBoutique()?.idBoutique?.image : 'https://api.dicebear.com/7.x/avataaars/svg?seed=115'"
               alt="Avatar"
               class="rounded-full"
             />
@@ -117,11 +117,11 @@
 
             <!-- Image -->
             <div class="space-y-1 md:col-span-2">
-              <label app-card-description for="image">Image URL</label>
+              <label app-card-description for="image">Image</label>
               <input
                 id="image"
-                type="text"
-                formControlName="image"
+                type="file"
+                (change)="onFileSelected($event)"  
                 placeholder="Lien vers l'image"
                 class="w-full h-11 pl-4 pr-4 rounded-2xl border border-border bg-muted/30 text-sm font-medium placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary/50 transition-all"
               />

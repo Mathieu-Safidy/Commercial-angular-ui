@@ -1,0 +1,118 @@
+<!-- boutique-info.component.html -->
+<div class="boutique-page">
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-image-wrapper">
+      <img [src]="backendLink + '/' + detailBoutique()?.idBoutique?.image" 
+     [alt]="detailBoutique()?.idBoutique?.nom" 
+     class="hero-image" />
+      <div class="hero-overlay"></div>
+    </div>
+    <div class="status-badge" [class.ouvert]="boutique.status === 'ouvert'" [class.ferme]="boutique.status === 'ferme'">
+      <span class="status-dot"></span>
+      {{ boutique.status === 'ouvert' ? 'Ouvert' : 'Fermé' }}
+    </div>
+  </div>
+
+  <!-- Content Card -->
+  <div class="content-wrapper">
+    <div class="main-card">
+
+      <!-- Nom & Description -->
+      <div class="card-header">
+        <h1 class="boutique-nom">{{ detailBoutique()?.idBoutique?.nom }}</h1>
+        <p class="boutique-description">{{ detailBoutique()?.description }}</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Info Grid -->
+      <div class="info-grid">
+
+        <div class="info-item">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ detailBoutique()?.email }}</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 10.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">Téléphone</span>
+            <span class="info-value">{{ detailBoutique()?.telephone }}</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">Adresse</span>
+            <span class="info-value">{{ detailBoutique()?.adresse }}</span>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="info-content">
+            <span class="info-label">Horaires</span>
+            <span class="info-value">{{ detailBoutique()?.descriptionHoraire }}</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+  
+    <!-- <app-card className="border-none shadow-elegant p-6 bg-gradient-to-br from-primary to-primary/80 text-white block">
+      <div class="space-y-6">
+        <div class="text-center">
+          <p class="text-primary-foreground/70 text-sm font-medium uppercase tracking-widest mb-1">Note moyenne donnée</p>
+          <div class="flex items-center justify-center gap-2">
+            <span class="text-6xl font-black">4.8</span>
+            <lucide-icon [img]="Star" class="w-8 h-8 fill-white text-white"></lucide-icon>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          @for (star of [5, 4, 3, 2, 1]; track star) {
+            <div class="flex items-center gap-3 text-sm">
+              <span class="w-3 font-bold">{{ star }}</span>
+              <app-progress
+                [value]="getStarPercentage(star)"
+                className="h-1.5 bg-white/20"
+                indicatorClassName="bg-white">
+              </app-progress>
+            </div>
+          }
+        </div>
+
+        <button app-button variant="secondary" className="w-full rounded-xl h-12 font-bold bg-white text-primary hover:bg-white/90">
+          Voir tous mes badges
+        </button>
+      </div>
+    </app-card> -->
+
+</div>

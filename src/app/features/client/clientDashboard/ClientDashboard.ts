@@ -14,12 +14,15 @@ import { ClientShopComponent } from '../clientShop/ClientShop';
 import { ClientHistoryComponent } from '../clientHistory/ClientHistory';
 import { ClientRentalsComponent } from '../clientRentals/ClientRentals';
 import { ClientReviewsComponent } from '../clientReviews/ClientReviews';
+import { BoutiqueInfoModalComponent } from '../boutiqueInfo/boutiqueInfo';
 
 
 import { TabsComponent, TabsListComponent, TabsTriggerComponent, TabsContentComponent } from '../../../components/ui/tabs';
 import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePosts';
 import { PanierService } from '../../../services/panierService/panier-service';
 import { ProductsCatalogueComponent } from "../catalogue/products-catalogue";
+import { BoutiquesCatalogueComponent } from '../boutiqueCatalogue/BoutiqueCatalogue';
+import { ProduitService } from '../../../services/produitService/produit-service';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -36,7 +39,8 @@ import { ProductsCatalogueComponent } from "../catalogue/products-catalogue";
     TabsTriggerComponent,
     TabsContentComponent,
     BoutiquePostsComponent,
-    ProductsCatalogueComponent
+    ProductsCatalogueComponent,
+    BoutiquesCatalogueComponent
 ],
   templateUrl: './ClientDashboard.html'
 })
@@ -47,16 +51,21 @@ export class ClientDashboardComponent {
   readonly MessageSquare = MessageSquare;
   readonly MapPin = MapPin;
   panierService = inject(PanierService);
+  produitService = inject(ProduitService);
   @ViewChild(TabsComponent) tabs!: TabsComponent;
 
   navigateTo(value: string) {
     this.tabs.value.set(value);
   }
-  constructor() { 
+  constructor() {
+    
   }
+
   
   async ngOnInit() {
+    await this.produitService.initializeProduits() ;
     await this.panierService.initializePanier();
+    await this.panierService.initializePaniertermine();
   }
   avatars = [1, 2, 3, 4];
 }

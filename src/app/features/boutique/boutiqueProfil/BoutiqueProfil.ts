@@ -10,6 +10,8 @@ import {DetailBoutiqueService} from '../../../services/detailBoutiqueService/det
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {DetailBoutique} from '../../../model/detailBoutiqueModel';
 import {AuthServices} from '../../../services/authService/auth.services';
+import { Environments } from "../../../environements/environments";
+import { ProduitService } from "../../../services/produitService/produit-service";
 
 
 @Component({
@@ -39,15 +41,22 @@ export class BoutiqueProfilComponent  {
   user: User | any = this.authService.currentUserSubject.value || { } ;
   userId = this.user._id;
   boutiqueExistante: boolean = false;
+  backendLink = Environments.BACKEND;
+  produitService = inject(ProduitService);
 
   constructor(
     private fb: FormBuilder,
     private detailBoutiqueService: DetailBoutiqueService
-  ) {}
+  ) {
+   }
 
   async ngOnInit() {
     this.initForm();
     await this.loadDetailBoutique();
+    if (this.boutiqueExistante) { 
+      const idBoutique = this.detailBoutique()?.idBoutique._id as string; 
+      this.produitService.initializeProduitsBoutique( idBoutique);
+    }
   }
 
   private initForm() {
@@ -101,7 +110,7 @@ export class BoutiqueProfilComponent  {
       adresse: this.detailBoutique()?.adresse,
       telephone: this.detailBoutique()?.telephone,
       descriptionHoraire: this.detailBoutique()?.descriptionHoraire,
-      image: this.detailBoutique()?.image
+      image: this.detailBoutique()?.idBoutique?.image 
     });
   }
 
@@ -124,43 +133,72 @@ export class BoutiqueProfilComponent  {
   }
 
   async addDetailBoutique() {
-    const payload = {
-      boutique: {
-        nom: this.form.value.nom,
-        description: "description par defaut",
-        idUser: this.userId,
-        idCategorie: "69903afccefeb3862e628ca6"
-      },
-      detail: {
-        description: this.form.value.descriptionDetail,
-        email: this.form.value.email,
-        adresse: this.form.value.adresse,
-        telephone: this.form.value.telephone,
-        descriptionHoraire: this.form.value.descriptionHoraire,
-        noteMoyen: 0,
-        image: this.form.value.image,
-        status: 1
-      }
+    const formData = new FormData();
+
+    const boutique = {
+      nom: this.form.value.nom,
+      description: "description par defaut",
+      idUser: this.userId,
+      idCategorie: "69903afccefeb3862e628ca6"
     };
-    await this.detailBoutiqueService.addDetail(payload);
+
+    const detail = {
+      description: this.form.value.descriptionDetail,
+      email: this.form.value.email,
+      adresse: this.form.value.adresse,
+      telephone: this.form.value.telephone,
+      descriptionHoraire: this.form.value.descriptionHoraire,
+      noteMoyen: 0,
+      status: 1
+    };
+
+    formData.append("boutique", JSON.stringify(boutique));
+    formData.append("detail", JSON.stringify(detail));
+
+    if (this.form.get('image')?.value) {
+      formData.append('image', this.form.get('image')?.value);
+    }
+
+    await this.detailBoutiqueService.addDetail(formData);
   }
 
   async updateBoutique() {
-    const payload = {
-      boutique: {
-        nom: this.form.value.nom
-      },
-      detail: {
-        description: this.form.value.descriptionDetail,
-        email: this.form.value.email,
-        adresse: this.form.value.adresse,
-        telephone: this.form.value.telephone,
-        descriptionHoraire: this.form.value.descriptionHoraire,
-        noteMoyen: 0,
-        image: this.form.value.image
-      }
+
+const formData = new FormData();
+
+    const boutique = {
+      nom: this.form.value.nom,
+      description: "description par defaut",
+      idUser: this.userId,
+      idCategorie: "69903afccefeb3862e628ca6"
     };
-    await this.detailBoutiqueService.updateDetail(this.userId, payload);
+
+    const detail = {
+      description: this.form.value.descriptionDetail,
+      email: this.form.value.email,
+      adresse: this.form.value.adresse,
+      telephone: this.form.value.telephone,
+      descriptionHoraire: this.form.value.descriptionHoraire,
+      noteMoyen: 0,
+      status: 1
+    };
+
+    formData.append("boutique", JSON.stringify(boutique));
+    formData.append("detail", JSON.stringify(detail));
+
+    if (this.form.get('image')?.value) {
+      formData.append('image', this.form.get('image')?.value);
+    }
+
+
+    await this.detailBoutiqueService.updateDetail(this.userId, formData);
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.form.patchValue({ image: file });
+    }
   }
 
   readonly icons = { MessageSquare, Camera, SquarePenIcon };
