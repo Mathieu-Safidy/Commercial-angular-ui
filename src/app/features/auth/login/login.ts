@@ -1,6 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
   LucideAngularModule,
@@ -16,6 +16,7 @@ import {
 } from 'lucide-angular';
 import { ButtonComponent } from '../../../components/ui/button';
 import { AuthServices } from '../../../services/authService/auth.services';
+import { single } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -42,7 +43,36 @@ export class Login {
   readonly Mail = Mail;
   readonly Store = Store;
   readonly User = User;
+  
+  // ✅ déclaration du FormGroup
+  usermock = [
+    { email: "admin@gmail.com", role: "Admin", password: "admin1234567" },
+    { email: "boutique@gmail.com", role: "Boutique", password: "boutique1234567" },
+    { email: "user@gmail.com", role: "User", password: "user1234567" }
+  ];
+  userlog = signal<{ email: string, password: string }>({ email: '', password: '' });
 
+  // constructor(private fb: FormBuilder) {}
+  // constructor() {
+  //   effect(( )=>{ 
+  //         const user = this.usermock.find(u => u.role === "User");
+  //         if (user) {
+  //           this.userlog.set( { email : user.email  , password : user.password } );
+  //         }
+  //   })
+  // }
+
+ngOnInit() {
+    const defaultUser = this.usermock.find(u => u.role === "User");
+    if (defaultUser) {
+      this.userlog.set({ email: defaultUser.email, password: defaultUser.password });
+    }
+    this.form.setValue( {  email : this.userlog().email , password : this.userlog().password ,  rememberMe: false,}) ; 
+    // this.form = this.fb.group({
+    //   email: [this.userlog().email, [Validators.required, Validators.email]],
+    //   password: [this.userlog().password, Validators.required]
+    // });
+}
   showPassword = signal(false);
   isLoading = signal(false);
   errorMessage = signal('');
@@ -73,6 +103,13 @@ export class Login {
 
   activeLogin(type: string) {
     this.activeLoginType.set(type);
+
+  // Trouve l'utilisateur correspondant au rôle et met à jour userlog
+  const user = this.usermock.find(u => u.role === type);
+  if (user) {
+    this.userlog.set( { email : user.email  , password : user.password } );
+  }
+    this.form.setValue( {  email : this.userlog().email , password : this.userlog().password ,  rememberMe: false,}) ; 
     this.typeActive.update((types) => {
       return types.map(t => ({
         ...t,
