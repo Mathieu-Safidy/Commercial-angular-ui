@@ -72,6 +72,7 @@
 
           <!-- Pages existantes -->
           <app-admin-overview *ngIf="activeSection === 'dashboard'"></app-admin-overview>
+          <app-admin-boxes *ngIf="activeSection === 'box'"></app-admin-boxes>
           <app-boutique-management *ngIf="activeSection === 'boutiques'"></app-boutique-management>
           <app-admin-performance *ngIf="activeSection === 'performance'"></app-admin-performance>
           <app-admin-events *ngIf="activeSection === 'events'"></app-admin-events>

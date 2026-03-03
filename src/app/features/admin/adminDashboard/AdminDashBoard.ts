@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import {
   Building2, Users, Calendar, Plus, Settings,
   Bell, Search, LayoutDashboard, ShieldCheck, Zap, LucideAngularModule,
-  ChartColumn, LogOut
+  ChartColumn, LogOut,
+  Package
 } from 'lucide-angular';
 import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {AdminOverviewComponent} from '../adminOverview/AdminOverview';
@@ -11,8 +12,9 @@ import {BoutiqueManagementComponent} from '../boutiqueManagement/BoutiqueManagem
 import {AdminEventsComponent} from '../adminEvents/AdminEvents';
 import { AdminUserComponent } from '../adminUser/adminUser';
 import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePosts';
+import { AdminBoxesComponent } from '../adminbox/adminbox';
 
-type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 'settings';
+type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 'settings' | 'box';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -27,6 +29,7 @@ type Section = 'dashboard' | 'boutiques' | 'performance' | 'events' | 'ads' | 's
     AdminEventsComponent,
     AdminUserComponent , 
     BoutiquePostsComponent,
+    AdminBoxesComponent,
     NgIf
   ]
 })
@@ -37,6 +40,7 @@ export class AdminDashboardComponent {
   // readonly BarChart3 = BarChart3;
   sidebarItems: { id: Section; label: string; icon: any }[] = [
     { id: 'dashboard', label: 'Dashboard Global', icon: LayoutDashboard },
+    { id: 'box', label: 'Gestion Boxes', icon: Package },
     { id: 'boutiques', label: 'Gestion Boutiques', icon: Building2 },
     { id: 'performance', label: 'Performance & Trafic', icon: ChartColumn },
     { id: 'events', label: 'Événements & Jeux', icon: Calendar },
