@@ -17,5 +17,9 @@ export class UserService {
     return this.utils.PGet(this.baseUrl);
   } 
 
+public async deleteUser(idUser: string) { 
+  return this.utils.PDelete(`${this.baseUrl}/${idUser}`);
+}
+
 
 }

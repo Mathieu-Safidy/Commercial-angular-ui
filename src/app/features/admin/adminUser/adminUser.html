@@ -17,7 +17,7 @@
       <mat-label>Nom d'utilisateur</mat-label>
       <mat-icon matPrefix>account_circle</mat-icon>
       <input matInput formControlName="username" placeholder="jean.dupont">
-      <mat-error *ngIf="f['username'].hasError('required')">Requis</mat-error>
+      <mat-error *ngIf="f['username'].hasError('required') && f['username'].touched">Requis</mat-error>
       <mat-error *ngIf="f['username'].hasError('minlength')">Min. 3 caractères</mat-error>
     </mat-form-field>
 
@@ -26,7 +26,7 @@
       <mat-label>Adresse email</mat-label>
       <mat-icon matPrefix>alternate_email</mat-icon>
       <input matInput formControlName="email" type="email" placeholder="jean@exemple.com">
-      <mat-error *ngIf="f['email'].hasError('required')">Requis</mat-error>
+      <mat-error *ngIf="f['email'].hasError('required') && f['username'].touched">Requis</mat-error>
       <mat-error *ngIf="f['email'].hasError('email')">Email invalide</mat-error>
     </mat-form-field>
 
@@ -40,7 +40,7 @@
       <button mat-icon-button matSuffix type="button" (click)="showPwd = !showPwd">
         <mat-icon>{{ showPwd ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
-      <mat-error *ngIf="f['password'].hasError('required')">Requis</mat-error>
+      <mat-error *ngIf="f['password'].hasError('required') && f['username'].touched">Requis</mat-error>
       <mat-error *ngIf="f['password'].hasError('minlength')">Min. 6 caractères</mat-error>
     </mat-form-field>
 
@@ -87,6 +87,7 @@
             <th class="px-6 py-5">Username</th>
             <th class="px-6 py-5">Email</th>
             <th class="px-6 py-5">Profil</th>
+            <th class="px-6 py-5">Action</th>
           </tr>
           </thead>
 
@@ -109,6 +110,11 @@
                 <td class="px-6 py-5">
                 <span class="font-bold text-sm">{{ user.idProfil.nom }}</span>
                 </td>
+            
+                <td class="px-6 py-5">
+                <button app-button class="h-11 px-6 rounded-xl shadow-md" (click)="deleteUser( user._id )">Supprimer</button>
+                </td>
+                
             </tr>
    
           </tbody>

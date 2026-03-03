@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserService } from '../../../services/userService/user-service';
+import { ButtonComponent } from "../../../components/ui/button";
 
 @Component({
   selector: 'app-admin-user',
@@ -21,7 +22,8 @@ import { UserService } from '../../../services/userService/user-service';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-  ],
+    ButtonComponent
+],
   templateUrl: './adminUser.html',
   styleUrls: ['./adminUser.scss'],
 })
@@ -33,6 +35,11 @@ export class AdminUserComponent {
   
   allUser = signal<any[]>([]) ;
 
+  profils = [
+    { _id: '1', name: 'Admin' },
+    { _id: '2', name: 'Boutique' }
+  ];
+
   constructor(private fb: FormBuilder, private userService: UserService) {
     this.form = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -40,6 +47,14 @@ export class AdminUserComponent {
       password: ['', [Validators.required, Validators.minLength(6)]],
       idProfil: ['', Validators.required],
     });
+  }
+  
+
+  async deleteUser(idUser : string ) { 
+     await this.userService.deleteUser( idUser) ; 
+      this.allUser.update(users =>
+        users.filter(u => u._id !== idUser)
+      );
   }
 
   // Accès plus sûr aux contrôles
@@ -65,22 +80,30 @@ export class AdminUserComponent {
     this.f.idProfil.markAsTouched(); // plus simple que get(...)
   }
 
-  onSubmit(): void {
-    if (this.form.invalid) {
+  async onSubmit() {
+  if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
+    this.loading = true;
     const payload = {
       username: this.f.username.value,
       email: this.f.email.value,
       password: this.f.password.value,
       idProfil: this.f.idProfil.value,
     };
-    this.userService.createUser(payload) ;
-    this.loading = true;
+    console.log("Payload ::: " , payload) ;
+
+    try {
+      await this.userService.createUser(payload);
+      await this.loadUsers();
+      this.form.reset();
+      this.form.markAsUntouched();
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loading = false;
+    }
   }
-   profils = [
-    { _id: '1', name: 'Admin' },
-    { _id: '2', name: 'Boutique' }
-  ];
-}
+  }
