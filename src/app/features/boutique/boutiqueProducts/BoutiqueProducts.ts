@@ -164,7 +164,8 @@ export class BoutiqueProductsComponent {
   idBoutique = signal<string | null>(null);
   constructor() {
     effect(async () => {
-      const prods = await this.produitService.getProduitsByBoutiqueId((await this.getBoutiqueByIdUser())._id);
+      //const prods = await this.produitService.getProduitsByBoutiqueId((await this.getBoutiqueByIdUser())._id);
+      const prods = this.produitService.produits();
       this.totalStock.set(this.calculeStockTotal());
       this.stockFaibleCount.set(this.calculerStockFaible(1, 5));
       this.ruptureCount.set(this.calculerStockFaible(0, 0));
@@ -220,8 +221,8 @@ export class BoutiqueProductsComponent {
         formData.append('image', result.imageFile); // upload fichier
       }
 
-      this.produitService.modifierProduit(produit._id, formData).then(() => {
-        this.produitService.reloadProduits();
+        this.produitService.modifierProduit(produit._id, formData).then(async() => {
+        await this.produitService.reloadProduits(this.idBoutique()!);
       });
     });
   }
@@ -252,8 +253,8 @@ export class BoutiqueProductsComponent {
       if (result.imageFile) {
         formData.append('image', result.imageFile); // upload fichier
       }
-      this.produitService.ajouterProduit(formData).then(() => {
-        this.produitService.reloadProduits();
+      this.produitService.ajouterProduit(formData).then( async() => {
+        await this.produitService.reloadProduits(this.idBoutique()!);
       });
       // const produit : Produit = {
       //   nom: result.nom,

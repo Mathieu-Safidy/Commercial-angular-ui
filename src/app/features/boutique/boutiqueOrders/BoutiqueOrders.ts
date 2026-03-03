@@ -20,6 +20,7 @@ import {SeparatorComponent} from '../../../components/ui/separator';
 import { AuthServices } from '../../../services/authService/auth.services';
 import { DetailBoutiqueService } from '../../../services/detailBoutiqueService/detail-boutique-service';
 import { DetailBoutique } from '../../../model/detailBoutiqueModel';
+import { ProduitService } from '../../../services/produitService/produit-service';
 
 type OrderStatus = 'en_cours' | 'valide' | 'annulee' ;
 
@@ -74,10 +75,11 @@ export class BoutiqueOrdersComponent {
   detailBoutiqueService = inject(DetailBoutiqueService) ;
   user: User | any = this.authService.currentUserSubject.value || { } ;
   userId = this.user._id;
-  idBoutique = "" ; 
+  idBoutique = signal("") ; 
   // orders: Order[] = [];
   orders = signal<Order[]>([] as Order[]);
   expandedOrderId = signal("");
+  produitService = inject(ProduitService)
 
   constructor(private commandeService: CommandeService , private commandeDetailService: CommandeDetailService) {}
 
@@ -85,7 +87,7 @@ export class BoutiqueOrdersComponent {
     // const data = await this.commandeService.getAll() as any[];
     await this.loadDetailBoutique() ; 
     console.log("ID BOUTIQUE 111 ::: " , this.idBoutique) ; 
-    const data =  await this.commandeService.getCommandeByIdBoutique( this.idBoutique) as any[]; 
+    const data =  await this.commandeService.getCommandeByIdBoutique( this.idBoutique()) as any[]; 
     this.orders.set(data.map(cmd => ({
       id: cmd._id || cmd.id,
       customer: cmd.customer || 'Client inconnu',
@@ -101,7 +103,7 @@ export class BoutiqueOrdersComponent {
   async loadDetailBoutique() {
       try {
         const res = await this.detailBoutiqueService.getDetailBoutiqueByUserId(this.userId) as DetailBoutique;
-        this.idBoutique = res.idBoutique._id ; 
+        this.idBoutique.set( res.idBoutique._id )  ; 
       }catch (err) {
         console.error('Erreur lors du chargement :', err);
       }
@@ -120,6 +122,17 @@ export class BoutiqueOrdersComponent {
 
   async valideOrder(order: Order) {
     await this.commandeService.valideClientCommandeStatus(order.id);
+    await this.produitService.reloadProduits(this.idBoutique());
+    this.loadStatus(order.id , "valide")  ; 
+  }
+  loadStatus(idOrder : string , status : OrderStatus ) { 
+      this.orders.set(
+      this.orders().map(order =>
+        order.id === idOrder
+          ? { ...order, status: status }  
+          : order
+      )
+    );
   }
 
   isExpanded(order: Order): boolean {

@@ -194,7 +194,9 @@ notesBoutiques: Record<string, number | undefined> = {};
     console.log(produits);
 
     this.products.set(
-      produits.map((produit) => ({
+      produits
+              .filter(p => p.boutique && p.boutique.nom)
+              .map((produit) => ({
         id: produit._id,
         name: produit.nom,
         boutique: produit.boutique.nom,

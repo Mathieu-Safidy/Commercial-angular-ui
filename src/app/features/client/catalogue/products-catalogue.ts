@@ -164,7 +164,7 @@ export class ProductsCatalogueComponent implements OnInit {
     console.log(produits);
     let avisMap = await this.initAvis(produits);
 
-    this.allProducts.set(produits.map((produit) => ({
+    this.allProducts.set(produits.filter(p => p.boutique && p.boutique.nom).map((produit) => ({
       ...produit,
       rating: this.calculeMoyenne(avisMap[produit._id] || []),
       image: produit.image ? this.backendLink + '/' + produit.image : 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400', // Placeholder, à remplacer par produit.image si disponible,

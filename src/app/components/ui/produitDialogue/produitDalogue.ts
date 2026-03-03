@@ -346,7 +346,7 @@ export class ProductDetailDialogComponent {
     try {
       // Appel API (adapte selon ton service)
       await this.stockService.approvisionnerProduit(prod._id, qty);
-      await this.produitService.reloadProduits(); // pour rafraîchir la liste et le produit sélectionné
+      await this.produitService.reloadProduits( this.product()?.idBoutique!); // pour rafraîchir la liste et le produit sélectionné
       // await this.produitService
       //   .approvisionnerProduit(prod._id, {
       //     quantite: qty,

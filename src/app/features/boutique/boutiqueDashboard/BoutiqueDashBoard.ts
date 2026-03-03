@@ -73,7 +73,7 @@ export class BoutiqueDashboardComponent {
   async init() {
     await this.laodBoutique();
     if (this.idBoutique()) {
-      this.produitService.initializeProduitsBoutique(this.idBoutique()!);
+      await this.produitService.initializeProduitsBoutique(this.idBoutique()!);
     }
   }
 
@@ -82,9 +82,9 @@ export class BoutiqueDashboardComponent {
     { id: 'products', label: 'Catalogue' , icon: Package },
     // { id: 'stock', label: 'Approvisionnement' , icon: Download },
     { id: 'orders', label: 'Commandes' , icon: ShoppingCart },
-    { id: 'promos', label: 'Promotions' , icon: Tag },
+    // { id: 'promos', label: 'Promotions' , icon: Tag },
     { id: 'posts', label: 'Actualités' , icon: Image },
-    { id: 'stats', label: 'Statistiques' , icon: ChartColumn },
+    // { id: 'stats', label: 'Statistiques' , icon: ChartColumn },
     { id: 'settings', label: 'Configuration' , icon: Settings },
     { id: 'avis', label: 'Profil', icon: User }
   ];

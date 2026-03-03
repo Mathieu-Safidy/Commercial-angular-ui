@@ -39,9 +39,9 @@ export class ProduitService {
     return await this.http.PGet(`/produits/boutique/${idBoutique}`) as Produit[];
   }
 
-  public async reloadProduits() {
+  public async reloadProduits(idBoutique : string ) {
     this.produits.set([]);
-    await this.initializeProduits();
+    await this.initializeProduitsBoutique(idBoutique);
     return this.produits();
   }
   

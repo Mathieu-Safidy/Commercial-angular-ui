@@ -22,6 +22,7 @@ import { BoutiquePostsComponent } from '../../boutique/boutiquePosts/BoutiquePos
 import { PanierService } from '../../../services/panierService/panier-service';
 import { ProductsCatalogueComponent } from "../catalogue/products-catalogue";
 import { BoutiquesCatalogueComponent } from '../boutiqueCatalogue/BoutiqueCatalogue';
+import { ProduitService } from '../../../services/produitService/produit-service';
 
 @Component({
   selector: 'app-client-dashboard',
@@ -50,15 +51,19 @@ export class ClientDashboardComponent {
   readonly MessageSquare = MessageSquare;
   readonly MapPin = MapPin;
   panierService = inject(PanierService);
+  produitService = inject(ProduitService);
   @ViewChild(TabsComponent) tabs!: TabsComponent;
 
   navigateTo(value: string) {
     this.tabs.value.set(value);
   }
-  constructor() { 
+  constructor() {
+    
   }
+
   
   async ngOnInit() {
+    await this.produitService.initializeProduits() ;
     await this.panierService.initializePanier();
     await this.panierService.initializePaniertermine();
   }
